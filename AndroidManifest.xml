@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="luc.fourestier.rbook"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="18" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/rbook_icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="luc.fourestier.rbook.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="luc.fourestier.rbook.RoadBookActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="luc.fourestier.rbook.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="luc.fourestier.rbook.MainActivity" />
+        </activity>
+        <activity
+            android:name="luc.fourestier.rbook.RoadPointActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="luc.fourestier.rbook.RoadBookActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="luc.fourestier.rbook.RoadBook" />
+        </activity>
+    </application>
+
+</manifest>

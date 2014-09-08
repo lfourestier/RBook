@@ -1,0 +1,15 @@
+{
+  "title":"Test road book #2",
+  "description":"Test erroneous road book or road point data. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "location":"Belgium, Ardennes",
+  "roadpoints": [
+     {"name":"Name 0", "observation":"Observation 0", "kilometer":0.0, "type":"ra4_exit2", "direction":"Direction 0"},
+     {"name":"", "observation":"Observation 1", "kilometer":1.1, "type":"t_left", "direction":"Direction 1"},
+     {"name":"Name 2", "observation":"", "kilometer":2.2, "type":"y_left", "direction":"Direction 2"},
+     {"name":"Name 3", "observation":"Observation 3", "kilometer":3.3, "type":"does_not_exist", "direction":"Direction 3"},
+     {"name":"Name 4", "observation":"Observation 4", "kilometer":4.4, "type":"", "direction":"Direction 4"},
+     {"name":"Name 5", "observation":"Observation 5", "kilometer":5.5, "type":"x4_right", "direction":""},
+     {"name":"", "observation":"", "kilometer":6.6, "type":"", "direction":""},
+     {"name":"Name 7", "observation":"Observation 7", "kilometer":7.7, "type":"t_left", "direction":"Direction 7"},
+  ]
+}

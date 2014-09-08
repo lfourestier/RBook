@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".RoadPointActivity" >
+
+    <ImageView
+        android:id="@+id/point_direction_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/point_direction_text"
+        android:src="@drawable/rbook_icon" />
+
+    <TextView
+        android:id="@+id/point_direction_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/point_direction_icon"
+        android:text="@string/default_text"
+        android:textSize="20dp" />
+
+    <ImageView
+        android:id="@+id/point_distancetonext_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_toLeftOf="@+id/point_distancetonext_text"
+        android:layout_alignTop="@+id/point_distancetonext_text"
+        android:src="@drawable/rbook_icon" />
+
+    <TextView
+        android:id="@+id/point_distancetonext_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/point_direction_text"
+        android:layout_below="@+id/point_direction_text"
+        android:layout_marginTop="5dp"
+        android:text="@string/default_text"
+        android:textSize="16dp" />
+
+    <ImageView
+        android:id="@+id/point_road_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/point_distancetonext_text"
+        android:layout_marginTop="5dp"
+        android:contentDescription="@string/default_text"
+        android:src="@drawable/ra4_exit2" />
+
+    <TextView
+        android:id="@+id/point_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/point_road_image"
+        android:layout_centerHorizontal="true"
+        android:text="@string/default_text"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/point_kilometer_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_above="@+id/point_partialkilometer_text"
+        android:text="@string/default_text"
+        android:textSize="40dp" />
+
+    <TextView
+        android:id="@+id/point_partialkilometer_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/point_previous_button"
+        android:layout_alignRight="@+id/point_kilometer_text"
+        android:text="@string/default_text"
+        android:textSize="16dp" />
+
+    <Button
+        android:id="@+id/point_previous_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/previous" />
+
+    <Button
+        android:id="@+id/point_next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/next" />
+
+</RelativeLayout>

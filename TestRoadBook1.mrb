@@ -1,0 +1,11 @@
+{
+  "title":"Test road book #1",
+  "description":"Test all images. Helps to see the image quality, readability...",
+  "location":"Somewhere!",
+  "roadpoints": [
+     {"name":"ra4_exit2 point", "observation":"round about point", "kilometer":0.0, "type":"ra4_exit2", "direction":"ra4_exit2 direction"},
+     {"name":"t_left point", "observation":"T cross point", "kilometer":21.3, "type":"t_left", "direction":"t_left direction"},
+     {"name":"x4_right point", "observation":"X cross point", "kilometer":48.1, "type":"x4_right", "direction":"x4_right direction"},
+     {"name":"y_left point", "observation":"Y point", "kilometer":76.5, "type":"y_left", "direction":"y_left direction"},
+  ]
+}
