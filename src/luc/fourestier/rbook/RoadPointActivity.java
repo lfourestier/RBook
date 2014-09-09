@@ -1,16 +1,21 @@
 package luc.fourestier.rbook;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.InputFilter.LengthFilter;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RoadPointActivity extends Activity {
 	private TextView directionTextView; // TODO Use "icon_line" relative layout
@@ -22,6 +27,8 @@ public class RoadPointActivity extends Activity {
 	private TextView partialTextView;
 	private Button previousButton;
 	private Button nextButton;
+	private Button mapButton;
+	private Button albumButton;
 
 	private RoadBook currentRoadBook;
 	private String currentBookName;
@@ -51,6 +58,10 @@ public class RoadPointActivity extends Activity {
 		nextButton = (Button) findViewById(R.id.point_next_button);
 		nextButton.setOnClickListener(mNextListener);
 		nextButton.setEnabled(true);
+		albumButton = (Button) findViewById(R.id.point_album_button);
+		albumButton.setOnClickListener(malbumListener);
+		mapButton = (Button) findViewById(R.id.point_map_button);
+		mapButton.setOnClickListener(mmapListener);
 
 		setTitle(currentBookName);
 
@@ -126,6 +137,34 @@ public class RoadPointActivity extends Activity {
 				// TODO: handle exception
 			}
 		}
+	};
+
+	private OnClickListener mmapListener = new OnClickListener() {
+		public void onClick(View v) {
+//			LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//		    View view = inflater.inflate(R.layout.,
+//		                                   (ViewGroup) findViewById(R.id.image_toast));
+
+		    Toast toast = Toast.makeText(v.getContext(), "Not yet implemented!", 3);
+		    //toast.setView(view);
+		    if (toast != null) {
+		    	toast.show();		
+		    }
+	    }
+	};
+
+	private OnClickListener malbumListener = new OnClickListener() {
+		public void onClick(View v) {
+//			LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//		    View view = inflater.inflate(R.layout.,
+//		                                   (ViewGroup) findViewById(R.id.image_toast));
+
+		    Toast toast = Toast.makeText(v.getContext(), "Not yet implemented!", 3);
+		    //toast.setView(view);
+		    if (toast != null) {
+		    	toast.show();		
+		    }
+	    }
 	};
 
 	private void RefreshRoadPoint() {

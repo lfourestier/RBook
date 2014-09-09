@@ -14,7 +14,7 @@
         android:layout_height="20dp"
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@+id/point_direction_text"
-        android:src="@drawable/rbook_icon" />
+        android:src="@drawable/direction_icon" />
 
     <TextView
         android:id="@+id/point_direction_text"
@@ -23,7 +23,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/point_direction_icon"
         android:text="@string/default_text"
-        android:textSize="20dp" />
+        android:textSize="24dp" />
 
     <ImageView
         android:id="@+id/point_distancetonext_icon"
@@ -31,7 +31,7 @@
         android:layout_height="20dp"
         android:layout_toLeftOf="@+id/point_distancetonext_text"
         android:layout_alignTop="@+id/point_distancetonext_text"
-        android:src="@drawable/rbook_icon" />
+        android:src="@drawable/milestone_icon" />
 
     <TextView
         android:id="@+id/point_distancetonext_text"
@@ -39,19 +39,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/point_direction_text"
         android:layout_below="@+id/point_direction_text"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:text="@string/default_text"
         android:textSize="16dp" />
-
-    <ImageView
-        android:id="@+id/point_road_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/point_distancetonext_text"
-        android:layout_marginTop="5dp"
-        android:contentDescription="@string/default_text"
-        android:src="@drawable/ra4_exit2" />
 
     <TextView
         android:id="@+id/point_name_text"
@@ -59,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/point_road_image"
         android:layout_centerHorizontal="true"
+        android:textStyle="italic"
         android:text="@string/default_text"
         android:textSize="20dp" />
 
@@ -69,7 +60,7 @@
         android:layout_alignParentLeft="true"
         android:layout_above="@+id/point_partialkilometer_text"
         android:text="@string/default_text"
-        android:textSize="40dp" />
+        android:textSize="50dp" />
 
     <TextView
         android:id="@+id/point_partialkilometer_text"
@@ -86,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/previous" />
+        android:background="@drawable/previous_icon" />
 
     <Button
         android:id="@+id/point_next_button"
@@ -94,6 +85,31 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="@string/next" />
+        android:background="@drawable/next_icon" />
+
+    <Button
+        android:id="@+id/point_album_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/point_next_button"
+        android:layout_toLeftOf="@+id/point_next_button"
+        android:background="@drawable/album_icon" />
+
+    <Button
+        android:id="@+id/point_map_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/point_previous_button"
+        android:layout_toRightOf="@+id/point_previous_button"
+        android:background="@drawable/map_icon" />
+
+    <ImageView
+        android:id="@+id/point_road_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/default_text"
+        android:src="@drawable/ra4_exit2" />
 
 </RelativeLayout>
