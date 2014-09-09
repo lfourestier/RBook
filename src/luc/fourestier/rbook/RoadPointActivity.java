@@ -145,7 +145,7 @@ public class RoadPointActivity extends Activity {
 //		    View view = inflater.inflate(R.layout.,
 //		                                   (ViewGroup) findViewById(R.id.image_toast));
 
-		    Toast toast = Toast.makeText(v.getContext(), "Not yet implemented!", 3);
+		    Toast toast = Toast.makeText(v.getContext(), "Photos are coming soon!", 3);
 		    //toast.setView(view);
 		    if (toast != null) {
 		    	toast.show();		
@@ -159,7 +159,7 @@ public class RoadPointActivity extends Activity {
 //		    View view = inflater.inflate(R.layout.,
 //		                                   (ViewGroup) findViewById(R.id.image_toast));
 
-		    Toast toast = Toast.makeText(v.getContext(), "Not yet implemented!", 3);
+		    Toast toast = Toast.makeText(v.getContext(), "Maps are coming soon!", 3);
 		    //toast.setView(view);
 		    if (toast != null) {
 		    	toast.show();		

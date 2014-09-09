@@ -1,7 +1,13 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    android:fillViewport="true">
+    
+<RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -10,11 +16,11 @@
 
     <ImageView
         android:id="@+id/book_name_icon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/book_name_text"
-        android:src="@drawable/rbook_icon" />
+        android:layout_alignBottom="@+id/book_name_text"
+        android:src="@drawable/rbook" />
 
     <TextView
         android:id="@+id/book_name_text"
@@ -23,7 +29,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/book_name_icon"
         android:text="@string/default_text" 
-        android:textSize="24dp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/book_description_text"
@@ -33,15 +39,15 @@
         android:layout_below="@+id/book_name_text"
         android:layout_marginTop="5dp"
         android:text="@string/default_text" 
-        android:textSize="18dp" />
+        android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/book_location_icon"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_toLeftOf="@+id/book_location_text"
-        android:layout_alignTop="@+id/book_location_text"
-        android:src="@drawable/location_icon" />
+        android:layout_alignBottom="@+id/book_location_text"
+        android:src="@drawable/location" />
 
     <TextView
         android:id="@+id/book_location_text"
@@ -51,15 +57,15 @@
         android:layout_below="@+id/book_description_text"
         android:layout_marginTop="20dp"
         android:text="@string/default_text"
-        android:textSize="18dp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/book_distance_icon"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_toLeftOf="@+id/book_distance_text"
-        android:layout_alignTop="@+id/book_distance_text"
-        android:src="@drawable/milestone_icon" />
+        android:layout_alignBottom="@+id/book_distance_text"
+        android:src="@drawable/milestone" />
 
     <TextView
         android:id="@+id/book_distance_text"
@@ -69,23 +75,25 @@
         android:layout_below="@+id/book_location_text"
         android:layout_marginTop="20dp"
         android:text="@string/default_text"
-        android:textSize="16dp" />
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/book_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/book_distance_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:contentDescription="@string/default_text"
+        android:src="@drawable/rb_ardennes" />
 
     <Button
         android:id="@+id/book_start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/book_image"
         android:layout_alignParentRight="true"
-        android:background="@drawable/start_icon" />
-
-    <ImageView
-        android:id="@+id/point_road_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/book_start_button"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="@string/default_text"
-        android:src="@drawable/rb_ardennes" />
+        android:background="@drawable/go" />
 
 </RelativeLayout>
+    </ScrollView>

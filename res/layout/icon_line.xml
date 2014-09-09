@@ -10,7 +10,7 @@
          android:layout_height="32dp"
          android:layout_alignParentLeft="true"
          android:layout_centerVertical="true"
-          android:src="@drawable/rbook_icon"
+          android:src="@drawable/rbook"
          />
 
     <!-- text -->

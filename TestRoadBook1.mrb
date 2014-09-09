@@ -3,9 +3,15 @@
   "description":"Test all images. Helps to see the image quality, readability...",
   "location":"Somewhere!",
   "roadpoints": [
-     {"name":"ra4_exit2 point", "observation":"round about point", "kilometer":0.0, "type":"ra4_exit2", "direction":"ra4_exit2 direction"},
-     {"name":"t_left point", "observation":"T cross point", "kilometer":21.3, "type":"t_left", "direction":"t_left direction"},
-     {"name":"x4_right point", "observation":"X cross point", "kilometer":48.1, "type":"x4_right", "direction":"x4_right direction"},
-     {"name":"y_left point", "observation":"Y point", "kilometer":76.5, "type":"y_left", "direction":"y_left direction"},
+     {"name":"finish point", "observation":"finish observation", "kilometer":0.0, "type":"finish", "direction":"finish direction"},
+     {"name":"ra4_exit2 point", "observation":"ra4_exit2 observation", "kilometer":0.0, "type":"ra4_exit2", "direction":"ra4_exit2 direction"},
+     {"name":"start point", "observation":"start observation", "kilometer":0.0, "type":"start", "direction":"start direction"},
+     {"name":"t_left point", "observation":"t_left observation", "kilometer":0.0, "type":"t_left", "direction":"t_left direction"},
+     {"name":"t_right point", "observation":"t_right observation", "kilometer":0.0, "type":"t_right", "direction":"t_right direction"},
+     {"name":"x4_left point", "observation":"x4_left observation", "kilometer":0.0, "type":"x4_left", "direction":"x4_left direction"},
+     {"name":"x4_right point", "observation":"x4_right observation", "kilometer":0.0, "type":"x4_right", "direction":"x4_right direction"},
+     {"name":"x4_straight point", "observation":"x4_straight observation", "kilometer":0.0, "type":"x4_straight", "direction":"x4_straight direction"},
+     {"name":"y_left point", "observation":"y_left observation", "kilometer":0.0, "type":"y_left", "direction":"y_left direction"},
+     {"name":"y_right point", "observation":"y_right observation", "kilometer":0.0, "type":"y_right", "direction":"y_right direction"},
   ]
 }
