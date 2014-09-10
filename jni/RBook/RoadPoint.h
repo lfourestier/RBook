@@ -24,10 +24,7 @@ public:
     };
 
     //! Road point name (Global name).
-    std::string Name;
-
-    //! Road point observations.
-    std::string Observation;
+    std::string Description;
 
     //! Total distance.
     float Kilometer;

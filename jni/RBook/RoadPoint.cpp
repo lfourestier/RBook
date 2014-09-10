@@ -10,8 +10,7 @@
 namespace RBook {
 
 RoadPoint::RoadPoint() {
-    Name = "";
-    Observation = "";
+    Description = "";
     Type = "";
     Kilometer = 0.0;
     Direction = "";

@@ -31,13 +31,16 @@ public:
         ERROR_DIR_NOT_FOUND, //!< Directory not found
         ERROR_EMPTY_LIST, //!< List of file is empty
         ERROR_BOOKNAME_NOT_FOUND, //!< Did not find the book name in the list
+        ERROR_ROADBOOK_INVALID, //!< The roadbook in use is somehow erroneous
     };
 
     /**
-     * Initialize the application root directory. The book will then be stored/read in/from "<rootdir>/BOOK_DIR".
-     * If directory contains books, it creates a list of those books.
-     * If directory is empty, the list is empty.
-     * If directory does not exist, it creates it (List is then empty!).
+     * Initialize the application root directory. The book will then be stored/read in/from "<rootdir>/BOOK_DIR" (@see BOOK_DIR).
+     * Then:
+     * - If directory contains books, it creates a list of those books.
+     * - If directory is empty, the list is empty.
+     * - If directory does not exist, it creates it (List is then empty!).
+     *
      * @pre <rootdir> MUST exist
      *
      * @example If <rootdir>="/sdcard" and RBOOK_DIR="RBook", "/sdcard/RBook" will be created. Books will be then placed here.
@@ -133,7 +136,7 @@ private:
     /**
      * Check directory existence.
      *
-     * @param directory: Directory path (Full path). Sub-directories MUST exist.
+     * @param directory: Directory path (Full path). Intermediate sub-directories in the path MUST exist.
      * @return @see ERROR
      */
     Error DirectoryExists(std::string directory);
@@ -141,10 +144,18 @@ private:
     /**
      * Create directory.
      *
-     * @param directory: Directory path (Full path). Sub-directories MUST exist.
+     * @param directory: Directory path (Full path). Intermediate sub-directories in the path MUST exist.
      * @return @see ERROR
      */
     Error MakeDirectory(std::string directory);
+
+    /**
+     * Remove the specified directory (And all its content).
+     *
+     * @param directory: Directory path (Full path).
+     * @return @see ERROR
+     */
+    Error RemoveDirectory(std::string directory);
 
     /**
      * List files of a certain extension contained by a directory.

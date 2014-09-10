@@ -12,7 +12,10 @@
 
 #include "BookManager.h"
 
+//! The road book directory
 #define BOOK_DIR "/RBook"
+
+//! The road book file extension
 #define BOOK_EXTENSION ".mrb"
 
 #define TAG "BookManager"
@@ -27,13 +30,11 @@ Error BookManager::Initialize(std::string rootdir) {
     ret = DirectoryExists(RBookDirectory);
     if (ret == ERROR_DIR_NOT_FOUND) {
         LOG_D(TAG, "RBook dir does not exist.");
-        ret = MakeDirectory(RBookDirectory); // TODO MakeDirectory does not work.
+        ret = MakeDirectory(RBookDirectory);
     }
-    else if (ret == ERROR_OK) {
-        LOG_D(TAG, "Check RBook dir for files.");
-        ret = ListFilesInDir(RBookDirectory, BOOK_EXTENSION, ListOfBooks);
+    if(ret != ERROR_OK) {
+        RBookDirectory.clear();
     }
-
     return ret;
 }
 
@@ -55,12 +56,20 @@ Error BookManager::GetRoadBookList(std::list<std::string> &booklist)
     Error ret;
 
     try {
-        if (!ListOfBooks.empty()) {
-            // Copy list
-             for (std::list<std::string>::iterator i=ListOfBooks.begin(); i != ListOfBooks.end(); ++i) {
-                 booklist.push_front(*i);
+        if (!RBookDirectory.empty()) {
+            // Refresh list
+            ret = ListFilesInDir(RBookDirectory, BOOK_EXTENSION, ListOfBooks);
+
+            if ((ret == ERROR_OK ) && (!ListOfBooks.empty())) {
+                // Copy list
+                 for (std::list<std::string>::iterator i=ListOfBooks.begin(); i != ListOfBooks.end(); ++i) {
+                     booklist.push_front(*i);
+                 }
              }
-         }
+        }
+        else {
+            ret = ERROR_NOT_INITIALIZED;
+        }
     }
     catch (std::exception& e) {
         ret = ERROR_FAIL;
@@ -79,9 +88,13 @@ Error BookManager::GetRoadBook(std::string bookname, RoadBook *& roadbook) {
             for (std::list<std::string>::iterator i=ListOfBooks.begin(); i != ListOfBooks.end(); ++i) {
                 if (bookname.compare(*i) == 0) {
                     roadbook = new RoadBook();
-                    roadbook->FilePath = RBookDirectory + "/" + bookname + BOOK_EXTENSION;
-                    ret = roadbook->Load();
-                    LOG_D("LFOR", "ret = %i", ret.Code); // TODO For debug only. Remove.
+                    if (roadbook != NULL) {
+                        roadbook->FilePath = RBookDirectory + "/" + bookname + BOOK_EXTENSION;
+                        ret = roadbook->Load();
+                    }
+                    else {
+                        ret = ERROR_FAIL;
+                    }
                     break;
                 }
             }
@@ -92,6 +105,33 @@ Error BookManager::GetRoadBook(std::string bookname, RoadBook *& roadbook) {
     }
     catch (std::exception& e) {
         ret = ERROR_FAIL;
+    }
+
+    return ret;
+}
+
+Error BookManager::CreateRoadBook(std::string bookname, RoadBook *& roadbook) {
+    Error ret;
+
+    roadbook = new RoadBook();
+    if (roadbook != NULL) {
+        roadbook->FilePath = RBookDirectory + "/" + bookname + BOOK_EXTENSION;
+    }
+    else {
+        ret = ERROR_FAIL;
+    }
+
+    return ret;
+}
+
+Error BookManager::SaveRoadBook(RoadBook *& roadbook) {
+    Error ret;
+
+    if (!roadbook->FilePath.empty()) {
+        ret = roadbook->Save();
+    }
+    else {
+        ret = ERROR_ROADBOOK_INVALID;
     }
 
     return ret;
@@ -110,6 +150,40 @@ Error BookManager::ReleaseRoadBook(RoadBook *& roadbook) {
     }
 
     return ret;
+}
+
+Error BookManager::DeleteRoadBook(std::string bookname) {
+    Error ret;
+
+    try {
+        if (!ListOfBooks.empty()) {
+            ret = ERROR_BOOKNAME_NOT_FOUND;
+
+            for (std::list<std::string>::iterator i=ListOfBooks.begin(); i != ListOfBooks.end(); ++i) {
+                if (bookname.compare(*i) == 0) {
+                    RoadBook* roadbook = new RoadBook();
+                    if (roadbook != NULL) {
+                        roadbook->FilePath = RBookDirectory + "/" + bookname + BOOK_EXTENSION;
+                        ret = roadbook->Delete();
+                        delete roadbook;
+                    }
+                    else {
+                        ret = ERROR_FAIL;
+                    }
+                    break;
+                }
+            }
+        }
+        else {
+            ret = ERROR_BOOKNAME_NOT_FOUND;
+        }
+    }
+    catch (std::exception& e) {
+        ret = ERROR_FAIL;
+    }
+
+    return ret;
+
 }
 
 BookManager::~BookManager() {
@@ -166,6 +240,10 @@ Error BookManager::ListFilesInDir(std::string directory, std::string extension, 
     Error ret;
 
     try {
+        if (!list.empty()) {
+            list.clear();
+        }
+
         DIR* dir = opendir(directory.c_str());
         if (dir != NULL) {
             struct dirent* file;

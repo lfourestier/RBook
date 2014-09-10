@@ -7,8 +7,17 @@ public class RoadBook {
 	 * 
 	 * @return The title string.
 	 */
-	public String getBookTitle() {
-		return _GetBookName();
+	public String getTitle() {
+		return _GetTitle();
+	}
+
+	/**
+	 * Set title.
+	 * 
+	 * @param title: the title.
+	 */
+	public void setTitle(String title) {
+		_SetTitle(title);
 	}
 
 	/**
@@ -16,8 +25,17 @@ public class RoadBook {
 	 * 
 	 * @return The description string.
 	 */
-	public String getBookDescription() {
-		return _GetBookDescription();
+	public String getDescription() {
+		return _GetDescription();
+	}
+
+	/**
+	 * Set description.
+	 * 
+	 * @param description: the description.
+	 */
+	public void setDescription(String description) {
+		_SetDescription(description);
 	}
 
 	/**
@@ -25,8 +43,17 @@ public class RoadBook {
 	 * 
 	 * @return The location string.
 	 */
-	public String getBookLocation() {
-		return _GetBookLocation();
+	public String getLocation() {
+		return _GetLocation();
+	}
+
+	/**
+	 * Set location.
+	 * 
+	 * @param location: the location.
+	 */
+	public void setLocation(String location) {
+		_SetLocation(location);
 	}
 
 	/**
@@ -34,71 +61,81 @@ public class RoadBook {
 	 * 
 	 * @return The distance
 	 */
-	public float getBookTotalDistance() {
-		return _GetBookTotalDistance();
+	public float getTotalDistance() {
+		return _GetTotalDistance();
+	}
+	
+	/**
+	 * Get the current road point.
+	 * @return The current road point.
+	 */
+	public RoadPoint getCurrentPoint() {
+		RoadPoint roadpoint = new RoadPoint();
+		roadpoint.nativeInstance = _GetCurrentPoint();
+		
+		return roadpoint;
 	}
 
 	/**
-	 * Get current point Name
-	 * 
-	 * @return The string
+	 * Get the previous road point.
+	 * @return The previous road point.
 	 */
-	public String getCurrentPointName() {
-		return _GetCurrentPointName();
+	public RoadPoint getPreviousPoint() {
+		RoadPoint roadpoint = new RoadPoint();
+		roadpoint.nativeInstance = _GetPreviousPoint();
+		
+		return roadpoint;
 	}
 
 	/**
-	 * Get current point RoadDetails
-	 * 
-	 * @return The string
+	 * Get the next road point.
+	 * @return The next road point.
 	 */
-	public String getCurrentPointObservation() {
-		return _GetCurrentPointObservation();
+	public RoadPoint getNextPoint() {
+		RoadPoint roadpoint = new RoadPoint();
+		roadpoint.nativeInstance = _GetNextPoint();
+		
+		return roadpoint;
 	}
 
 	/**
-	 * Get current point Kilometer
+	 * Get distance to next point in the list
 	 * 
-	 * @return The float
+	 * @return The float distance
 	 */
-	public float getCurrentPointKilometer() {
-		return _GetCurrentPointKilometer();
+	public float getDistanceToNext() {
+		return _GetDistanceToNext();
 	}
 
 	/**
-	 * Get current point Type
+	 * Get distance from previous point in the list
 	 * 
-	 * @return The string
+	 * @return The float distance
 	 */
-	public String getCurrentPointType() {
-		return _GetCurrentPointType();
+	public float getDistanceFromPrevious() {
+		return _GetDistanceFromPrevious();
 	}
 
 	/**
-	 * Get current point Direction
-	 * 
-	 * @return The string
+	 * Add a new road point before the current position.
+	 * @return The new created empty roadpoint.
 	 */
-	public String getCurrentPointDirection() {
-		return _GetCurrentPointDirection();
+	public RoadPoint addNewPointBefore() {
+		RoadPoint roadpoint = new RoadPoint();
+		roadpoint.nativeInstance = _AddNewPointBefore();
+		
+		return roadpoint;
 	}
 
 	/**
-	 * Get current point DistanceToNext
-	 * 
-	 * @return The float
+	 * Add a new road point after the current position.
+	 * @return The new created empty roadpoint.
 	 */
-	public float getCurrentPointDistanceToNext() {
-		return _GetCurrentPointDistanceToNext();
-	}
-
-	/**
-	 * Get previous point DistanceToNext
-	 * 
-	 * @return The float
-	 */
-	public float getCurrentPointDistanceFromPrevious() {
-		return _GetCurrentPointDistanceFromPrevious();
+	public RoadPoint addNewPointAfter() {
+		RoadPoint roadpoint = new RoadPoint();
+		roadpoint.nativeInstance = _AddNewPointAfter();
+		
+		return roadpoint;
 	}
 
 	/**
@@ -121,6 +158,13 @@ public class RoadBook {
 	public void reset() {
 		_Reset();
 	}
+	
+	/**
+	 * Go to last road point
+	 */
+	public void end() {
+		_End();
+	}
 
 	// protected
 	
@@ -136,31 +180,39 @@ public class RoadBook {
 
 	// Native
 
-	private native final String _GetBookName();
+	private native final String _GetTitle();
 
-	private native final String _GetBookDescription();
+	private native final void _SetTitle(String title);
+	
+	private native final String _GetDescription();
 
-	private native final String _GetBookLocation();
+	private native final void _SetDescription(String description);
+	
+	private native final String _GetLocation();
 
-	private native final float _GetBookTotalDistance();
+	private native final void _SetLocation(String location);
+	
+	private native final float _GetTotalDistance();
 
-	private native final String _GetCurrentPointName();
+	private native final int _GetCurrentPoint();
+	
+	private native final int _GetPreviousPoint();
+	
+	private native final int _GetNextPoint();
+	
+	private native final float _GetDistanceToNext();
 
-	private native final String _GetCurrentPointObservation();
+	private native final float _GetDistanceFromPrevious();
 
-	private native final float _GetCurrentPointKilometer();
-
-	private native final String _GetCurrentPointType();
-
-	private native final String _GetCurrentPointDirection();
-
-	private native final float _GetCurrentPointDistanceToNext();
-
-	private native final float _GetCurrentPointDistanceFromPrevious();
-
+	private native final int _AddNewPointBefore();
+	
+	private native final int _AddNewPointAfter();
+	
 	private native final void _Next();
 
 	private native final void _Previous();
 
 	private native final void _Reset();
+	
+	private native final void _End();
 }

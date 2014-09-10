@@ -3,11 +3,11 @@
   "description":"Nice trip in the Ardennes, visiting the country side.",
   "location":"Belgium, Ardennes",
   "roadpoints": [
-     {"name":"Start in Huy.", "observation":"Near by the castle", "kilometer":0.0, "type":"start", "direction":"Marche en Famenne"},
-     {"name":"Marche city center", "observation":"Near by the city hall", "kilometer":35.6, "type":"ra4_exit2", "direction":"Rochefort"},
-     {"name":"Rochefort, the river", "observation":"Near by the bridge.", "kilometer":52.3, "type":"t_left", "direction":"Saint Hubert"},
-     {"name":"Saint Hubert", "observation":"Right after the chirch.", "kilometer":89.2, "type":"x4_right", "direction":"La roche en Ardenne"},
-     {"name":"La Roche en Ardenne", "observation":"Along the Ourthe", "kilometer":123.7, "type":"y_left", "direction":"Huy"},
-     {"name":"Finish in Huy", "observation":"Near by the castle.", "kilometer":158.6, "type":"finish", "direction":""},
+     {"description":"Start in Huy. Near by the castle", "kilometer":0.0, "type":"start", "direction":"Marche en Famenne"},
+     {"description":"Marche city center. Near by the city hall", "kilometer":35.6, "type":"ra4_exit2", "direction":"Rochefort"},
+     {"description":"Rochefort, the river. Near by the bridge.", "kilometer":52.3, "type":"t_left", "direction":"Saint Hubert"},
+     {"description":"Saint Hubert. Right after the chirch.", "kilometer":89.2, "type":"x4_right", "direction":"La roche en Ardenne"},
+     {"description":"La Roche en Ardenne. Along the Ourthe", "kilometer":123.7, "type":"y_left", "direction":"Huy"},
+     {"description":"Finish in Huy. Near by the castle.", "kilometer":158.6, "type":"finish", "direction":""},
   ]
 }

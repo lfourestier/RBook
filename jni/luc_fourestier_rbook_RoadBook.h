@@ -9,90 +9,114 @@ extern "C" {
 #endif
 /*
  * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetBookName
+ * Method:    _GetTitle
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookName
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetTitle
   (JNIEnv *, jobject);
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetBookDescription
+ * Method:    _SetTitle
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetTitle
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _GetDescription
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookDescription
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetDescription
   (JNIEnv *, jobject);
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetBookLocation
+ * Method:    _SetDescription
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetDescription
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _GetLocation
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookLocation
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetLocation
   (JNIEnv *, jobject);
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetBookTotalDistance
+ * Method:    _SetLocation
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetLocation
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _GetTotalDistance
  * Signature: ()F
  */
-JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookTotalDistance
+JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetTotalDistance
   (JNIEnv *, jobject);
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetCurrentPointName
- * Signature: ()Ljava/lang/String;
+ * Method:    _GetCurrentPoint
+ * Signature: ()I
  */
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointName
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPoint
   (JNIEnv *, jobject);
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetCurrentPointObservation
- * Signature: ()Ljava/lang/String;
+ * Method:    _GetPreviousPoint
+ * Signature: ()I
  */
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointObservation
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1GetPreviousPoint
   (JNIEnv *, jobject);
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetCurrentPointKilometer
+ * Method:    _GetNextPoint
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1GetNextPoint
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _GetDistanceToNext
  * Signature: ()F
  */
-JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointKilometer
+JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetDistanceToNext
   (JNIEnv *, jobject);
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetCurrentPointType
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointType
-  (JNIEnv *, jobject);
-
-/*
- * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetCurrentPointDirection
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointDirection
-  (JNIEnv *, jobject);
-
-/*
- * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetCurrentPointDistanceToNext
+ * Method:    _GetDistanceFromPrevious
  * Signature: ()F
  */
-JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointDistanceToNext
+JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetDistanceFromPrevious
   (JNIEnv *, jobject);
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
- * Method:    _GetCurrentPointDistanceFromPrevious
- * Signature: ()F
+ * Method:    _AddNewPointBefore
+ * Signature: ()I
  */
-JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointDistanceFromPrevious
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1AddNewPointBefore
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _AddNewPointAfter
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1AddNewPointAfter
   (JNIEnv *, jobject);
 
 /*
@@ -117,6 +141,14 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1Previous
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1Reset
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _End
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1End
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

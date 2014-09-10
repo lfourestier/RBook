@@ -25,11 +25,12 @@ public:
 
     //! RoadBook Error list
     enum ERROR {
-        ERROR_NO_BOOK_FILE = ROADBOOK_ERROR_BASE,
-        ERROR_MAL_FORMATTED_BOOK,
-        ERROR_EMPTY_LIST,
-        ERROR_REACHED_END,
-        ERROR_REACHED_START,
+        ERROR_FILE_NOT_FOUND = ROADBOOK_ERROR_BASE, //!< Did not find the file specified.
+        ERROR_MAL_FORMATTED_BOOK, //!< Roadbook file is mal formatted.
+        ERROR_EMPTY_LIST, //!< Road point list is empty.
+        ERROR_REACHED_END, //!< Reached the end of the road point list while navigating into it.
+        ERROR_REACHED_START, //!< Reached the start of the road point list while navigating into it.
+        ERROR_CANNOT_SAVE, //!< File issue while saving.
     };
 
     //! Road book title
@@ -74,7 +75,7 @@ public:
      * @param distance: The distance
      * @return @see ERROR
      */
-    Error GetDistanceFromPreviousPoint(float &distance);
+    Error GetDistanceFromPrevious(float &distance);
 
     /**
      * Calculate the distance to the next point in the list.
@@ -82,7 +83,27 @@ public:
      * @param distance: The distance
      * @return @see ERROR
      */
-    Error GetDistanceToNextPoint(float &distance);
+    Error GetDistanceToNext(float &distance);
+
+    /**
+     * Insert a new point into the list before the current position.
+     * Create the point.
+     * Current position point and next ones will be pushed.
+     *
+     * @param point: Return created point.
+     * @return @see ERROR
+     */
+    Error AddNewPointBefore(RoadPoint*& point);
+
+    /**
+     * Insert a new point into the list after the current position.
+     * Create the point.
+     * Next points will be pushed.
+     *
+     * @param point: returned new created point.
+     * @return @see ERROR
+     */
+    Error AddNewPointAfter(RoadPoint*& point);
 
    /**
      * Advance into the list.
@@ -106,6 +127,13 @@ public:
      * @return @see ERROR
      */
     Error Reset();
+
+    /**
+     * Go to end of point list.
+     *
+     * @return @see ERROR
+     */
+    Error End();
 
 private:
     /**
@@ -152,12 +180,19 @@ private:
     Error Save();
 
     /**
+     * Delete the roadbook. Remove any corresponding resources (Files, directories...).
+     *
+     * @return @see ERROR
+     */
+    Error Delete();
+
+    /**
      * Parse the general data of the road book
      *
-     * @param motobook: The road book
+     * @param content: The road book content
      * @return @see ERROR.
      */
-    Error ParseRoadBook(const std::string& roadbook);
+    Error ParseRoadBook(const std::string& content);
 
     /**
      * Parse the road point list of the road book and create the object list out of it.
@@ -175,6 +210,31 @@ private:
      */
     Error ParseRoadPoint(const JSONNode& roadpoint);
 
+    /**
+     * Generate the road book json data.
+     *
+     * @param content: the returned content string.
+     * @return @see ERROR
+     */
+    Error GenerateRoadBook(std::string& content);
+
+    /**
+     * Generate the road point json array.
+     *
+     * @param roadpoints: json array node where to store the array
+     * @return @see ERROR
+     */
+    Error GenerateRoadPoints(JSONNode& roadpoints);
+
+    /**
+     * Check if file exists.
+     *
+     * @pre file string MUST NOT be empty.
+     *
+     * @param file: File path.
+     * @return @see ERROR
+     */
+    Error FileExists(std::string file);
 };
 
 } // namespace

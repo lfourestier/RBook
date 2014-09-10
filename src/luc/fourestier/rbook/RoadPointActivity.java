@@ -22,7 +22,7 @@ public class RoadPointActivity extends Activity {
 										// instead of fixed layout.
 	private TextView distancetonextTextView;
 	private ImageView pointImageView;
-	private TextView nameTextView;
+	private TextView descriptionTextView;
 	private TextView kilometerTextView;
 	private TextView partialTextView;
 	private Button previousButton;
@@ -49,7 +49,7 @@ public class RoadPointActivity extends Activity {
 		directionTextView = (TextView) findViewById(R.id.point_direction_text);
 		distancetonextTextView = (TextView) findViewById(R.id.point_distancetonext_text);
 		pointImageView = (ImageView) findViewById(R.id.point_road_image);
-		nameTextView = (TextView) findViewById(R.id.point_name_text);
+		descriptionTextView = (TextView) findViewById(R.id.point_description_text);
 		kilometerTextView = (TextView) findViewById(R.id.point_kilometer_text);
 		partialTextView = (TextView) findViewById(R.id.point_partialkilometer_text);
 		previousButton = (Button) findViewById(R.id.point_previous_button);
@@ -169,16 +169,16 @@ public class RoadPointActivity extends Activity {
 
 	private void RefreshRoadPoint() {
 		Float distance = 0.0f;
-		directionTextView.setText(currentRoadBook.getCurrentPointDirection());
+		directionTextView.setText(currentRoadBook.getCurrentPoint().getDirection());
 		
 		try {
-			distance = currentRoadBook.getCurrentPointDistanceToNext();
+			distance = currentRoadBook.getDistanceToNext();
 		} catch (IndexOutOfBoundsException e) {
 			distance = 0.0f;
 		}
 		distancetonextTextView.setText(String.format("%.2f", distance));
 		
-		pointImageType = currentRoadBook.getCurrentPointType();
+		pointImageType = currentRoadBook.getCurrentPoint().getType();
 		int id = getResources().getIdentifier(pointImageType, drawablePrefix,
 				getPackageName());
 		if (id != 0) {
@@ -186,11 +186,11 @@ public class RoadPointActivity extends Activity {
 		} else {
 			pointImageView.setImageResource(R.drawable.question_mark);
 		}
-		nameTextView.setText(currentRoadBook.getCurrentPointName());
-		kilometerTextView.setText(String.format("%.2f", currentRoadBook.getCurrentPointKilometer()));
+		descriptionTextView.setText(currentRoadBook.getCurrentPoint().getDescription());
+		kilometerTextView.setText(String.format("%.2f", currentRoadBook.getCurrentPoint().getKilometer()));
 
 		try {
-			distance = currentRoadBook.getCurrentPointDistanceFromPrevious();
+			distance = currentRoadBook.getDistanceFromPrevious();
 		} catch (IndexOutOfBoundsException e) {
 			distance = 0.0f;
 		}

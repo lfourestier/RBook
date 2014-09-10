@@ -39,10 +39,10 @@ public class RoadBookActivity extends Activity {
     	
     	setTitle(currentBookName);
     	
-	    titleTextView.setText(currentRoadBook.getBookTitle());
-	    descriptionTextView.setText(currentRoadBook.getBookDescription());
-	    locationTextView.setText(currentRoadBook.getBookLocation());
-	    distanceTextView.setText(String.format("%.1f", currentRoadBook.getBookTotalDistance()));
+	    titleTextView.setText(currentRoadBook.getTitle());
+	    descriptionTextView.setText(currentRoadBook.getDescription());
+	    locationTextView.setText(currentRoadBook.getLocation());
+	    distanceTextView.setText(String.format("%.1f", currentRoadBook.getTotalDistance()));
 	}
 
 	/**

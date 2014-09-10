@@ -24,7 +24,7 @@ static void JNIThrowOnError(JNIEnv *env, RBook::Error error) {
     case RBook::ERROR_OK:
         break;
     case RBook::RoadBook::ERROR_MAL_FORMATTED_BOOK:
-    case RBook::RoadBook::ERROR_NO_BOOK_FILE:
+    case RBook::RoadBook::ERROR_FILE_NOT_FOUND:
         LOG_E(TAG, "java/io/IOException");
         JNIThrowException(env, "java/io/IOException", NULL);
         break;
@@ -74,7 +74,7 @@ static void SetInstance(JNIEnv* env, jobject thiz, const RBook::RoadBook* inst) 
 
 // JNI API
 
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookName(JNIEnv *env, jobject thiz) {
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetTitle(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
     RBook::RoadBook *mb = GetInstance(env, thiz);
@@ -86,7 +86,23 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookName(JNIEn
     return env->NewStringUTF(mb->Title.c_str());
 }
 
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookDescription(JNIEnv *env, jobject thiz) {
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetTitle (JNIEnv *env, jobject thiz, jstring title) {
+    InitializeInstanceField(env, thiz);
+
+    const char* chartitle = env->GetStringUTFChars(title, NULL);
+    std::string cpptitle(chartitle);
+    env->ReleaseStringUTFChars(title, chartitle);
+
+    RBook::RoadBook *roadbook = GetInstance(env, thiz);
+    if (roadbook == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+
+    roadbook->Title = cpptitle;
+}
+
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetDescription(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
     RBook::RoadBook *rb = GetInstance(env, thiz);
@@ -98,7 +114,23 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookDescriptio
     return env->NewStringUTF(rb->Description.c_str());
 }
 
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookLocation(JNIEnv *env, jobject thiz) {
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetDescription (JNIEnv *env, jobject thiz, jstring description) {
+    InitializeInstanceField(env, thiz);
+
+    const char* chardescription = env->GetStringUTFChars(description, NULL);
+    std::string cppdescription(chardescription);
+    env->ReleaseStringUTFChars(description, chardescription);
+
+    RBook::RoadBook *roadbook = GetInstance(env, thiz);
+    if (roadbook == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+
+    roadbook->Description = cppdescription;
+}
+
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetLocation(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
     RBook::RoadBook *rb = GetInstance(env, thiz);
@@ -110,7 +142,23 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookLocation(J
     return env->NewStringUTF(rb->Location.c_str());
 }
 
-JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookTotalDistance(JNIEnv *env, jobject thiz) {
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetLocation (JNIEnv *env, jobject thiz, jstring location) {
+    InitializeInstanceField(env, thiz);
+
+    const char* charlocation = env->GetStringUTFChars(location, NULL);
+    std::string cpplocation(charlocation);
+    env->ReleaseStringUTFChars(location, charlocation);
+
+    RBook::RoadBook *roadbook = GetInstance(env, thiz);
+    if (roadbook == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+
+    roadbook->Location = cpplocation;
+}
+
+JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetTotalDistance(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
     RBook::RoadBook *rb = GetInstance(env, thiz);
@@ -122,108 +170,55 @@ JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookTotalDistan
     return rb->TotalDistance;
 }
 
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointName(JNIEnv *env, jobject thiz) {
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPoint (JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
-    RBook::RoadBook *rb = GetInstance(env, thiz);
-    if (rb == NULL) {
+    RBook::RoadBook *roadbook = GetInstance(env, thiz);
+    if (roadbook == NULL) {
         JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
-        return env->NewStringUTF("");
+        return 0;
     }
 
-    RBook::RoadPoint *rp = NULL;
-    RBook::Error error = rb->GetCurrentPoint(rp);
+    RBook::RoadPoint *roadpoint = NULL;
+    RBook::Error error = roadbook->GetCurrentPoint(roadpoint);
     JNIThrowOnError(env, error);
-    if (rp == NULL) {
-        LOG_I(TAG, "Road point null!");
-        return env->NewStringUTF("");
-    }
 
-    LOG_V(TAG, "Current point name: %s", rp->Name.c_str());
-    return env->NewStringUTF(rp->Name.c_str());
+    return (int) roadpoint;
 }
 
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointObservation(JNIEnv *env, jobject thiz) {
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1GetPreviousPoint (JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
-    RBook::RoadBook *rb = GetInstance(env, thiz);
-    if (rb == NULL) {
+    RBook::RoadBook *roadbook = GetInstance(env, thiz);
+    if (roadbook == NULL) {
         JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
-        return env->NewStringUTF("");
+        return 0;
     }
 
-    RBook::RoadPoint *rp = NULL;
-    RBook::Error error = rb->GetCurrentPoint(rp);
+    RBook::RoadPoint *roadpoint = NULL;
+    RBook::Error error = roadbook->GetPreviousPoint(roadpoint);
     JNIThrowOnError(env, error);
-    if (rp == NULL) {
-        LOG_I(TAG, "Road point null!");
-        return env->NewStringUTF("");
-    }
 
-    return env->NewStringUTF(rp->Observation.c_str());
+    return (int) roadpoint;
 }
 
-JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointKilometer(JNIEnv *env, jobject thiz) {
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1GetNextPoint (JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
-    RBook::RoadBook *rb = GetInstance(env, thiz);
-    if (rb == NULL) {
+    RBook::RoadBook *roadbook = GetInstance(env, thiz);
+    if (roadbook == NULL) {
         JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
-        return 0.0;
+        return 0;
     }
 
-    RBook::RoadPoint *rp = NULL;
-    RBook::Error error = rb->GetCurrentPoint(rp);
+    RBook::RoadPoint *roadpoint = NULL;
+    RBook::Error error = roadbook->GetNextPoint(roadpoint);
     JNIThrowOnError(env, error);
-    if (rp == NULL) {
-        LOG_I(TAG, "Road point null!");
-        return 0.0;
-    }
 
-    return rp->Kilometer;
+    return (int) roadpoint;
 }
 
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointType(JNIEnv *env, jobject thiz) {
-    InitializeInstanceField(env, thiz);
-
-    RBook::RoadBook *rb = GetInstance(env, thiz);
-    if (rb == NULL) {
-        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
-        return env->NewStringUTF("");
-    }
-
-    RBook::RoadPoint *rp = NULL;
-    RBook::Error error = rb->GetCurrentPoint(rp);
-    JNIThrowOnError(env, error);
-    if (rp == NULL) {
-        LOG_I(TAG, "Road point null!");
-        return env->NewStringUTF("");
-    }
-
-    return env->NewStringUTF(rp->Type.c_str());
-}
-
-JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointDirection(JNIEnv *env, jobject thiz) {
-    InitializeInstanceField(env, thiz);
-
-    RBook::RoadBook *rb = GetInstance(env, thiz);
-    if (rb == NULL) {
-        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
-        return env->NewStringUTF("");
-    }
-
-    RBook::RoadPoint *rp = NULL;
-    RBook::Error error = rb->GetCurrentPoint(rp);
-    JNIThrowOnError(env, error);
-    if (rp == NULL) {
-        LOG_I(TAG, "Road point null!");
-        return env->NewStringUTF("");
-    }
-
-    return env->NewStringUTF(rp->Direction.c_str());
-}
-
-JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointDistanceToNext(JNIEnv *env, jobject thiz) {
+JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetDistanceToNext(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
     RBook::RoadBook *rb = GetInstance(env, thiz);
@@ -233,13 +228,13 @@ JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointDis
     }
 
     float distance = 0.0;
-    RBook::Error error = rb->GetDistanceToNextPoint(distance);
+    RBook::Error error = rb->GetDistanceToNext(distance);
     JNIThrowOnError(env, error);
 
     return distance;
 }
 
-JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointDistanceFromPrevious(JNIEnv *env, jobject thiz) {
+JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetDistanceFromPrevious(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
     RBook::RoadBook *rb = GetInstance(env, thiz);
@@ -249,10 +244,42 @@ JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointDis
     }
 
     float distance = 0.0;
-    RBook::Error error = rb->GetDistanceFromPreviousPoint(distance);
+    RBook::Error error = rb->GetDistanceFromPrevious(distance);
     JNIThrowOnError(env, error);
 
     return distance;
+}
+
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1AddNewPointBefore (JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    RBook::RoadBook *roadbook = GetInstance(env, thiz);
+    if (roadbook == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return 0;
+    }
+
+    RBook::RoadPoint *roadpoint = NULL;
+    RBook::Error error = roadbook->AddNewPointBefore(roadpoint);
+    JNIThrowOnError(env, error);
+
+    return (int) roadpoint;
+}
+
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1AddNewPointAfter (JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    RBook::RoadBook *roadbook = GetInstance(env, thiz);
+    if (roadbook == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return 0;
+    }
+
+    RBook::RoadPoint *roadpoint = NULL;
+    RBook::Error error = roadbook->AddNewPointAfter(roadpoint);
+    JNIThrowOnError(env, error);
+
+    return (int) roadpoint;
 }
 
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1Next(JNIEnv *env, jobject thiz) {
@@ -281,6 +308,7 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1Previous(JNIEnv *env
     JNIThrowOnError(env, error);
 }
 
+
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1Reset(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
@@ -291,5 +319,18 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1Reset(JNIEnv *env, j
     }
 
     RBook::Error error = rb->Reset();
+    JNIThrowOnError(env, error);
+}
+
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1End(JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    RBook::RoadBook *rb = GetInstance(env, thiz);
+    if (rb == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+
+    RBook::Error error = rb->End();
     JNIThrowOnError(env, error);
 }
