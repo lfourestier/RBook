@@ -47,9 +47,35 @@ public class BookManager {
 	}
 	
 	/**
+	 * Create a new blank road book.
+	 * 
+	 * @param bookname: the bookname (ie: simple file name w/o extension)
+	 * @return The road book
+	 * @exception java/lang/RuntimeException: any internal native resource errors; 
+	 */
+	public RoadBook createRoadBook(String bookname) {
+		RoadBook rb = new RoadBook();
+		rb.nativeInstance = _CreateRoadBook(bookname);
+		
+		return rb;
+		
+	}
+	
+	/**
+	 * Save the road book.
+	 * 
+	 * @param roadbook: the roadbook to save.
+	 * @exception java/lang/RuntimeException: any internal native resource errors; 
+	 * @exception java/io/IOException: any file errors; 
+	 */
+	public void saveRoadBook(RoadBook roadbook) {
+		_SaveRoadBook(roadbook.nativeInstance);
+	}
+	 
+	/**
 	 * Release the road book.
-	 * Once used, the user MUST release the roadbook native resources by calling that function.
-	 * Roadbook is then not usable anymore and user must call GetRoadBook to get it again.
+	 * The user MUST release the roadbook native resources by calling that function.
+	 * Once used, Roadbook is not usable anymore and user must call GetRoadBook to get it again.
 	 * 
 	 * @param roadbook: the roadbook to release.
 	 * @exception java/lang/RuntimeException: any internal native resource errors; 
@@ -61,6 +87,17 @@ public class BookManager {
 		roadbook.nativeInstance = 0;
 	}
 	 
+	/**
+	 * Delete the roadbook.
+	 * 
+	 * @param bookname: the roadbook to delete.
+	 * @exception java/lang/RuntimeException: any internal native resource errors; 
+	 * @exception java/io/IOException: any file errors; 
+	 */
+	public void deleteRoadBook(String bookname) {
+		_DeleteRoadBook(bookname);
+	}
+	
 	/**
 	 * Releases the native BookManager instance and all resources associated with it.
 	 * 
@@ -82,6 +119,9 @@ public class BookManager {
 	private native final void _Create(String rootdir);
 	private native final String _GetRoadBookListSerialized();
 	private native final int _GetRoadBook(String bookname);
+	private native final int _CreateRoadBook(String bookname);
+	private native final void _SaveRoadBook(int instance);
 	private native final void _ReleaseRoadBook(int instance);
+	private native final void _DeleteRoadBook(String bookname);
 	private native final void _Release();
 }

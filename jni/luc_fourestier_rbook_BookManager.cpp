@@ -23,10 +23,14 @@ static void JNIThrowOnError(JNIEnv *env, RBook::Error error) {
     switch (ERROR_CODE(error)) {
     case RBook::ERROR_OK:
         break;
+    case RBook::RoadBook::ERROR_MAL_FORMATTED_BOOK:
+    case RBook::RoadBook::ERROR_CANNOT_SAVE:
+    case RBook::RoadBook::ERROR_FILE_NOT_FOUND:
     case RBook::BookManager::ERROR_DIR_NOT_FOUND:
         LOG_E(TAG, "java/io/IOException");
         JNIThrowException(env, "java/io/IOException", NULL);
         break;
+    case RBook::RoadBook::ERROR_EMPTY_LIST:
     case RBook::BookManager::ERROR_EMPTY_LIST:
     case RBook::BookManager::ERROR_BOOKNAME_NOT_FOUND:
         LOG_E(TAG, "java/lang/IndexOutOfBoundsException");
@@ -133,6 +137,40 @@ JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_BookManager__1GetRoadBook(JNIEn
 
 }
 
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_BookManager__1CreateRoadBook(JNIEnv *env, jobject thiz, jstring bookname) {
+    RBook::BookManager *bm = GetInstance(env, thiz);
+    if (bm == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return 0;
+    }
+
+    const char* charbookname = env->GetStringUTFChars(bookname, NULL);
+    std::string cppbookname(charbookname);
+    env->ReleaseStringUTFChars(bookname, charbookname);
+
+    RBook::RoadBook *roadbook = NULL;
+    RBook::Error error = bm->CreateRoadBook(cppbookname, roadbook);
+    JNIThrowOnError(env, error);
+
+    return (int) roadbook;
+
+}
+
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1SaveRoadBook(JNIEnv *env, jobject thiz, jint instance) {
+    RBook::BookManager *bm = GetInstance(env, thiz);
+    if (bm == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+
+    RBook::RoadBook *roadbook = reinterpret_cast<RBook::RoadBook*>(instance);
+    if (roadbook == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+    bm->SaveRoadBook(roadbook);
+}
+
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1ReleaseRoadBook(JNIEnv *env, jobject thiz, jint instance) {
     RBook::BookManager *bm = GetInstance(env, thiz);
     if (bm == NULL) {
@@ -146,6 +184,21 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1ReleaseRoadBook(J
         return;
     }
     bm->ReleaseRoadBook(roadbook);
+}
+
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1DeleteRoadBook (JNIEnv *env, jobject thiz, jstring bookname) {
+    RBook::BookManager *bm = GetInstance(env, thiz);
+    if (bm == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+
+     const char* charbookname = env->GetStringUTFChars(bookname, NULL);
+     std::string cppbookname(charbookname);
+     env->ReleaseStringUTFChars(bookname, charbookname);
+
+     RBook::Error error = bm->DeleteRoadBook(cppbookname);
+     JNIThrowOnError(env, error);
 }
 
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1Release(JNIEnv *env, jobject thiz) {

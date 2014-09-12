@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="default_text">None</string>
     <string name="app_name">RoadBook</string>
     <string name="action_settings">Settings</string>
-    <string name="default_text">none</string>
-    <string name="my_first_road_book">MyFirstRoadBook</string>
-    <string name="test_road_book">TestRoadBook</string>
-    <string name="title">Title</string>
-    <string name="description">Description</string>
-    <string name="location">Location</string>
-    <string name="distance">Distance</string>
-    <string name="title_activity_road_point">RoadPointActivity</string>
-    <string name="previous">Prev</string>
-    <string name="next">Next</string>
-    <string name="start">Start</string>
-    <string name="load">Load</string>
-    <string name="create_new">New</string>
-    <string name="open">Open</string>
-    <string name="title_activity_road_book">RoadBook</string>
+    <string name="action_add">Add</string>
+    <string name="action_save">Save</string>
+    <string name="dialog_add_book_text">Roadbook name</string>
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="book_edit_title_hint">Title</string>
+    <string name="book_edit_decription_hint">Description</string>
+    <string name="book_edit_location_hint">Location (ex: "France, Paris")</string>
+    <string name="warning_name_empty">Book name is empty!</string>
+    <string name="title_activity_road_point_edit">RoadPointEditActivity</string>
     <string name="hello_world">Hello world!</string>
 
 </resources>

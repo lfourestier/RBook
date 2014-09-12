@@ -33,11 +33,35 @@ JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_BookManager__1GetRoadBook
 
 /*
  * Class:     luc_fourestier_rbook_BookManager
+ * Method:    _CreateRoadBook
+ * Signature: (Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_BookManager__1CreateRoadBook
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     luc_fourestier_rbook_BookManager
+ * Method:    _SaveRoadBook
+ * Signature: (I)V
+ */
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1SaveRoadBook
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     luc_fourestier_rbook_BookManager
  * Method:    _ReleaseRoadBook
  * Signature: (I)V
  */
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1ReleaseRoadBook
   (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     luc_fourestier_rbook_BookManager
+ * Method:    _DeleteRoadBook
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1DeleteRoadBook
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     luc_fourestier_rbook_BookManager

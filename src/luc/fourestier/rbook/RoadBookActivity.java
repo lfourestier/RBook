@@ -45,9 +45,6 @@ public class RoadBookActivity extends Activity {
 	    distanceTextView.setText(String.format("%.1f", currentRoadBook.getTotalDistance()));
 	}
 
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
 	private void setupActionBar() {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);

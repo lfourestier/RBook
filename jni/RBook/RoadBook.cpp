@@ -355,7 +355,7 @@ Error RoadBook::ParseRoadBook(const std::string& content) {
                 Location = i->as_string();
             }
             else if ((i->type() == JSON_ARRAY) && (nodename == ROADBOOK_ROADPOINTS_TAG)) {
-                ret = ParseRoadPointList(*i);
+                ret = ParseRoadPointList(*i); // TODO Crash if array is empty. Why?
             }
         }
 
