@@ -24,7 +24,6 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 	
 	public static BookManager theBookManager = null;
 	public static RoadBook currentRoadBook = null; // TODO Should not be static!
-	public static String currentBookName = null;
 
 // Native library
 	
@@ -39,9 +38,9 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		bookListView = (ListView) findViewById(R.id.road_book_list);
-
 		try {
+			bookListView = (ListView) findViewById(R.id.road_book_list);
+
 			if (theBookManager == null) {
 				String sdcard = Environment.getExternalStorageDirectory()
 						.getPath();
@@ -50,16 +49,13 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 			}
 
 			bookListArray = theBookManager.getRoadBookList();
-			if (currentBookName == null) {
-				currentBookName = bookListArray.get(0);
-			}
-
 
 			listAdapter = new BookListAdapter(this, bookListArray);
 			bookListView.setAdapter(listAdapter);
 			bookListView.setOnItemClickListener(mListViewListener);
 		} catch (Exception e) {
-			Log.e("MAIN", "BookManager creation failed");
+			Log.e("MainActivity", "Error while starting: " + e.getMessage());
+			toastMessage("Error while starting!");
 		}
 	}
 
@@ -96,7 +92,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 				int position, long id) {
 			try {
 				// Save the last file name
-				currentBookName = (String) parent.getItemAtPosition(position);
+				String bookName = (String) parent.getItemAtPosition(position);
 
 				// Unload the old one
 				if (currentRoadBook != null) {
@@ -105,13 +101,14 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 				}
 
 				// Load the new road book
-				currentRoadBook = theBookManager.getRoadBook(currentBookName);
+				currentRoadBook = theBookManager.getRoadBook(bookName);
 
 				Intent intent = new Intent(MainActivity.this, RoadBookActivity.class);
 				startActivity(intent);
 
 			} catch (Exception e) {
-				// TODO: handle exception
+				Log.e("MainActivity", "Error while loading: " + e.getMessage());
+				toastMessage("Oups! Cannot load!");
 			}
 		}
 	};
@@ -125,18 +122,15 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-		currentBookName = ((AddDialogFragment) dialog).roadBookName;
+		String bookName = ((AddDialogFragment) dialog).roadBookName;
 
-		if (!currentBookName.isEmpty()) {
+		if (!bookName.isEmpty()) {
 			if (currentRoadBook != null) {
 				theBookManager.releaseRoadBook(currentRoadBook);
 				currentRoadBook = null;
 			}
-			currentRoadBook = theBookManager.createRoadBook(currentBookName);
+			currentRoadBook = theBookManager.createRoadBook(bookName);
 			
-//	    	bookListArray.add(currentBookName);
-//	    	listAdapter.notifyDataSetChanged();
-	    	
 			Intent intent = new Intent(MainActivity.this, RoadBookEditActivity.class);
 			startActivity(intent);
 		}

@@ -232,6 +232,13 @@ Error RoadBook::End() {
 
 // Private
 
+RoadBook::RoadBook() : RoadPointIndex(0) {
+    Title = "";
+    Description = "";
+    Location = "";
+    TotalDistance = 0.0;
+}
+
 RoadBook::~RoadBook() {
     try {
         // Delete road point list

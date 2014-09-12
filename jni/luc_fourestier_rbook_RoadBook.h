@@ -9,6 +9,14 @@ extern "C" {
 #endif
 /*
  * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _GetBookName
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookName
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
  * Method:    _GetTitle
  * Signature: ()Ljava/lang/String;
  */

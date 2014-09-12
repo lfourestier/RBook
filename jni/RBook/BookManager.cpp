@@ -90,6 +90,7 @@ Error BookManager::GetRoadBook(std::string bookname, RoadBook *& roadbook) {
                     roadbook = new RoadBook();
                     if (roadbook != NULL) {
                         roadbook->FilePath = RBookDirectory + "/" + bookname + BOOK_EXTENSION;
+                        roadbook->Bookname = bookname;
                         ret = roadbook->Load();
                     }
                     else {
@@ -116,6 +117,7 @@ Error BookManager::CreateRoadBook(std::string bookname, RoadBook *& roadbook) {
     roadbook = new RoadBook();
     if (roadbook != NULL) {
         roadbook->FilePath = RBookDirectory + "/" + bookname + BOOK_EXTENSION;
+        roadbook->Bookname = bookname;
     }
     else {
         ret = ERROR_FAIL;

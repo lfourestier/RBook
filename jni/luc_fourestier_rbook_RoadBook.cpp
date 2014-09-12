@@ -25,11 +25,13 @@ static void JNIThrowOnError(JNIEnv *env, RBook::Error error) {
         break;
     case RBook::RoadBook::ERROR_MAL_FORMATTED_BOOK:
     case RBook::RoadBook::ERROR_FILE_NOT_FOUND:
+    case RBook::RoadBook::ERROR_CANNOT_SAVE:
         LOG_E(TAG, "java/io/IOException");
         JNIThrowException(env, "java/io/IOException", NULL);
         break;
     case RBook::RoadBook::ERROR_REACHED_END:
     case RBook::RoadBook::ERROR_REACHED_START:
+    case RBook::RoadBook::ERROR_EMPTY_LIST:
         LOG_I(TAG, "java/lang/IndexOutOfBoundsException");
         JNIThrowException(env, "java/lang/IndexOutOfBoundsException", NULL);
         break;
@@ -73,6 +75,18 @@ static void SetInstance(JNIEnv* env, jobject thiz, const RBook::RoadBook* inst) 
 }
 
 // JNI API
+
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookName(JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    RBook::RoadBook *mb = GetInstance(env, thiz);
+    if (mb == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return env->NewStringUTF("");
+    }
+
+    return env->NewStringUTF(mb->Bookname.c_str());
+}
 
 JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetTitle(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);

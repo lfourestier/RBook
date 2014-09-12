@@ -1,6 +1,15 @@
 package luc.fourestier.rbook;
 
 public class RoadBook {
+	
+	/**
+	 * Get the bookname (Short name).
+	 * 
+	 * @return The bookname.
+	 */
+	public String getBookName() {
+		return _GetBookName();
+	}
 
 	/**
 	 * Get the title of the road book.
@@ -180,6 +189,8 @@ public class RoadBook {
 
 	// Native
 
+	private native final String _GetBookName();
+	
 	private native final String _GetTitle();
 
 	private native final void _SetTitle(String title);

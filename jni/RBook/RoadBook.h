@@ -33,6 +33,9 @@ public:
         ERROR_CANNOT_SAVE, //!< File issue while saving.
     };
 
+    //! bookname (Short name for the book = file name w/o extension and path.)
+    std::string Bookname;
+
     //! Road book title
     std::string Title;
 
@@ -105,7 +108,7 @@ public:
      */
     Error AddNewPointAfter(RoadPoint*& point);
 
-   /**
+    /**
      * Advance into the list.
      * Stays at end if end is reached and return REACHED_END.
      *
@@ -154,10 +157,7 @@ private:
     /**
      * Constructor.
      */
-    RoadBook() :
-            RoadPointIndex(0) {
-    }
-    ;
+    RoadBook();
 
     /**
      * Destructor.

@@ -64,11 +64,30 @@
 	        android:hint="@string/book_edit_location_hint"
 	        android:textSize="20sp" />
 	
-	    <Button
+	    <ImageView
+	        android:id="@+id/book_distance_icon"
+	        android:layout_width="20dp"
+	        android:layout_height="20dp"
+	        android:layout_toLeftOf="@+id/book_edit_distance_text"
+	        android:layout_alignBottom="@+id/book_edit_distance_text"
+	        android:contentDescription="@string/default_text"
+	        android:src="@drawable/milestone" />
+	
+	    <TextView
+	        android:id="@+id/book_edit_distance_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignLeft="@+id/book_edit_name_text"
+	        android:layout_below="@+id/book_edit_location_text"
+	        android:layout_marginTop="20dp"
+	        android:text="@string/default_text"
+	        android:textSize="20sp" />
+	
+		<Button
 	        android:id="@+id/book_edit_start_button"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/book_edit_location_text"
+	        android:layout_below="@+id/book_edit_distance_text"
 	        android:layout_alignParentRight="true"
 	        android:background="@drawable/go" />
 	
