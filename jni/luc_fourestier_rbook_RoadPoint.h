@@ -71,6 +71,14 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadPoint__1GetDirection
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadPoint__1SetDirection
   (JNIEnv *, jobject, jstring);
 
+/*
+ * Class:     luc_fourestier_rbook_RoadPoint
+ * Method:    _GetNumber
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadPoint__1GetNumber
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

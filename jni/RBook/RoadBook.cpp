@@ -32,6 +32,12 @@
 
 namespace RBook {
 
+Error RoadBook::GetPointCount(unsigned int &count) {
+    Error ret;
+    count = RoadPointList.size();
+    return ret;
+}
+
 Error RoadBook::GetCurrentPoint(RoadPoint*& point) {
     Error ret;
 
@@ -41,6 +47,7 @@ Error RoadBook::GetCurrentPoint(RoadPoint*& point) {
         }
         else {
             point = RoadPointList[RoadPointIndex]; // We assume RoadPointIndex is properly calculated by the other functions.
+            point->Number = RoadPointIndex+1;
         }
     }
     catch (std::exception& e) {
@@ -174,6 +181,34 @@ Error RoadBook::AddNewPointAfter(RoadPoint*& point){
             std::vector<RoadPoint*>::iterator iterator = RoadPointList.begin();
             std::advance(iterator, RoadPointIndex + 1);
             RoadPointList.insert(iterator, point);
+            Next(); // Go to the new point
+        }
+    } catch (std::exception& e) {
+        ret = ERROR_FAIL;
+    }
+
+    return ret;
+}
+
+Error RoadBook::DeleteCurrentPoint() {
+    Error ret;
+
+    try {
+        if (!RoadPointList.empty()) {
+            std::vector<RoadPoint*>::iterator iterator = RoadPointList.begin();
+            std::advance(iterator, RoadPointIndex);
+            RoadPointList.erase(iterator);
+
+            // Re-adjust index
+            if (RoadPointList.size() == 0) {
+                RoadPointIndex = 0;
+            }
+            else if (RoadPointIndex >= RoadPointList.size()) {
+                RoadPointIndex = RoadPointList.size()-1;
+            }
+        }
+        else {
+            ret = ERROR_EMPTY_LIST;
         }
     } catch (std::exception& e) {
         ret = ERROR_FAIL;

@@ -14,6 +14,7 @@ RoadPoint::RoadPoint() {
     Type = "";
     Kilometer = 0.0;
     Direction = "";
+    Number = 0;
 }
 
 } // namespace

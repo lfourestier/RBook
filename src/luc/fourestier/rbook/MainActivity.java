@@ -72,8 +72,9 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	        case R.id.action_settings:
-	            //openSearch();
+	        case R.id.action_help:
+				Intent intent = new Intent(MainActivity.this, HelpActivity.class);
+				startActivity(intent);
 	            return true;
 	        case R.id.action_add:
 			    showAddDialog();

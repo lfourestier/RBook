@@ -50,11 +50,27 @@
         </activity>
         <activity
             android:name="luc.fourestier.rbook.RoadPointEditActivity"
-            android:label="@string/title_activity_road_point_edit"
+            android:label="@string/app_name"
             android:parentActivityName="luc.fourestier.rbook.RoadBookEditActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="luc.fourestier.rbook.RoadBookEditActivity" />
+        </activity>
+        <activity
+            android:name="luc.fourestier.rbook.RoadPointSelectActivity"
+            android:label="@string/title_activity_road_point_select"
+            android:parentActivityName="luc.fourestier.rbook.RoadPointEditActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="luc.fourestier.rbook.RoadPointEditActivity" />
+        </activity>
+        <activity
+            android:name="luc.fourestier.rbook.HelpActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="luc.fourestier.rbook.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="luc.fourestier.rbook.MainActivity" />
         </activity>
     </application>
 

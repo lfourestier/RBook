@@ -35,6 +35,9 @@ public:
     //! Description of the direction towards the next point (City, well known places, road numbers...).
     std::string Direction;
 
+    //! The number of the point in the list.
+    unsigned int Number;
+
     /**
      * Constructor.
      */

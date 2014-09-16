@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,10 +19,11 @@ import android.widget.Toast;
 public class RoadPointEditActivity extends Activity {
 	private EditText directionEditText; 
 	private TextView distancetonextTextView;
-	private ImageView pointImageView;
+	private ImageButton pointImageButton;
 	private EditText descriptionEditText;
 	private EditText kilometerEditText;
 	private TextView partialTextView;
+	private TextView numberTextView;
 	private Button previousButton;
 	private Button nextButton;
 	private Button mapButton;
@@ -47,13 +49,15 @@ public class RoadPointEditActivity extends Activity {
 	
 			directionEditText = (EditText) findViewById(R.id.point_edit_direction_text);
 			distancetonextTextView = (TextView) findViewById(R.id.point_edit_distancetonext_text);
-			pointImageView = (ImageView) findViewById(R.id.point_edit_road_image);
+			pointImageButton = (ImageButton) findViewById(R.id.point_edit_road_image);
+			pointImageButton.setOnClickListener(mPointImageListener);
 			descriptionEditText = (EditText) findViewById(R.id.point_edit_description_text);
 			kilometerEditText = (EditText) findViewById(R.id.point_edit_kilometer_text);
 			partialTextView = (TextView) findViewById(R.id.point_edit_partialkilometer_text);
+			numberTextView = (TextView) findViewById(R.id.point_edit_numbers_text);
 			previousButton = (Button) findViewById(R.id.point_edit_previous_button);
 			previousButton.setOnClickListener(mPrevListener);
-			previousButton.setEnabled(false);
+			previousButton.setEnabled(true);
 			nextButton = (Button) findViewById(R.id.point_edit_next_button);
 			nextButton.setOnClickListener(mNextListener);
 			nextButton.setEnabled(true);
@@ -65,11 +69,10 @@ public class RoadPointEditActivity extends Activity {
 			setTitle(currentRoadBook.getBookName());
 	
 			try {
-				RoadPoint roadpoint = currentRoadBook.getCurrentPoint(); // get road point and Check if list empty
-				refreshRoadPointView(roadpoint);
+				refreshRoadPointView(currentRoadBook);
 			} catch (IndexOutOfBoundsException e) {
-				RoadPoint roadpoint = currentRoadBook.addNewPointAfter();
-				refreshRoadPointView(roadpoint);
+				currentRoadBook.addNewPointAfter();
+				refreshRoadPointView(currentRoadBook);
 			}
 		
 		} catch (Exception e) {
@@ -104,7 +107,7 @@ public class RoadPointEditActivity extends Activity {
 				toastMessage("Oups! Cannot load!");
 			}
 			return true;
-        case R.id.action_save:
+        case R.id.action_point_save:
         	try {
 	        	setValueFromRoadPointView(currentRoadBook.getCurrentPoint());
 			    theBookManager.saveRoadBook(currentRoadBook);
@@ -115,18 +118,36 @@ public class RoadPointEditActivity extends Activity {
 				toastMessage("Oups! Cannot save!");
 			}
             return true;
+        case R.id.action_point_add:
+        	setValueFromRoadPointView(currentRoadBook.getCurrentPoint());
+        	currentRoadBook.addNewPointBefore();
+        	refreshRoadPointView(currentRoadBook);
+            return true;
+        case R.id.action_point_delete:
+        	setValueFromRoadPointView(currentRoadBook.getCurrentPoint());
+        	currentRoadBook.deleteCurrentPoint();
+        	refreshRoadPointView(currentRoadBook);
+            return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 // Buttons
 	
+	private OnClickListener mPointImageListener = new OnClickListener() {
+		public void onClick(View v) {
+			setValueFromRoadPointView(currentRoadBook.getCurrentPoint());
+    	    Intent intent = new Intent(RoadPointEditActivity.this, RoadPointSelectActivity.class);
+    	    startActivity(intent);
+	    }
+	};
+
 	private OnClickListener mPrevListener = new OnClickListener() {
 		public void onClick(View v) {
 			setValueFromRoadPointView(currentRoadBook.getCurrentPoint());
 			try {
 				currentRoadBook.previous();
-				refreshRoadPointView(currentRoadBook.getCurrentPoint());
+				refreshRoadPointView(currentRoadBook);
 				nextButton.setEnabled(true);
 			} catch (IndexOutOfBoundsException e) {
 				previousButton.setEnabled(false);
@@ -142,12 +163,13 @@ public class RoadPointEditActivity extends Activity {
 			setValueFromRoadPointView(currentRoadBook.getCurrentPoint());
 			try {
 				currentRoadBook.next();
-				refreshRoadPointView(currentRoadBook.getCurrentPoint());
+				refreshRoadPointView(currentRoadBook);
 				previousButton.setEnabled(true);
 			} catch (IndexOutOfBoundsException e) {
-				currentRoadBook.addNewPointAfter();
-				currentRoadBook.next();
-				refreshRoadPointView(currentRoadBook.getCurrentPoint());
+				Float kilometer = currentRoadBook.getCurrentPoint().getKilometer();
+				RoadPoint roadpoint = currentRoadBook.addNewPointAfter(); // Advance index!
+				roadpoint.setKilometer(kilometer);
+				refreshRoadPointView(currentRoadBook);
 				previousButton.setEnabled(true);
 			} catch (Exception e) {
 				Log.e("RoadPointEditActivity", "Error while going previous!" + e.getMessage());
@@ -178,12 +200,13 @@ public class RoadPointEditActivity extends Activity {
 	
 // Road point	
 
-	private void refreshRoadPointView(RoadPoint roadpoint) {
+	private void refreshRoadPointView(RoadBook roadbook) {
 		Float distance = 0.0f;
+		RoadPoint roadpoint = roadbook.getCurrentPoint();
 		directionEditText.setText(roadpoint.getDirection());
 		
 		try {
-			distance = currentRoadBook.getDistanceToNext();
+			distance = roadbook.getDistanceToNext();
 		} catch (IndexOutOfBoundsException e) {
 			distance = 0.0f;
 		}
@@ -193,24 +216,27 @@ public class RoadPointEditActivity extends Activity {
 		int id = getResources().getIdentifier(pointImageType, drawablePrefix,
 				getPackageName());
 		if (id != 0) {
-			pointImageView.setImageResource(id);
+			pointImageButton.setImageResource(id);
 		} else {
-			pointImageView.setImageResource(R.drawable.question_mark);
+			pointImageButton.setImageResource(R.drawable.question_mark);
 		}
 		descriptionEditText.setText(roadpoint.getDescription());
 		kilometerEditText.setText(String.format("%.2f", roadpoint.getKilometer()));
 
 		try {
-			distance = currentRoadBook.getDistanceFromPrevious();
+			distance = roadbook.getDistanceFromPrevious();
 		} catch (IndexOutOfBoundsException e) {
 			distance = 0.0f;
 		}
 		partialTextView.setText(String.format("%.2f", distance));
+		numberTextView.setText(Integer.toString(roadpoint.getNumber()) + "/" + Integer.toString(roadbook.getPointCount()));
 	}
 		
 	private void setValueFromRoadPointView(RoadPoint roadpoint) {
 		roadpoint.setDirection(directionEditText.getText().toString());
-		roadpoint.setType("question_mark"); // TODO Select images here!
+		if (roadpoint.getType() == "") {
+			roadpoint.setType("question_mark");
+		}
 		roadpoint.setDescription(descriptionEditText.getText().toString());
 		String kilometerstring = kilometerEditText.getText().toString();
 		kilometerstring = kilometerstring.replace(',', '.');

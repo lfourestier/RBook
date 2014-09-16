@@ -26,7 +26,7 @@ public class AddDialogFragment extends DialogFragment {
         try {
             listener = (AddDialogListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement NoticeDialogListener");
+            throw new ClassCastException(activity.toString() + " must implement AddDialogListener");
         }
     }
     

@@ -52,12 +52,13 @@
 	        android:text="@string/default_text"
 	        android:textSize="16sp" />
 	    
-	    <ImageView
+	    <ImageButton
 	        android:id="@+id/point_edit_road_image"
 	        android:layout_width="100dp"
 	    	android:layout_height="100dp"
 	  		android:layout_below="@+id/point_edit_distancetonext_text"
 	        android:layout_centerHorizontal="true"
+	        android:scaleType="fitCenter"
 	        android:contentDescription="@string/default_text"
 	        android:src="@drawable/question_mark_icon" />
 	
@@ -88,7 +89,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_toRightOf="@+id/point_edit_kilometer_icon"
 	        android:layout_below="@+id/point_edit_description_text"
-	        android:hint="@string/default_text"
+	        android:hint="@string/default_float_text"
 		    android:inputType="text"
 	        android:textSize="50sp" />
 	
@@ -101,7 +102,16 @@
 	        android:text="@string/default_text"
 	        android:textSize="16sp" />
 	
-	    <Button
+	    <TextView
+	        android:id="@+id/point_edit_numbers_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_above="@+id/point_edit_next_button"
+	        android:layout_alignParentRight="true"
+	        android:text="@string/default_text"
+	        android:textSize="16sp" />
+
+	    	    <Button
 	        android:id="@+id/point_edit_previous_button"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"

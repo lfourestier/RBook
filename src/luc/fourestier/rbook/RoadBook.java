@@ -75,6 +75,15 @@ public class RoadBook {
 	}
 	
 	/**
+	 * Get the number of point in the list.
+	 * 
+	 * @return The number.
+	 */
+	public int getPointCount() {
+		return _GetPointCount();
+	}
+	
+	/**
 	 * Get the current road point.
 	 * @return The current road point.
 	 */
@@ -146,6 +155,14 @@ public class RoadBook {
 		
 		return roadpoint;
 	}
+	
+	/**
+	 * Delete the current point.
+	 * Index will be adapted if it is the last point of the list.
+	 */
+	public void deleteCurrentPoint() {
+		_DeleteCurrentPoint();
+	}
 
 	/**
 	 * Advance to next road point.
@@ -205,6 +222,8 @@ public class RoadBook {
 	
 	private native final float _GetTotalDistance();
 
+	private native final int _GetPointCount();
+	
 	private native final int _GetCurrentPoint();
 	
 	private native final int _GetPreviousPoint();
@@ -218,6 +237,8 @@ public class RoadBook {
 	private native final int _AddNewPointBefore();
 	
 	private native final int _AddNewPointAfter();
+	
+	private native final void _DeleteCurrentPoint();
 	
 	private native final void _Next();
 

@@ -89,6 +89,15 @@
         android:text="@string/default_text"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/point_numbers_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/point_next_button"
+        android:layout_alignParentRight="true"
+        android:text="@string/default_text"
+        android:textSize="16sp" />
+
     <Button
         android:id="@+id/point_previous_button"
         android:layout_width="wrap_content"

@@ -73,6 +73,14 @@ JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetTotalDistance
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _GetPointCount
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1GetPointCount
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
  * Method:    _GetCurrentPoint
  * Signature: ()I
  */
@@ -125,6 +133,14 @@ JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1AddNewPointBefore
  * Signature: ()I
  */
 JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1AddNewPointAfter
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _DeleteCurrentPoint
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1DeleteCurrentPoint
   (JNIEnv *, jobject);
 
 /*

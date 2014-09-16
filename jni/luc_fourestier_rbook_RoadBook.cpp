@@ -184,6 +184,21 @@ JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetTotalDistance(J
     return rb->TotalDistance;
 }
 
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1GetPointCount (JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    RBook::RoadBook *roadbook = GetInstance(env, thiz);
+    if (roadbook == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return 0;
+    }
+
+    unsigned int count = 0;
+    roadbook->GetPointCount(count);
+
+    return (int) count;
+}
+
 JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPoint (JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 
@@ -294,6 +309,19 @@ JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1AddNewPointAfter (JN
     JNIThrowOnError(env, error);
 
     return (int) roadpoint;
+}
+
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1DeleteCurrentPoint(JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    RBook::RoadBook *rb = GetInstance(env, thiz);
+    if (rb == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+
+    RBook::Error error = rb->DeleteCurrentPoint();
+    JNIThrowOnError(env, error);
 }
 
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1Next(JNIEnv *env, jobject thiz) {

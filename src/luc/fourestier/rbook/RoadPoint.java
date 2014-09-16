@@ -73,6 +73,15 @@ public class RoadPoint {
 	public void setDirection(String direction) {
 		_SetDirection(direction);
 	}
+	
+	/**
+	 * Get the point number in the list.
+	 * 
+	 * @return The number.
+	 */
+	public int getNumber() {
+		return _GetNumber();
+	}
 
 	// protected
 	
@@ -102,4 +111,6 @@ public class RoadPoint {
 	private native final String _GetDirection();
 	
 	private native final void _SetDirection(String direction);
+	
+	private native final int _GetNumber();
 }

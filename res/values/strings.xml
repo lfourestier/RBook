@@ -2,12 +2,14 @@
 <resources>
 
     <string name="default_text">None</string>
-    <string name="app_name">RoadBook</string>
-    <string name="action_settings">Settings</string>
+    <string name="default_float_text">0.00</string>
+    <string name="app_name">RBook</string>
+    <string name="action_help">Help</string>
     <string name="action_add">Add</string>
     <string name="action_save">Save</string>
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
+    <string name="action_settings">Settings</string>
     <string name="dialog_add_book_text">Roadbook name</string>
     <string name="button_ok">OK</string>
     <string name="button_cancel">Cancel</string>
@@ -17,7 +19,8 @@
     <string name="point_edit_direction_hint">Direction to follow next</string>
     <string name="point_edit_description_hint">Point description</string>
     <string name="warning_name_empty">Book name is empty!</string>
-    <string name="title_activity_road_point_edit">RoadPointEditActivity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_road_point_select">Select your roadpoint</string>
+    <string name="rbook_help">RBook is a road book reader/generator. \nIt is aimed to share your road trips with friends and enjoy riding throughout the world. If you like it, please share it!</string>
+    <string name="rbook_copyright">Written by Luc Fourestier - lfourestier@yahoo.fr \nAll rights are reserved. Copyright 2014</string>
 
 </resources>

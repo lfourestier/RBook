@@ -171,3 +171,16 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadPoint__1SetDirection (JNIEn
 
     roadpoint->Direction = cppdirection;
 }
+
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadPoint__1GetNumber(JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    RBook::RoadPoint *roadpoint = GetInstance(env, thiz);
+    if (roadpoint == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return 0.0;
+    }
+
+    return roadpoint->Number;
+}
+

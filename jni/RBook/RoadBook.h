@@ -49,6 +49,14 @@ public:
     float TotalDistance;
 
     /**
+     * Get the total number of points in the book.
+     *
+     * @param count: the number of points
+     * @return @see ERROR
+     */
+    Error GetPointCount(unsigned int &count);
+
+    /**
      * Get the current road point in the book.
      *
      * @param Point: The created RoadPoint object.
@@ -101,12 +109,20 @@ public:
     /**
      * Insert a new point into the list after the current position.
      * Create the point.
-     * Next points will be pushed.
+     * Next points will be pushed. Index is incremented.
      *
      * @param point: returned new created point.
      * @return @see ERROR
      */
     Error AddNewPointAfter(RoadPoint*& point);
+
+    /**
+     * Delete current point.
+     * Index will be updated to previous point if end of list, else remains as it is.
+     *
+     * @return @see ERROR
+     */
+    Error DeleteCurrentPoint();
 
     /**
      * Advance into the list.
