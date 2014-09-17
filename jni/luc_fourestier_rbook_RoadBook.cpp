@@ -88,6 +88,18 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookName(JNIEn
     return env->NewStringUTF(mb->Bookname.c_str());
 }
 
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetFilePath(JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    RBook::RoadBook *mb = GetInstance(env, thiz);
+    if (mb == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return env->NewStringUTF("");
+    }
+
+    return env->NewStringUTF(mb->FilePath.c_str());
+}
+
 JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetTitle(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 

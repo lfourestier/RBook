@@ -42,8 +42,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 			bookListView = (ListView) findViewById(R.id.road_book_list);
 
 			if (theBookManager == null) {
-				String sdcard = Environment.getExternalStorageDirectory()
-						.getPath();
+				String sdcard = Environment.getExternalStorageDirectory().getPath();
 				Log.v("MAIN", "External storage dir: " + sdcard);
 				theBookManager = BookManager.Create(sdcard);
 			}

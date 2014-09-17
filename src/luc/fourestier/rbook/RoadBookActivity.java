@@ -1,7 +1,10 @@
 package luc.fourestier.rbook;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -10,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +27,8 @@ public class RoadBookActivity extends Activity {
 	private BookManager theBookManager = null;
     private RoadBook currentRoadBook = null;
 
+    private ShareActionProvider mShareActionProvider = null;
+    
 // Activity
     
 	@Override
@@ -44,6 +50,7 @@ public class RoadBookActivity extends Activity {
 	    	
 	    	setTitle(currentRoadBook.getBookName());
 	    	refreshRoadBookView(currentRoadBook);
+	    	
 		}
     	catch (Exception e) {
 			Log.e("RoadBookActivity", "Error while loading book: " + e.getMessage());
@@ -63,6 +70,15 @@ public class RoadBookActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.road_book, menu);
+		
+	    MenuItem shareItem = menu.findItem(R.id.action_share);
+	    mShareActionProvider = (ShareActionProvider) shareItem.getActionProvider();
+		Intent shareIntent = new Intent(Intent.ACTION_SEND);
+		shareIntent.setType("application/zip");
+		Uri uri = Uri.fromFile(new File(currentRoadBook.getFilePath()));
+	 	shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+	 	mShareActionProvider.setShareIntent(shareIntent);
+	 	
 		return true;
 	}
 

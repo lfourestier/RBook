@@ -49,6 +49,11 @@ public:
     float TotalDistance;
 
     /**
+     * File location where to save and load.
+     */
+    std::string FilePath;
+
+    /**
      * Get the total number of points in the book.
      *
      * @param count: the number of points
@@ -155,11 +160,6 @@ public:
     Error End();
 
 private:
-    /**
-     * File location where to save and load.
-     */
-    std::string FilePath;
-
     /**
      * List of road points
      */

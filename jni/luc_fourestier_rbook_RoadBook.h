@@ -17,6 +17,14 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetBookName
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _GetFilePath
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetFilePath
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
  * Method:    _GetTitle
  * Signature: ()Ljava/lang/String;
  */

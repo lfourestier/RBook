@@ -12,6 +12,15 @@ public class RoadBook {
 	}
 
 	/**
+	 * Get the file path (full path).
+	 * 
+	 * @return The path.
+	 */
+	public String getFilePath() {
+		return _GetFilePath();
+	}
+
+	/**
 	 * Get the title of the road book.
 	 * 
 	 * @return The title string.
@@ -207,44 +216,25 @@ public class RoadBook {
 	// Native
 
 	private native final String _GetBookName();
-	
+	private native final String _GetFilePath();
 	private native final String _GetTitle();
-
 	private native final void _SetTitle(String title);
-	
 	private native final String _GetDescription();
-
 	private native final void _SetDescription(String description);
-	
 	private native final String _GetLocation();
-
 	private native final void _SetLocation(String location);
-	
 	private native final float _GetTotalDistance();
-
 	private native final int _GetPointCount();
-	
 	private native final int _GetCurrentPoint();
-	
 	private native final int _GetPreviousPoint();
-	
 	private native final int _GetNextPoint();
-	
 	private native final float _GetDistanceToNext();
-
 	private native final float _GetDistanceFromPrevious();
-
 	private native final int _AddNewPointBefore();
-	
 	private native final int _AddNewPointAfter();
-	
 	private native final void _DeleteCurrentPoint();
-	
 	private native final void _Next();
-
 	private native final void _Previous();
-
 	private native final void _Reset();
-	
 	private native final void _End();
 }
