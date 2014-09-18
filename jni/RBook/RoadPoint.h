@@ -12,7 +12,7 @@
 
 #include "Error.h"
 
-#define ROADPOINT_ERROR_BASE 2000
+#define ROADPOINT_ERROR_BASE ERROR_ROADPOINT_BASE
 
 namespace RBook {
 

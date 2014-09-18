@@ -10,6 +10,8 @@
 
 #include <string>
 
+#include "Config.h"
+
 //! Set an std::string message to the error object.
 #define ERROR_SET_MSG(error, string) error.Description.assign(string)
 

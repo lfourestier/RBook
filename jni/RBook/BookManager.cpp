@@ -15,9 +15,6 @@
 //! The road book directory
 #define BOOK_DIR "/RBook"
 
-//! The road book file extension
-#define BOOK_EXTENSION ".mrb"
-
 #define TAG "BookManager"
 
 namespace RBook {

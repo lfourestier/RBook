@@ -14,7 +14,7 @@
 #include "Error.h"
 #include "RoadBook.h"
 
-#define BOOKMANAGER_ERROR_BASE 3000
+#define BOOKMANAGER_ERROR_BASE ERROR_BOOKMANAGER_BASE
 
 namespace RBook {
 

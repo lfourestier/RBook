@@ -3,7 +3,8 @@ SOURCES :=   	BookManager.cpp \
 				RoadBook.cpp \
                 RoadPoint.cpp \
                 Error.cpp \
-                Log.cpp
+                Log.cpp \
+                ArchiveFile.cpp
 
 SRCDIR := $(MODULEDIR)/
 INCDIR := $(LOCAL_PATH)/$(MODULEDIR)/

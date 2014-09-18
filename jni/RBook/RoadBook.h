@@ -15,7 +15,13 @@
 #include "Error.h"
 #include "libjson.h"
 
-#define ROADBOOK_ERROR_BASE 1000
+#define ROADBOOK_ERROR_BASE ERROR_ROADBOOK_BASE
+
+//! The road book file extension
+#define BOOK_EXTENSION ".mrb"
+
+//! The compressed road book file extension
+#define COMPRESSED_BOOK_EXTENSION ".mrz"
 
 namespace RBook {
 

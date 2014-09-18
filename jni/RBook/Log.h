@@ -12,20 +12,22 @@
 #ifndef LOG_H_
 #define LOG_H_
 
+#include "Config.h"
+
 // Preprocessing options
 
-#define LOG_ENABLE //! Enable logs. Comment it to disable log macros below.
+//#define LOG_ENABLE //! Enable logs. Comment it to disable log macros below.
 // Mutually exclusive options
 //#define LOG_FILELINE //! Will add file name and line number to the log.
 //#define LOG_FUNCLINE //! Will add function name and line number to the log.
 
 // Runtime options
 
-#define LOG_ANDROID //!< Enable android native log. @todo adapt automatically with platform
+//#define LOG_ANDROID //!< Enable android native log. @todo adapt automatically with platform
 //#define LOG_FILE   //!< Enable file log.
 //#define LOG_PRINTF //!< Enable printf log (Console log)
 
-#define LOG_MIN_LEVEL Log::LOG_VERBOSE //! Define the minimum level to be logged
+//#define LOG_MIN_LEVEL Log::LOG_VERBOSE //! Define the minimum level to be logged
 
 #ifdef LOG_ANDROID
 #include <android/log.h>

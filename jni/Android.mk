@@ -26,5 +26,7 @@ LOCAL_LDLIBS    += -llog
 include $(LOCAL_PATH)/$(RBOOKDIR)/sources.mk
 
 include $(LOCAL_PATH)/$(EXTERNALDIR)/libjson/sources.mk
+include $(LOCAL_PATH)/$(EXTERNALDIR)/zlib/sources.mk
+include $(LOCAL_PATH)/$(EXTERNALDIR)/minizip/sources.mk
 
 include $(BUILD_SHARED_LIBRARY)
