@@ -5,10 +5,8 @@
  *      Author: Luc Fourestier
  */
 
-#include <sys/stat.h>
-#include <dirent.h>
-
 #include "Log.h"
+#include "FileUtils.h"
 
 #include "BookManager.h"
 
@@ -24,10 +22,10 @@ Error BookManager::Initialize(std::string rootdir) {
 
     RBookDirectory = rootdir + BOOK_DIR;
 
-    ret = DirectoryExists(RBookDirectory);
-    if (ret == ERROR_DIR_NOT_FOUND) {
+    ret = FileUtils::DirectoryExists(RBookDirectory);
+    if (ret == FileUtils::ERROR_DIR_NOT_FOUND) {
         LOG_D(TAG, "RBook dir does not exist.");
-        ret = MakeDirectory(RBookDirectory);
+        ret = FileUtils::MakeDirectory(RBookDirectory);
     }
     if(ret != ERROR_OK) {
         RBookDirectory.clear();
@@ -55,7 +53,7 @@ Error BookManager::GetRoadBookList(std::list<std::string> &booklist)
     try {
         if (!RBookDirectory.empty()) {
             // Refresh list
-            ret = ListFilesInDir(RBookDirectory, BOOK_EXTENSION, ListOfBooks);
+            ret = FileUtils::ListFilesInDir(RBookDirectory, ROADBOOK_COMPRESSED_EXTENSION, ListOfBooks);
 
             if ((ret == ERROR_OK ) && (!ListOfBooks.empty())) {
                 // Copy list
@@ -86,7 +84,7 @@ Error BookManager::GetRoadBook(std::string bookname, RoadBook *& roadbook) {
                 if (bookname.compare(*i) == 0) {
                     roadbook = new RoadBook();
                     if (roadbook != NULL) {
-                        roadbook->FilePath = RBookDirectory + "/" + bookname + BOOK_EXTENSION;
+                        roadbook->FilePath = RBookDirectory + "/" + bookname + ROADBOOK_COMPRESSED_EXTENSION;
                         roadbook->Bookname = bookname;
                         ret = roadbook->Load();
                     }
@@ -113,7 +111,7 @@ Error BookManager::CreateRoadBook(std::string bookname, RoadBook *& roadbook) {
 
     roadbook = new RoadBook();
     if (roadbook != NULL) {
-        roadbook->FilePath = RBookDirectory + "/" + bookname + BOOK_EXTENSION;
+        roadbook->FilePath = RBookDirectory + "/" + bookname + ROADBOOK_COMPRESSED_EXTENSION;
         roadbook->Bookname = bookname;
     }
     else {
@@ -162,7 +160,7 @@ Error BookManager::DeleteRoadBook(std::string bookname) {
                 if (bookname.compare(*i) == 0) {
                     RoadBook* roadbook = new RoadBook();
                     if (roadbook != NULL) {
-                        roadbook->FilePath = RBookDirectory + "/" + bookname + BOOK_EXTENSION;
+                        roadbook->FilePath = RBookDirectory + "/" + bookname + ROADBOOK_COMPRESSED_EXTENSION;
                         ret = roadbook->Delete();
                         delete roadbook;
                     }
@@ -195,82 +193,6 @@ BookManager::~BookManager() {
     catch (std::exception& e) {
         // Do nothing
     }
-}
-
-// private
-
-Error BookManager::DirectoryExists(std::string directory) {
-    Error ret;
-    struct stat status;
-
-    try {
-        if (stat(directory.c_str(), &status) == 0) {
-            if (!S_ISDIR(status.st_mode)) {
-                ret = ERROR_DIR_NOT_FOUND;
-            }
-        }
-        else {
-            ret = ERROR_DIR_NOT_FOUND;
-        }
-    }
-    catch (std::exception& e) {
-        ret = ERROR_FAIL;
-    }
-
-    return ret;
-}
-
-Error BookManager::MakeDirectory(std::string directory) {
-    Error ret;
-
-    try {
-        if (mkdir(directory.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0) {
-            ret = ERROR_FAIL;
-        }
-    }
-    catch (std::exception& e) {
-        ret = ERROR_FAIL;
-    }
-
-    return ret;
-}
-
-Error BookManager::ListFilesInDir(std::string directory, std::string extension, std::list<std::string> &list) {
-    Error ret;
-
-    try {
-        if (!list.empty()) {
-            list.clear();
-        }
-
-        DIR* dir = opendir(directory.c_str());
-        if (dir != NULL) {
-            struct dirent* file;
-
-            LOG_V(TAG, "Books found in %s:", directory.c_str());
-            while ((file = readdir(dir)) != NULL) {
-                std::string filename(file->d_name);
-
-                std::size_t pos = filename.find(extension);
-                if (pos == std::string::npos) {
-                    continue;
-                }
-
-                filename.replace(pos, extension.size(), "");
-                list.push_back(filename);
-                LOG_V(TAG, filename.c_str());
-            }
-            closedir(dir);
-        }
-        else {
-            ret = ERROR_FAIL;
-        }
-    }
-    catch (std::exception& e) {
-        ret = ERROR_FAIL;
-    }
-
-    return ret;
 }
 
 } /* namespace RBook */

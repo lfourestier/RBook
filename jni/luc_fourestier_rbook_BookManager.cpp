@@ -8,6 +8,7 @@
 #include "luc_fourestier_rbook_BookManager.h"
 #include "RBook/BookManager.h"
 #include "RBook/Log.h"
+#include "FileUtils.h"
 
 #define TAG "JNIBookManager"
 
@@ -25,8 +26,8 @@ static void JNIThrowOnError(JNIEnv *env, RBook::Error error) {
         break;
     case RBook::RoadBook::ERROR_MAL_FORMATTED_BOOK:
     case RBook::RoadBook::ERROR_CANNOT_SAVE:
-    case RBook::RoadBook::ERROR_FILE_NOT_FOUND:
-    case RBook::BookManager::ERROR_DIR_NOT_FOUND:
+    case RBook::RoadBook::ERROR_BOOK_NOT_FOUND:
+    case RBook::FileUtils::ERROR_DIR_NOT_FOUND:
         LOG_E(TAG, "java/io/IOException");
         JNIThrowException(env, "java/io/IOException", NULL);
         break;

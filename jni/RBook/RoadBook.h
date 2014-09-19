@@ -15,13 +15,13 @@
 #include "Error.h"
 #include "libjson.h"
 
-#define ROADBOOK_ERROR_BASE ERROR_ROADBOOK_BASE
+#define ROADBOOK_ERROR_BASE CONFIG_ROADBOOK_ERROR_BASE
 
 //! The road book file extension
-#define BOOK_EXTENSION ".mrb"
+#define ROADBOOK_EXTENSION ".mrb"
 
 //! The compressed road book file extension
-#define COMPRESSED_BOOK_EXTENSION ".mrz"
+#define ROADBOOK_COMPRESSED_EXTENSION ".mrz"
 
 namespace RBook {
 
@@ -31,7 +31,7 @@ public:
 
     //! RoadBook Error list
     enum ERROR {
-        ERROR_FILE_NOT_FOUND = ROADBOOK_ERROR_BASE, //!< Did not find the file specified.
+        ERROR_BOOK_NOT_FOUND = ROADBOOK_ERROR_BASE, //!< Did not find the book specified.
         ERROR_MAL_FORMATTED_BOOK, //!< Roadbook file is mal formatted.
         ERROR_EMPTY_LIST, //!< Road point list is empty.
         ERROR_REACHED_END, //!< Reached the end of the road point list while navigating into it.
@@ -176,6 +176,9 @@ private:
      */
     unsigned int RoadPointIndex;
 
+    //! Temporary directory where archive will be inflated.
+    std::string TempArchiveDirectory;
+
     /**
      * Constructor.
      */
@@ -248,15 +251,6 @@ private:
      */
     Error GenerateRoadPoints(JSONNode& roadpoints);
 
-    /**
-     * Check if file exists.
-     *
-     * @pre file string MUST NOT be empty.
-     *
-     * @param file: File path.
-     * @return @see ERROR
-     */
-    Error FileExists(std::string file);
 };
 
 } // namespace

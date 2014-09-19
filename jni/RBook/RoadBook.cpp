@@ -18,6 +18,8 @@
 #include "Log.h"
 #include "zip.h"
 #include "unzip.h"
+#include "Archive.h"
+#include "FileUtils.h"
 
 #include "RoadBook.h"
 
@@ -298,59 +300,55 @@ Error RoadBook::Load() {
     Error ret;
     std::string roadbookcontent;
 
-    if ((!FilePath.empty()) && (FileExists(FilePath) == ERROR_OK)) {
+    if ((!FilePath.empty()) && (FileUtils::FileExists(FilePath) == ERROR_OK)) {
         // Load road book file
         LOG_I(TAG, "Load %s", FilePath.c_str());
         try {
-            std::ifstream roadbookfile(FilePath.c_str());
-            std::string mbc((std::istreambuf_iterator<char>(roadbookfile)), std::istreambuf_iterator<char>());
-            roadbookcontent = mbc;
+            Archive archive(FilePath);
 
-           // TODO Insert .mrz (compressed roadbooks) functionality here.
-           unsigned int position = FilePath.find(BOOK_EXTENSION);
-           std::string mrzfile = FilePath.replace(position, strlen(BOOK_EXTENSION), COMPRESSED_BOOK_EXTENSION);
-           std::string testfile = FilePath.replace(position, strlen(BOOK_EXTENSION), ".mr2");
-           LOG_I("LFOR", "Decompressing %s", mrzfile.c_str());
-           unzFile uf = unzOpen(mrzfile.c_str());
-           if (uf == NULL) {
-               LOG_I("LFOR", "Could not open mrz file!");
-           }
-           int err = unzGoToFirstFile(uf);
-           if (err != ZIP_OK) {
-               LOG_I("LFOR", "Go to first file in zip failed!");
-           }
-           err = unzOpenCurrentFile(uf);
-           if (err != ZIP_OK) {
-               LOG_I("LFOR", "Open current file in zip failed!");
-           }
-           FILE *fout=fopen(testfile.c_str(),"wb");
-           if (fout == NULL) {
-               LOG_I("LFOR", "fout is null!");
-           }
-           int write_size = 0;
-           char buffer[256];
-           do {
-               write_size = unzReadCurrentFile(uf, buffer, 256);
-               if (write_size > 0) {
-                   int size = fwrite(buffer, 1, write_size, fout);
-                   if (size <= 0) {
-                       LOG_I("LFOR", "Could not write decompressed data!");
-                   }
-               }
-               LOG_I("LFOR", "Write %i bytes!", write_size);
-               if (unzeof(uf)) {
-                   break;
-               }
+            // Create directory where to inflate and inflate
+            TempArchiveDirectory = FilePath;
+            ret = FileUtils::RemoveExtension(TempArchiveDirectory);
+            if (ret != ERROR_OK) {
+                LOG_E(TAG, "could generate archive directory name!");
+                return ret;
+            }
 
-           } while (write_size > 0);
-           fclose(fout);
-           unzCloseCurrentFile(uf);
-           unzClose(uf);
-           LOG_I("LFOR", "Finished decompressing");
+            ret = FileUtils::MakeDirectory(TempArchiveDirectory);
+            if (ret != ERROR_OK) {
+                LOG_E(TAG, "could not create directory!");
+                return ret;
+            }
+
+            ret = archive.Inflate(TempArchiveDirectory);
+            if (ret != ERROR_OK) {
+                LOG_E(TAG, "could not inflate archive!");
+                return ret;
+            }
+
+            // Find the file to parse for roadbook
+            std::string mrbfilepath(FilePath);
+            ret = FileUtils::GetFileRoot(mrbfilepath);
+            if (ret != ERROR_OK) {
+                LOG_E(TAG, "could not get root!");
+                return ret;
+            }
+            mrbfilepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + mrbfilepath + ROADBOOK_EXTENSION;
+            LOG_D(TAG, "Parsing file: %s", mrbfilepath.c_str());
+
+            if (FileUtils::FileExists(mrbfilepath) == ERROR_OK) {
+                std::ifstream roadbookfile(mrbfilepath.c_str());
+                std::string mbc((std::istreambuf_iterator<char>(roadbookfile)), std::istreambuf_iterator<char>());
+                roadbookcontent = mbc;
+            }
+            else {
+                LOG_E(TAG, "%s not found!", mrbfilepath.c_str());
+                ret = ERROR_BOOK_NOT_FOUND;
+            }
         }
         catch (std::ios_base::failure& e) {
             LOG_W(TAG, "Load: no such file!");
-            ret = ERROR_FILE_NOT_FOUND;
+            ret = ERROR_BOOK_NOT_FOUND;
         }
         catch (std::exception& e) {
             LOG_E(TAG, "Load: generic failure!");
@@ -358,7 +356,7 @@ Error RoadBook::Load() {
         }
     }
     else {
-        ret = ERROR_FILE_NOT_FOUND;
+        ret = ERROR_BOOK_NOT_FOUND;
     }
 
     if (ret == ERROR_OK) {
@@ -391,55 +389,13 @@ Error RoadBook::Save() {
             file.close();
 
             // Compress files into .mrz
-            std::string mrzfile = FilePath;
-            unsigned int position = mrzfile.find(BOOK_EXTENSION);
-            LOG_I("LFOR", "Found .mrb %i", position);
-            mrzfile.replace(position, strlen(BOOK_EXTENSION), COMPRESSED_BOOK_EXTENSION);
-            LOG_I(TAG, "Filepath %s", FilePath.c_str());
-
-
-            LOG_I("LFOR", "Compressing %s", mrzfile.c_str());
-            // TODO Check error returned for mimizip functions
-            zipFile zf = zipOpen(mrzfile.c_str(), APPEND_STATUS_CREATE);
-            if (zf == NULL) {
-                LOG_I("LFOR", "zip file pointer is null!");
-            }
-            zip_fileinfo zi = {0};
-            std::string shortname(Bookname);
-            shortname.append(BOOK_EXTENSION);
-            int err = zipOpenNewFileInZip(zf, shortname.c_str(), &zi,
-                             NULL,0,NULL,0,NULL,
-                             Z_DEFLATED,
-                             Z_DEFAULT_COMPRESSION);
-            if (err != ZIP_OK) {
-                LOG_I("LFOR", "Error while opening zip file in zip!");
-            }
-            FILE *fin = fopen(FilePath.c_str(),"rb");
-            if (fin==NULL) {
-                LOG_I("LFOR", "Error while opening file %s", FilePath.c_str());
-                ret = ERROR_FAIL;
-            }
-
-            int read_size = 0;
-            char buffer[256];
-            do {
-                read_size = fread(buffer, 1, 256, fin);
-                if (read_size > 0) {
-                    err = zipWriteInFileInZip (zf,buffer,read_size);
-                    if (err != ZIP_OK) {
-                        LOG_I("LFOR", "Error while writing zip file in zip!");
-                    }
-                }
-                LOG_I("LFOR", "Written %i bytes in zip file!", read_size);
-                if (feof(fin)){
-                    LOG_I("LFOR", "feof of mrb!");
-                    break;
-                }
-            } while (read_size > 0);
-            fclose(fin);
-            zipCloseFileInZip(zf);
-            zipClose(zf, NULL);
-            LOG_I("LFOR", "Finished zipping!");
+//            std::string mrzfile = FilePath;
+//            unsigned int position = mrzfile.find(BOOK_EXTENSION);
+//            mrzfile.replace(position, strlen(BOOK_EXTENSION), COMPRESSED_BOOK_EXTENSION);
+//            Archive archive(mrzfile);
+//            std::vector<std::string> listoffiles;
+//            listoffiles.push_back(FilePath);
+//            archive.Overwrite(listoffiles);
         }
         catch (std::ios_base::failure& e) {
             LOG_W(TAG, "Save: Could not save file!");
@@ -451,7 +407,7 @@ Error RoadBook::Save() {
         }
     }
     else {
-        ret = ERROR_FILE_NOT_FOUND;
+        ret = ERROR_BOOK_NOT_FOUND;
     }
 
     return ret;
@@ -460,11 +416,7 @@ Error RoadBook::Save() {
 Error RoadBook::Delete() {
     Error ret;
 
-    if ((!FilePath.empty()) && (FileExists(FilePath) == ERROR_OK)) {
-        if (remove(FilePath.c_str()) != 0) {
-            ret = ERROR_FAIL;
-        }
-    }
+    ret = FileUtils::DeleteFile(FilePath);
 
     return ret;
 }
@@ -606,27 +558,6 @@ Error RoadBook::GenerateRoadPoints(JSONNode& roadpoints) {
             roadpointnode.push_back(JSONNode(ROADPOINT_DIRECTION_TAG, RoadPointList[index]->Direction));
 
             roadpoints.push_back(roadpointnode);
-        }
-    }
-    catch (std::exception& e) {
-        ret = ERROR_FAIL;
-    }
-
-    return ret;
-}
-
-Error RoadBook::FileExists(std::string file) {
-    Error ret;
-    struct stat status;
-
-    try {
-        if (stat(file.c_str(), &status) == 0) {
-            if (!S_ISREG(status.st_mode)) {
-                ret = ERROR_FILE_NOT_FOUND;
-            }
-        }
-        else {
-            ret = ERROR_FILE_NOT_FOUND;
         }
     }
     catch (std::exception& e) {

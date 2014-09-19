@@ -14,7 +14,7 @@
 #include "Error.h"
 #include "RoadBook.h"
 
-#define BOOKMANAGER_ERROR_BASE ERROR_BOOKMANAGER_BASE
+#define BOOKMANAGER_ERROR_BASE CONFIG_BOOKMANAGER_ERROR_BASE
 
 namespace RBook {
 
@@ -28,7 +28,6 @@ public:
     //! BookManager Error list
     enum ERROR {
         ERROR_NOT_INITIALIZED = BOOKMANAGER_ERROR_BASE, //!< Directory not specified.
-        ERROR_DIR_NOT_FOUND, //!< Directory not found
         ERROR_EMPTY_LIST, //!< List of file is empty
         ERROR_BOOKNAME_NOT_FOUND, //!< Did not find the book name in the list
         ERROR_ROADBOOK_INVALID, //!< The roadbook in use is somehow erroneous
@@ -133,39 +132,6 @@ private:
     //! The list of books.
     std::list<std::string> ListOfBooks;
 
-    /**
-     * Check directory existence.
-     *
-     * @param directory: Directory path (Full path). Intermediate sub-directories in the path MUST exist.
-     * @return @see ERROR
-     */
-    Error DirectoryExists(std::string directory);
-
-    /**
-     * Create directory.
-     *
-     * @param directory: Directory path (Full path). Intermediate sub-directories in the path MUST exist.
-     * @return @see ERROR
-     */
-    Error MakeDirectory(std::string directory);
-
-    /**
-     * Remove the specified directory (And all its content).
-     *
-     * @param directory: Directory path (Full path).
-     * @return @see ERROR
-     */
-    Error RemoveDirectory(std::string directory);
-
-    /**
-     * List files of a certain extension contained by a directory.
-     *
-     * @param directory: Directory path (Full path). Directory MUST exist.
-     * @param extension: Extension. Must contain the "." separator, eg, ".txt" (And not just "txt"!!!).
-     * @param list: The returned list of file (Extension is stripped off from the filename. eg: "file.txt" becomes "file" in the list.
-     * @return @see ERROR
-     */
-    Error ListFilesInDir(std::string directory, std::string extension, std::list<std::string> &list);
 };
 
 } /* namespace RBook */

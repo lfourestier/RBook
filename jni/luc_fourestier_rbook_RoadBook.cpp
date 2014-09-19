@@ -24,7 +24,7 @@ static void JNIThrowOnError(JNIEnv *env, RBook::Error error) {
     case RBook::ERROR_OK:
         break;
     case RBook::RoadBook::ERROR_MAL_FORMATTED_BOOK:
-    case RBook::RoadBook::ERROR_FILE_NOT_FOUND:
+    case RBook::RoadBook::ERROR_BOOK_NOT_FOUND:
     case RBook::RoadBook::ERROR_CANNOT_SAVE:
         LOG_E(TAG, "java/io/IOException");
         JNIThrowException(env, "java/io/IOException", NULL);
