@@ -28,6 +28,7 @@
 #define ROADBOOK_TITLE_TAG "title"
 #define ROADBOOK_DESCRIPTION_TAG "description"
 #define ROADBOOK_LOCATION_TAG "location"
+#define ROADBOOK_IMAGE_TAG "image"
 #define ROADBOOK_ROADPOINTS_TAG "roadpoints"
 
 #define ROADPOINT_DESCRIPTION_TAG "description"
@@ -272,11 +273,25 @@ Error RoadBook::End() {
 
 // Private
 
+RoadBook::RoadBook(std::string filepath, std::string bookname) : RoadPointIndex(0) {
+    Title = "";
+    Description = "";
+    Location = "";
+    TotalDistance = 0.0;
+    Image = "";
+    ImagePath = "";
+
+    FilePath = filepath;
+    Bookname = bookname;
+}
+
 RoadBook::RoadBook() : RoadPointIndex(0) {
     Title = "";
     Description = "";
     Location = "";
     TotalDistance = 0.0;
+    Image = "";
+    ImagePath = "";
 }
 
 RoadBook::~RoadBook() {
@@ -286,14 +301,31 @@ RoadBook::~RoadBook() {
             RoadPointList.pop_back();
         }
 
-        // If loaded, release any other created resources (Files...)
-        // TODO delete any uncompressed resources here (.mrz functionality)
+        RemoveTemporaryDirectory();
 
         RoadPointIndex = 0;
     }
     catch (std::exception& e) {
         // Do nothing
     }
+}
+
+Error RoadBook::Create() {
+    Error ret;
+
+    // Prepare a new road book
+    if (!FilePath.empty()) {
+        ret = CreateTemporaryDirectory();
+        if (ret != ERROR_OK) {
+            LOG_E(TAG, "could create archive temporary directory!");
+            return ret = ERROR_CANNOT_CREATE;
+        }
+    }
+    else {
+        ret = ERROR_CANNOT_CREATE;
+    }
+
+    return ret;
 }
 
 Error RoadBook::Load() {
@@ -306,36 +338,29 @@ Error RoadBook::Load() {
         try {
             Archive archive(FilePath);
 
-            // Create directory where to inflate and inflate
-            TempArchiveDirectory = FilePath;
-            ret = FileUtils::RemoveExtension(TempArchiveDirectory);
+            ret = CreateTemporaryDirectory();
             if (ret != ERROR_OK) {
-                LOG_E(TAG, "could generate archive directory name!");
-                return ret;
-            }
-
-            ret = FileUtils::MakeDirectory(TempArchiveDirectory);
-            if (ret != ERROR_OK) {
-                LOG_E(TAG, "could not create directory!");
-                return ret;
+                LOG_E(TAG, "could create archive temporary directory!");
+                return ret = ERROR_CANNOT_CREATE;
             }
 
             ret = archive.Inflate(TempArchiveDirectory);
             if (ret != ERROR_OK) {
                 LOG_E(TAG, "could not inflate archive!");
-                return ret;
+                return ret = ERROR_CANNOT_CREATE;
             }
 
-            // Find the file to parse for roadbook
+            // Find the file to parse for the roadbook
             std::string mrbfilepath(FilePath);
             ret = FileUtils::GetFileRoot(mrbfilepath);
             if (ret != ERROR_OK) {
                 LOG_E(TAG, "could not get root!");
-                return ret;
+                return ret = ERROR_CANNOT_CREATE;
             }
             mrbfilepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + mrbfilepath + ROADBOOK_EXTENSION;
             LOG_D(TAG, "Parsing file: %s", mrbfilepath.c_str());
 
+            // Parse the roadbook
             if (FileUtils::FileExists(mrbfilepath) == ERROR_OK) {
                 std::ifstream roadbookfile(mrbfilepath.c_str());
                 std::string mbc((std::istreambuf_iterator<char>(roadbookfile)), std::istreambuf_iterator<char>());
@@ -360,14 +385,11 @@ Error RoadBook::Load() {
     }
 
     if (ret == ERROR_OK) {
-        // Default
-        Title = "";
-        Description = "";
-        Location = "";
-        TotalDistance = 0.0;
-
-        // Parse road book file
+         // Parse road book file
         ret = ParseRoadBook(roadbookcontent);
+        if (!Image.empty()) {
+            ImagePath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + Image;
+        }
     }
 
     return ret;
@@ -380,7 +402,21 @@ Error RoadBook::Save() {
         // Save road book file
         LOG_I(TAG, "Save %s", FilePath.c_str());
         try {
-            std::ofstream file(FilePath.c_str(), std::ofstream::trunc);
+            // Check if temporary directories have been created
+            if ((TempArchiveDirectory.empty()) || (FileUtils::DirectoryExists(TempArchiveDirectory) == FileUtils::ERROR_DIR_NOT_FOUND)) {
+                return ret = ERROR_CANNOT_SAVE;
+            }
+
+            // Create the file of the roadbook (.mrb)
+            std::string mrbfilepath(FilePath);
+            ret = FileUtils::GetFileRoot(mrbfilepath);
+            if (ret != ERROR_OK) {
+                LOG_E(TAG, "could not get root!");
+                return ret = ERROR_CANNOT_SAVE;
+            }
+            mrbfilepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + mrbfilepath + ROADBOOK_EXTENSION;
+
+            std::ofstream file(mrbfilepath.c_str(), std::ofstream::trunc);
             std::string content;
             ret = GenerateRoadBook(content);
             if (ret == ERROR_OK) {
@@ -388,14 +424,13 @@ Error RoadBook::Save() {
             }
             file.close();
 
-            // Compress files into .mrz
-//            std::string mrzfile = FilePath;
-//            unsigned int position = mrzfile.find(BOOK_EXTENSION);
-//            mrzfile.replace(position, strlen(BOOK_EXTENSION), COMPRESSED_BOOK_EXTENSION);
-//            Archive archive(mrzfile);
-//            std::vector<std::string> listoffiles;
-//            listoffiles.push_back(FilePath);
-//            archive.Overwrite(listoffiles);
+            Archive archive(FilePath);
+            ret = archive.Deflate(TempArchiveDirectory);
+            if (ret != ERROR_OK) {
+                LOG_E(TAG, "could not deflate archive!");
+                return ret = ERROR_CANNOT_SAVE;
+            }
+
         }
         catch (std::ios_base::failure& e) {
             LOG_W(TAG, "Save: Could not save file!");
@@ -421,6 +456,47 @@ Error RoadBook::Delete() {
     return ret;
 }
 
+Error RoadBook::CreateTemporaryDirectory() {
+    Error ret;
+
+    // Create directory where to archive
+    TempArchiveDirectory = FilePath;
+    ret = FileUtils::RemoveExtension(TempArchiveDirectory);
+    if (ret != ERROR_OK) {
+        LOG_E(TAG, "could generate archive directory name!");
+        return ret;
+    }
+
+    if (FileUtils::DirectoryExists(TempArchiveDirectory) == ERROR_OK) {
+        ret = FileUtils::RemoveDirectory(TempArchiveDirectory);
+        if (ret != ERROR_OK) {
+            LOG_E(TAG, "could not remove directory!");
+            return ret;
+        }
+    }
+
+    ret = FileUtils::MakeDirectory(TempArchiveDirectory);
+    if (ret != ERROR_OK) {
+        LOG_E(TAG, "could not create directory!");
+        return ret;
+    }
+
+    return ret;
+}
+
+Error RoadBook::RemoveTemporaryDirectory() {
+    Error ret;
+
+    if (!TempArchiveDirectory.empty()) {
+        ret = FileUtils::RemoveDirectory(TempArchiveDirectory);
+        if (ret != ERROR_OK) {
+            LOG_E(TAG, "could remove directory!");
+        }
+    }
+
+    return ret;
+}
+
 Error RoadBook::ParseRoadBook(const std::string& content) {
     Error ret;
 
@@ -441,6 +517,10 @@ Error RoadBook::ParseRoadBook(const std::string& content) {
             else if ((i->type() == JSON_STRING) && (nodename == ROADBOOK_LOCATION_TAG)) {
                 LOG_V(TAG, "%s: %s", nodename.c_str(), i->as_string().c_str());
                 Location = i->as_string();
+            }
+            else if ((i->type() == JSON_STRING) && (nodename == ROADBOOK_IMAGE_TAG)) {
+                LOG_V(TAG, "%s: %s", nodename.c_str(), i->as_string().c_str());
+                Image = i->as_string();
             }
             else if ((i->type() == JSON_ARRAY) && (nodename == ROADBOOK_ROADPOINTS_TAG)) {
                 ret = ParseRoadPointList(*i); // TODO Crash if array is empty. Why?

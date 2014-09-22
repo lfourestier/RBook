@@ -113,6 +113,7 @@ Error BookManager::CreateRoadBook(std::string bookname, RoadBook *& roadbook) {
     if (roadbook != NULL) {
         roadbook->FilePath = RBookDirectory + "/" + bookname + ROADBOOK_COMPRESSED_EXTENSION;
         roadbook->Bookname = bookname;
+        ret = roadbook->Create();
     }
     else {
         ret = ERROR_FAIL;

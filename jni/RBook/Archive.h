@@ -65,7 +65,15 @@ public:
      * @note If the directory is not empty and contains a file that is also in the archive, it will be overwritten.
      * Advice: Prefer to use empty directories.
      */
-    Error Inflate(std::string dir);
+    Error Inflate(std::string directory);
+
+    /**
+     * Deflate (compress) the content of a directory. (Sub directories not included!).
+     * All files contained in that directory will be archived.
+     * @param dir: The directory path. Directory MUST exist and contain at least one file!
+     * @return @see ERROR
+     */
+    Error Deflate(std::string directory);
 
 private:
     //! Full path for the archive file (file name and extension included).

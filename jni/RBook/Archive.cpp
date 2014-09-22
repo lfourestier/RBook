@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <dirent.h>
 
 #include "Log.h"
 #include "unzip.h"
@@ -66,7 +68,7 @@ Error Archive::Overwrite(std::vector<std::string> files) {
     return ret;
 }
 
-Error Archive::Inflate(std::string dir) {
+Error Archive::Inflate(std::string directory) {
     Error ret;
 
     LOG_V(TAG, "Inflating %s", FilePath.c_str());
@@ -87,7 +89,7 @@ Error Archive::Inflate(std::string dir) {
     do {
         unz_file_info fileinfo;
         char buffer[BUFFER_SIZE];
-        std::string filepath = dir + FILEUTILS_PATH_DELIMITER;
+        std::string filepath = directory + FILEUTILS_PATH_DELIMITER;
 
         err = unzOpenCurrentFile(unzipfile);
         if (err != ZIP_OK) {
@@ -149,6 +151,40 @@ Error Archive::Inflate(std::string dir) {
     } while (!endofarchive);
 
     unzClose(unzipfile);
+
+    return ret;
+}
+
+Error Archive::Deflate(std::string directory) {
+    Error ret;
+    std::vector<std::string> files;
+
+    try {
+        DIR* dir = opendir(directory.c_str());
+        if (dir != NULL) {
+            struct dirent* file;
+
+            while ((file = readdir(dir)) != NULL) {
+                if (file->d_type != DT_REG) {
+                    continue;
+                }
+
+                std::string filename(directory + FILEUTILS_PATH_DELIMITER);
+                filename.append(file->d_name);
+                files.push_back(filename);
+            }
+            closedir(dir);
+        }
+        else {
+            ret = ERROR_FAIL;
+        }
+
+        ret = Overwrite(files);
+    }
+    catch (std::exception& e) {
+        ret = ERROR_FAIL;
+    }
+
 
     return ret;
 }

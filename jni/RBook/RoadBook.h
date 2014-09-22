@@ -37,6 +37,7 @@ public:
         ERROR_REACHED_END, //!< Reached the end of the road point list while navigating into it.
         ERROR_REACHED_START, //!< Reached the start of the road point list while navigating into it.
         ERROR_CANNOT_SAVE, //!< File issue while saving.
+        ERROR_CANNOT_CREATE, //!< Somehow could not create the temporary resources needed by RBook.
     };
 
     //! bookname (Short name for the book = file name w/o extension and path.)
@@ -53,6 +54,12 @@ public:
 
     //! Road book total distance
     float TotalDistance;
+
+    //! The image name illustrating the roadbook.
+    std::string Image;
+
+    //! Full path to the image.
+    std::string ImagePath;
 
     /**
      * File location where to save and load.
@@ -176,7 +183,7 @@ private:
      */
     unsigned int RoadPointIndex;
 
-    //! Temporary directory where archive will be inflated.
+    //! Temporary directory where archive will be inflated (ex: if the raodbook filename is MyRoadBook.mrz, then "/sdcard/RBook/MyRoadbook").
     std::string TempArchiveDirectory;
 
     /**
@@ -185,9 +192,23 @@ private:
     RoadBook();
 
     /**
+     * Constructor.
+     * @param filepath: The path to the roadbook file.
+     * @param bookname: the short bookname.
+     */
+    RoadBook(std::string filepath, std::string bookname);
+
+    /**
      * Destructor.
      */
     ~RoadBook();
+
+    /**
+     * Create a new roadbook.
+     * Creates the temporary directories needed for the roadbook.
+     * @return @see ERROR
+     */
+    Error Create();
 
     /**
      * Load the road book from the known location.
@@ -198,7 +219,7 @@ private:
     Error Load();
 
     /**
-     * Save the road book into the known location.
+     * Save the road book.
      *
      * @return @see ERROR
      */
@@ -210,6 +231,19 @@ private:
      * @return @see ERROR
      */
     Error Delete();
+
+    /**
+     * Create the temporary directory where roadbook files will be stored before archiving.
+     * BE CAREFUL: If it already exists, the temporary (@see TempArchiveDirectory) directory will be destroyed with all its content.
+     * @return @see ERROR
+     */
+    Error CreateTemporaryDirectory();
+
+    /**
+     * Remove the archive temporary directory (@see TempArchiveDirectory).
+     * @return @see ERROR
+     */
+    Error RemoveTemporaryDirectory();
 
     /**
      * Parse the general data of the road book
