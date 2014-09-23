@@ -10,6 +10,7 @@
 
 #include <string>
 #include <list>
+#include <map>
 
 #include "Error.h"
 #include "RoadBook.h"
@@ -57,9 +58,10 @@ public:
      * @example Typical place where to fetch could be the "download" directory.
      *
      * @param fetchdirs: The list of directories where to fetch.
+     * @param filemap: the list of importable files found in the directories, in the form of a map <shortname, fullpath>.
      * @return @see ERROR
      */
-    Error FetchRoadBooks(std::list<std::string> fetchdirs);
+    Error ListImportRoadBooks(std::list<std::string> fetchdirs, std::map<std::string, std::string> &filemap);
 
     /**
      * Return the book list.
@@ -128,6 +130,9 @@ public:
 private:
     //! The root directory where books are stored (Full path).
     std::string RBookDirectory;
+
+    //! The directory that roadbook can use as temporary archive.
+    std::string RBookTempDirectory;
 
     //! The list of books.
     std::list<std::string> ListOfBooks;

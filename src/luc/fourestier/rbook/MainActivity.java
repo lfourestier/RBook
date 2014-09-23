@@ -1,11 +1,16 @@
 package luc.fourestier.rbook;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import luc.fourestier.rbook.AddDialogFragment.AddDialogListener;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -41,7 +46,28 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 		try {
 			Intent intent = getIntent();
 			String action = intent.getAction();
-			Log.v("LFOR" , "Intent detected: " + action);
+			
+			if (action.compareTo(Intent.ACTION_VIEW) == 0) {
+				String scheme = intent.getScheme();
+				if (scheme.compareTo(ContentResolver.SCHEME_CONTENT) == 0) {
+					Uri uri = intent.getData();
+					ContentResolver resolver = getContentResolver();
+					String name = getContentName(resolver, uri);
+					
+//					InputStream input = resolver.openInputStream(uri);
+					Log.v("LFOR" , "Content intent detected: " + action + " : " + intent.getDataString() + " : " + intent.getType() + " : " + name);
+				}
+				else if (scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
+					Uri uri = intent.getData();
+					String host = uri.getLastPathSegment();
+					
+//					InputStream input = resolver.openInputStream(uri);
+					Log.v("LFOR" , "File intent detected: " + action + " : " + intent.getDataString() + " : " + intent.getType() + " : " + host);
+				}
+				else if (scheme.compareTo("http") == 0) {
+					// TODO Import from website!
+				}
+			}
 			
 			bookListView = (ListView) findViewById(R.id.road_book_list);
 
@@ -156,6 +182,18 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 	    if (toast != null) {
 	    	toast.show();		
 	    }
+    }
+    
+    
+    public String getContentName(ContentResolver resolver, Uri uri){
+        Cursor cursor = resolver.query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int nameIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
+        if (nameIndex >= 0) {
+            return cursor.getString(nameIndex);
+        } else {
+            return null;
+        }
     }
 }
 

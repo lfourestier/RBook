@@ -114,7 +114,7 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_BookManager__1GetRoadBookLis
     for (std::list<std::string>::iterator it = booklist.begin(); it != booklist.end(); ++it) {
         serializedlist += *it + ";";
     }
-    LOG_V(TAG, "Serialized list of books: %s", serializedlist.c_str());
+//    LOG_V(TAG, "Serialized list of books: %s", serializedlist.c_str());
 
     return env->NewStringUTF(serializedlist.c_str());
 }

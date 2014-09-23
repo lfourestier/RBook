@@ -166,7 +166,7 @@ Error FileUtils::RemoveDirectory(std::string directory) {
             closedir(dir);
         }
         else {
-            LOG_E(TAG, "Directory struct is null!");
+            LOG_W(TAG, "Directory struct is null!");
             ret = ERROR_FAIL;
         }
 

@@ -4,6 +4,7 @@
     <string name="default_text">None</string>
     <string name="default_float_text">0.00</string>
     <string name="app_name">RBook</string>
+    <string name="rbook_viewer">RBook</string>
     <string name="action_help">Help</string>
     <string name="action_add">Add</string>
     <string name="action_save">Save</string>

@@ -40,9 +40,6 @@ public:
         ERROR_CANNOT_CREATE, //!< Somehow could not create the temporary resources needed by RBook.
     };
 
-    //! bookname (Short name for the book = file name w/o extension and path.)
-    std::string Bookname;
-
     //! Road book title
     std::string Title;
 
@@ -55,16 +52,17 @@ public:
     //! Road book total distance
     float TotalDistance;
 
+    //! bookname (Short name for the book = file name w/o extension and path.)
+    std::string Bookname;
+
+    //! File location where to save and load.
+    std::string FilePath;
+
     //! The image name illustrating the roadbook.
     std::string Image;
 
     //! Full path to the image.
     std::string ImagePath;
-
-    /**
-     * File location where to save and load.
-     */
-    std::string FilePath;
 
     /**
      * Get the total number of points in the book.
@@ -183,20 +181,16 @@ private:
      */
     unsigned int RoadPointIndex;
 
-    //! Temporary directory where archive will be inflated (ex: if the raodbook filename is MyRoadBook.mrz, then "/sdcard/RBook/MyRoadbook").
+     //! Temporary directory where archive will be inflated.
     std::string TempArchiveDirectory;
-
-    /**
-     * Constructor.
-     */
-    RoadBook();
 
     /**
      * Constructor.
      * @param filepath: The path to the roadbook file.
      * @param bookname: the short bookname.
+     * @param tempdirectory: The path to the directory that roadbook can use to inflate. BE CAREFUL: Directory will be erased before usage.
      */
-    RoadBook(std::string filepath, std::string bookname);
+    RoadBook(std::string filepath, std::string bookname, std::string tempdirectory);
 
     /**
      * Destructor.

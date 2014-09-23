@@ -13,6 +13,9 @@
 //! The road book directory
 #define BOOK_DIR "/RBook"
 
+//! The road book temporary directory
+#define BOOK_TEMP_DIR "/Temp"
+
 #define TAG "BookManager"
 
 namespace RBook {
@@ -20,27 +23,55 @@ namespace RBook {
 Error BookManager::Initialize(std::string rootdir) {
     Error ret;
 
+    // Check RBook directory and cerate if needed.
     RBookDirectory = rootdir + BOOK_DIR;
 
     ret = FileUtils::DirectoryExists(RBookDirectory);
     if (ret == FileUtils::ERROR_DIR_NOT_FOUND) {
-        LOG_D(TAG, "RBook dir does not exist.");
+        LOG_D(TAG, "RBook directory does not exist.");
         ret = FileUtils::MakeDirectory(RBookDirectory);
     }
     if(ret != ERROR_OK) {
         RBookDirectory.clear();
+        return ret;
     }
+
+    // Prepare temporary directory
+    RBookTempDirectory = RBookDirectory + BOOK_TEMP_DIR;
+    if (FileUtils::DirectoryExists(RBookTempDirectory) == ERROR_OK) {
+        FileUtils::RemoveDirectory(RBookTempDirectory);
+    }
+    ret = FileUtils::MakeDirectory(RBookTempDirectory);
+    if(ret != ERROR_OK) {
+        RBookTempDirectory.clear();
+        return ret;
+    }
+
     return ret;
 }
 
-Error BookManager::FetchRoadBooks(std::list<std::string> fetchdirs) {
+Error BookManager::ListImportRoadBooks(std::list<std::string> fetchdirs, std::map<std::string, std::string> &filemap) {
     Error ret;
 
-    if (!RBookDirectory.empty()) {
-        // TODO Implement FetchRoadBooks
+    try {
+        if (!fetchdirs.empty()) {
+            for (std::list<std::string>::iterator i=fetchdirs.begin(); i != fetchdirs.end(); ++i) {
+                std::list<std::string> templist;
+                ret = FileUtils::ListFilesPathInDir(*i, ROADBOOK_COMPRESSED_EXTENSION, templist);
+                if (ret != ERROR_OK) {
+                    LOG_E(TAG, "Could not list files in directory: %s", ((std::string)*i).c_str());
+                    return ret;
+                }
+                templist.sort();
+                //filemap.merge(templist);
+            }
+        }
+        else {
+            ret = ERROR_NOT_INITIALIZED;
+        }
     }
-    else {
-        ret = ERROR_NOT_INITIALIZED;
+    catch (std::exception& e) {
+        ret = ERROR_FAIL;
     }
 
     return ret;
@@ -51,9 +82,9 @@ Error BookManager::GetRoadBookList(std::list<std::string> &booklist)
     Error ret;
 
     try {
-        if (!RBookDirectory.empty()) {
+        if (!RBookDirectory.empty() && (FileUtils::DirectoryExists(RBookDirectory) != FileUtils::ERROR_DIR_NOT_FOUND)) {
             // Refresh list
-            ret = FileUtils::ListFilesInDir(RBookDirectory, ROADBOOK_COMPRESSED_EXTENSION, ListOfBooks);
+            ret = FileUtils::ListFilesRootInDir(RBookDirectory, ROADBOOK_COMPRESSED_EXTENSION, ListOfBooks);
 
             if ((ret == ERROR_OK ) && (!ListOfBooks.empty())) {
                 // Copy list
@@ -82,10 +113,8 @@ Error BookManager::GetRoadBook(std::string bookname, RoadBook *& roadbook) {
 
             for (std::list<std::string>::iterator i=ListOfBooks.begin(); i != ListOfBooks.end(); ++i) {
                 if (bookname.compare(*i) == 0) {
-                    roadbook = new RoadBook();
+                    roadbook = new RoadBook(RBookDirectory + FILEUTILS_PATH_DELIMITER + bookname + ROADBOOK_COMPRESSED_EXTENSION, bookname, RBookTempDirectory);
                     if (roadbook != NULL) {
-                        roadbook->FilePath = RBookDirectory + "/" + bookname + ROADBOOK_COMPRESSED_EXTENSION;
-                        roadbook->Bookname = bookname;
                         ret = roadbook->Load();
                     }
                     else {
@@ -109,10 +138,8 @@ Error BookManager::GetRoadBook(std::string bookname, RoadBook *& roadbook) {
 Error BookManager::CreateRoadBook(std::string bookname, RoadBook *& roadbook) {
     Error ret;
 
-    roadbook = new RoadBook();
+    roadbook = new RoadBook(RBookDirectory + FILEUTILS_PATH_DELIMITER + bookname + ROADBOOK_COMPRESSED_EXTENSION, bookname, RBookTempDirectory);
     if (roadbook != NULL) {
-        roadbook->FilePath = RBookDirectory + "/" + bookname + ROADBOOK_COMPRESSED_EXTENSION;
-        roadbook->Bookname = bookname;
         ret = roadbook->Create();
     }
     else {
@@ -159,9 +186,8 @@ Error BookManager::DeleteRoadBook(std::string bookname) {
 
             for (std::list<std::string>::iterator i=ListOfBooks.begin(); i != ListOfBooks.end(); ++i) {
                 if (bookname.compare(*i) == 0) {
-                    RoadBook* roadbook = new RoadBook();
+                    RoadBook* roadbook = new RoadBook(RBookDirectory + FILEUTILS_PATH_DELIMITER + bookname + ROADBOOK_COMPRESSED_EXTENSION, bookname, RBookTempDirectory);
                     if (roadbook != NULL) {
-                        roadbook->FilePath = RBookDirectory + "/" + bookname + ROADBOOK_COMPRESSED_EXTENSION;
                         ret = roadbook->Delete();
                         delete roadbook;
                     }
@@ -189,6 +215,11 @@ BookManager::~BookManager() {
         // Delete book list
         while (!ListOfBooks.empty()) {
             ListOfBooks.pop_back();
+        }
+        // Delete temporary files
+        if (FileUtils::DirectoryExists(RBookTempDirectory) == ERROR_OK) {
+            FileUtils::RemoveDirectory(RBookTempDirectory);
+            RBookTempDirectory.clear();
         }
     }
     catch (std::exception& e) {

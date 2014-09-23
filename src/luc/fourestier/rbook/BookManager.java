@@ -18,6 +18,10 @@ public class BookManager {
 		return bm;
 	}
 	
+	/**
+	 * Get the list of roadbook available in the RBook directory.
+	 * @return List of books
+	 */
 	public ArrayList<String> getRoadBookList() {
 		String serializedlist = _GetRoadBookListSerialized();
 		String[] list = serializedlist.split(";");

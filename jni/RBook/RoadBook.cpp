@@ -273,7 +273,7 @@ Error RoadBook::End() {
 
 // Private
 
-RoadBook::RoadBook(std::string filepath, std::string bookname) : RoadPointIndex(0) {
+RoadBook::RoadBook(std::string filepath, std::string bookname, std::string tempdirectory) : RoadPointIndex(0) {
     Title = "";
     Description = "";
     Location = "";
@@ -283,15 +283,7 @@ RoadBook::RoadBook(std::string filepath, std::string bookname) : RoadPointIndex(
 
     FilePath = filepath;
     Bookname = bookname;
-}
-
-RoadBook::RoadBook() : RoadPointIndex(0) {
-    Title = "";
-    Description = "";
-    Location = "";
-    TotalDistance = 0.0;
-    Image = "";
-    ImagePath = "";
+    TempArchiveDirectory = tempdirectory + FILEUTILS_PATH_DELIMITER + Bookname;
 }
 
 RoadBook::~RoadBook() {
@@ -403,8 +395,15 @@ Error RoadBook::Save() {
         LOG_I(TAG, "Save %s", FilePath.c_str());
         try {
             // Check if temporary directories have been created
-            if ((TempArchiveDirectory.empty()) || (FileUtils::DirectoryExists(TempArchiveDirectory) == FileUtils::ERROR_DIR_NOT_FOUND)) {
+            if (TempArchiveDirectory.empty()) {
                 return ret = ERROR_CANNOT_SAVE;
+            }
+
+            if (FileUtils::DirectoryExists(TempArchiveDirectory) == FileUtils::ERROR_DIR_NOT_FOUND) {
+                ret = FileUtils::MakeDirectory(TempArchiveDirectory);
+                if (ret != ERROR_OK) {
+                    return ret;
+                }
             }
 
             // Create the file of the roadbook (.mrb)
@@ -451,6 +450,7 @@ Error RoadBook::Save() {
 Error RoadBook::Delete() {
     Error ret;
 
+    ret = RemoveTemporaryDirectory();
     ret = FileUtils::DeleteFile(FilePath);
 
     return ret;
@@ -459,23 +459,23 @@ Error RoadBook::Delete() {
 Error RoadBook::CreateTemporaryDirectory() {
     Error ret;
 
-    // Create directory where to archive
-    TempArchiveDirectory = FilePath;
-    ret = FileUtils::RemoveExtension(TempArchiveDirectory);
-    if (ret != ERROR_OK) {
-        return ret;
-    }
+    // Create temporary directory where to inflate archive
+    if (!TempArchiveDirectory.empty()) {
+        if (FileUtils::DirectoryExists(TempArchiveDirectory) == ERROR_OK) {
+            ret = FileUtils::RemoveDirectory(TempArchiveDirectory);
+            if (ret != ERROR_OK) {
+                LOG_W(TAG, "could not remove directory!");
+                return ret;
+            }
+        }
 
-    if (FileUtils::DirectoryExists(TempArchiveDirectory) == ERROR_OK) {
-        ret = FileUtils::RemoveDirectory(TempArchiveDirectory);
+        ret = FileUtils::MakeDirectory(TempArchiveDirectory);
         if (ret != ERROR_OK) {
             return ret;
         }
     }
-
-    ret = FileUtils::MakeDirectory(TempArchiveDirectory);
-    if (ret != ERROR_OK) {
-        return ret;
+    else {
+        ret = ERROR_FAIL;
     }
 
     return ret;
@@ -487,7 +487,7 @@ Error RoadBook::RemoveTemporaryDirectory() {
     if (!TempArchiveDirectory.empty()) {
         ret = FileUtils::RemoveDirectory(TempArchiveDirectory);
         if (ret != ERROR_OK) {
-            LOG_E(TAG, "could not remove directory!");
+            LOG_W(TAG, "could not remove directory!");
         }
     }
 
