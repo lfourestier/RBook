@@ -39,6 +39,10 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 		setContentView(R.layout.activity_main);
 
 		try {
+			Intent intent = getIntent();
+			String action = intent.getAction();
+			Log.v("LFOR" , "Intent detected: " + action);
+			
 			bookListView = (ListView) findViewById(R.id.road_book_list);
 
 			if (theBookManager == null) {
@@ -52,6 +56,12 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 			listAdapter = new BookListAdapter(this, bookListArray);
 			bookListView.setAdapter(listAdapter);
 			bookListView.setOnItemClickListener(mListViewListener);
+			
+			if (currentRoadBook != null) {
+				theBookManager.releaseRoadBook(currentRoadBook);
+				currentRoadBook = null;
+			}
+
 		} catch (Exception e) {
 			Log.e("MainActivity", "Error while starting: " + e.getMessage());
 			toastMessage("Error while starting!");

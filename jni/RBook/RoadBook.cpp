@@ -463,21 +463,18 @@ Error RoadBook::CreateTemporaryDirectory() {
     TempArchiveDirectory = FilePath;
     ret = FileUtils::RemoveExtension(TempArchiveDirectory);
     if (ret != ERROR_OK) {
-        LOG_E(TAG, "could generate archive directory name!");
         return ret;
     }
 
     if (FileUtils::DirectoryExists(TempArchiveDirectory) == ERROR_OK) {
         ret = FileUtils::RemoveDirectory(TempArchiveDirectory);
         if (ret != ERROR_OK) {
-            LOG_E(TAG, "could not remove directory!");
             return ret;
         }
     }
 
     ret = FileUtils::MakeDirectory(TempArchiveDirectory);
     if (ret != ERROR_OK) {
-        LOG_E(TAG, "could not create directory!");
         return ret;
     }
 
@@ -490,7 +487,7 @@ Error RoadBook::RemoveTemporaryDirectory() {
     if (!TempArchiveDirectory.empty()) {
         ret = FileUtils::RemoveDirectory(TempArchiveDirectory);
         if (ret != ERROR_OK) {
-            LOG_E(TAG, "could remove directory!");
+            LOG_E(TAG, "could not remove directory!");
         }
     }
 

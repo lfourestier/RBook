@@ -105,10 +105,19 @@ public:
      *
      * @param directory: Directory path (Full path). Directory MUST exist.
      * @param extension: Extension. Must contain the "." separator, eg, ".txt" (And not just "txt"!!!).
-     * @param list: The returned list of file (Extension is stripped off from the filename. eg: "file.txt" becomes "file" in the list.
+     * @param list: The returned list of file (Extension is stripped off from the filename. eg: "file.txt" becomes "file" in the list).
      * @return @see ERROR
      */
-    static Error ListFilesInDir(std::string directory, std::string extension, std::list<std::string> &list);
+    static Error ListFilesRootInDir(std::string directory, std::string extension, std::list<std::string> &list);
+
+    /**
+     * List files of a certain extension contined by the directory
+     * @param directory: Directory path (Full path). Directory MUST exist.
+     * @param extension: Extension. Must contain the "." separator, eg, ".txt" (And not just "txt"!!!).
+     * @param list: The returned list of file (Full path; Ex: "/sdcard/RBook/file.mrz").
+     * @return
+     */
+    static Error ListFilesPathInDir(std::string directory, std::string extension, std::list<std::string> &list);
 };
 
 } /* namespace RBook */
