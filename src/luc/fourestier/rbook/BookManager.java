@@ -62,7 +62,23 @@ public class BookManager {
 		rb.nativeInstance = _CreateRoadBook(bookname);
 		
 		return rb;
+	}
+	
+	/**
+	 * Import an external file into the book list
+	 * @param filepath: the external file path (Full path)
+	 * @param bookname: the bookname
+	 * @param overwrite: If true and bookname exits in the list, overwrite it.
+	 * @return The road book
+	 * @exception java/lang/RuntimeException: any internal native resource errors; 
+	 * @exception java/io/IOException: any file errors; 
+	 * @exception java/io/IllegalArgumentException: If the bookname already exits in the list and overwrite is not true. 
+	 */
+	public RoadBook importRoadBook(String filepath, String bookname, boolean overwrite) {
+		RoadBook rb = new RoadBook();
+		rb.nativeInstance = _ImportRoadBook(filepath, bookname, overwrite);
 		
+		return rb;
 	}
 	
 	/**
@@ -124,6 +140,7 @@ public class BookManager {
 	private native final String _GetRoadBookListSerialized();
 	private native final int _GetRoadBook(String bookname);
 	private native final int _CreateRoadBook(String bookname);
+	private native final int _ImportRoadBook(String filepath, String bookname, boolean overwrite);
 	private native final void _SaveRoadBook(int instance);
 	private native final void _ReleaseRoadBook(int instance);
 	private native final void _DeleteRoadBook(String bookname);

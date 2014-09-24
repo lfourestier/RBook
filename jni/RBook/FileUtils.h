@@ -32,6 +32,14 @@ public:
 // File
 
     /**
+     * Copy the source file into the destination location.
+     * @param source: Source file path. File MUST exists.
+     * @param destination: Destination file path. Path MUST exists. File will be overwritten if exist.
+     * @return @see ERROR
+     */
+    static Error CopyFile(std::string source, std::string destination);
+
+    /**
      * Delete a file
      * @param file: Full path to the file
      * @return @see ERROR
@@ -74,6 +82,7 @@ public:
      * @return @see ERROR
      */
     static Error RemoveExtension(std::string &filepath);
+
 // Directory
 
     /**

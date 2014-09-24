@@ -8,6 +8,7 @@
 #include "luc_fourestier_rbook_RoadBook.h"
 #include "RBook/RoadBook.h"
 #include "RBook/Log.h"
+#include "RBook/FileUtils.h"
 
 #define TAG "JNIRoadBook"
 
@@ -27,6 +28,8 @@ static void JNIThrowOnError(JNIEnv *env, RBook::Error error) {
     case RBook::RoadBook::ERROR_BOOK_NOT_FOUND:
     case RBook::RoadBook::ERROR_CANNOT_SAVE:
     case RBook::RoadBook::ERROR_CANNOT_CREATE:
+    case RBook::FileUtils::ERROR_DIR_NOT_FOUND:
+    case RBook::FileUtils::ERROR_FILE_NOT_FOUND:
         LOG_E(TAG, "java/io/IOException");
         JNIThrowException(env, "java/io/IOException", NULL);
         break;

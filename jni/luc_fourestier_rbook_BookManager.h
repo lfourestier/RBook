@@ -41,6 +41,14 @@ JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_BookManager__1CreateRoadBook
 
 /*
  * Class:     luc_fourestier_rbook_BookManager
+ * Method:    _ImportRoadBook
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Z)I
+ */
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_BookManager__1ImportRoadBook
+  (JNIEnv *, jobject, jstring, jstring, jboolean);
+
+/*
+ * Class:     luc_fourestier_rbook_BookManager
  * Method:    _SaveRoadBook
  * Signature: (I)V
  */

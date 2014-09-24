@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
+#include <fstream>
 
 #include "Log.h"
 
@@ -19,6 +20,28 @@
 #define TAG "FileUtils"
 
 namespace RBook {
+
+Error FileUtils::CopyFile(std::string source, std::string destination) {
+    Error ret;
+
+    try {
+        std::ifstream inputfile(source.c_str(), std::ifstream::in|std::ifstream::binary);
+        std::ofstream outputfile(destination.c_str(), std::ofstream::out|std::ofstream::trunc|std::ofstream::binary);
+
+        if (inputfile.is_open() && outputfile.is_open()) {
+            outputfile << inputfile.rdbuf();
+            inputfile.close();
+            outputfile.close();
+        }
+        else {
+            ret = ERROR_FAIL;
+        }
+    } catch (std::exception &e) {
+        ret = ERROR_FAIL;
+    }
+
+    return ret;
+}
 
 Error FileUtils::DeleteFile(std::string file) {
     Error ret;
@@ -33,8 +56,8 @@ Error FileUtils::DeleteFile(std::string file) {
     }
 
     return ret;
-
 }
+
 Error FileUtils::FileExists(std::string file) {
     Error ret;
     struct stat status;
@@ -134,7 +157,7 @@ Error FileUtils::MakeDirectory(std::string directory) {
 
     try {
         if (mkdir(directory.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0) {
-            LOG_E(TAG, "Create directory %s!", directory.c_str());
+            LOG_E(TAG, "Error while creating directory %s!", directory.c_str());
             ret = ERROR_FAIL;
         }
     }

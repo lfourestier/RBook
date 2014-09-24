@@ -28,8 +28,13 @@ static void JNIThrowOnError(JNIEnv *env, RBook::Error error) {
     case RBook::RoadBook::ERROR_CANNOT_SAVE:
     case RBook::RoadBook::ERROR_BOOK_NOT_FOUND:
     case RBook::FileUtils::ERROR_DIR_NOT_FOUND:
+    case RBook::FileUtils::ERROR_FILE_NOT_FOUND:
         LOG_E(TAG, "java/io/IOException");
         JNIThrowException(env, "java/io/IOException", NULL);
+        break;
+    case RBook::BookManager::ERROR_ROADBOOK_EXISTS:
+        LOG_E(TAG, "java/lang/IllegalArgumentException");
+        JNIThrowException(env, "java/lang/IllegalArgumentException", NULL);
         break;
     case RBook::RoadBook::ERROR_EMPTY_LIST:
     case RBook::BookManager::ERROR_EMPTY_LIST:
@@ -135,7 +140,6 @@ JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_BookManager__1GetRoadBook(JNIEn
     JNIThrowOnError(env, error);
 
     return (int) roadbook;
-
 }
 
 JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_BookManager__1CreateRoadBook(JNIEnv *env, jobject thiz, jstring bookname) {
@@ -154,7 +158,28 @@ JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_BookManager__1CreateRoadBook(JN
     JNIThrowOnError(env, error);
 
     return (int) roadbook;
+}
 
+JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_BookManager__1ImportRoadBook (JNIEnv *env, jobject thiz, jstring filepath, jstring bookname, jboolean overwrite) {
+    RBook::BookManager *bm = GetInstance(env, thiz);
+    if (bm == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return 0;
+    }
+
+    const char* charbookname = env->GetStringUTFChars(bookname, NULL);
+    std::string cppbookname(charbookname);
+    env->ReleaseStringUTFChars(bookname, charbookname);
+
+    const char* charfilepath = env->GetStringUTFChars(filepath, NULL);
+    std::string cppfilepath(charfilepath);
+    env->ReleaseStringUTFChars(filepath, charfilepath);
+
+    RBook::RoadBook *roadbook = NULL;
+    RBook::Error error = bm->ImportRoadBook(cppfilepath, cppbookname, (bool) overwrite, roadbook);
+    JNIThrowOnError(env, error);
+
+    return (int) roadbook;
 }
 
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1SaveRoadBook(JNIEnv *env, jobject thiz, jint instance) {

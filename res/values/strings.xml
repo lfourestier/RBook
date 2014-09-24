@@ -22,7 +22,20 @@
     <string name="point_edit_description_hint">Point description</string>
     <string name="warning_name_empty">Book name is empty!</string>
     <string name="title_activity_road_point_select">Select your roadpoint</string>
-    <string name="rbook_help">RBook is a road book reader/generator. \nIt is aimed to share your road trips with friends and enjoy riding throughout the world. If you like it, please share it!</string>
+    <string name="rbook_help_intro_title">Introduction</string>
+    <string name="rbook_help_intro">RBook is a road book reader/generator.\n
+        It is aimed to share your trips with friends and enjoy riding throughout the world.\n
+        If you like it, please share it!</string>
+    <string name="rbook_help_read_title">Read a book</string>
+    <string name="rbook_help_read">Main page proposes you to select the roadbook you want to read.\n
+        By selecting one, you will first see the overall road book description. Then press "go" button at the bottom to start your trip and see it point after point.\n
+        You can navigate trough the road point with the right and left arrows.\n
+        Top text in the point view is the direction you need to follow after the point is passed, followed by the distance to next point.\n
+        Below, the current point image with the immediate instructions you need to follow on that point (Yellow Arrow).
+        Below again, a small description of the current point with some observations, the kilometer (Distance from the start of the trip) and the partial kilometer (Ditance from last point).</string>
+    <string name="rbook_help_edit_title">Edit a book</string>
+    <string name="rbook_help_edit">The top bar (Action bar) provides you the possibility to Add, Edit or delete a road book.\n
+        Feel free to create your own road books!</string>
     <string name="rbook_copyright">Written by Luc Fourestier - lfourestier@yahoo.fr \nAll rights are reserved. Copyright 2014</string>
 
 </resources>

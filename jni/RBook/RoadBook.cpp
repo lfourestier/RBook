@@ -343,13 +343,7 @@ Error RoadBook::Load() {
             }
 
             // Find the file to parse for the roadbook
-            std::string mrbfilepath(FilePath);
-            ret = FileUtils::GetFileRoot(mrbfilepath);
-            if (ret != ERROR_OK) {
-                LOG_E(TAG, "could not get root!");
-                return ret = ERROR_CANNOT_CREATE;
-            }
-            mrbfilepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + mrbfilepath + ROADBOOK_EXTENSION;
+            std::string mrbfilepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + ROADBOOK_FILE;
             LOG_D(TAG, "Parsing file: %s", mrbfilepath.c_str());
 
             // Parse the roadbook
@@ -407,13 +401,7 @@ Error RoadBook::Save() {
             }
 
             // Create the file of the roadbook (.mrb)
-            std::string mrbfilepath(FilePath);
-            ret = FileUtils::GetFileRoot(mrbfilepath);
-            if (ret != ERROR_OK) {
-                LOG_E(TAG, "could not get root!");
-                return ret = ERROR_CANNOT_SAVE;
-            }
-            mrbfilepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + mrbfilepath + ROADBOOK_EXTENSION;
+            std::string mrbfilepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + ROADBOOK_FILE;
 
             std::ofstream file(mrbfilepath.c_str(), std::ofstream::trunc);
             std::string content;

@@ -1,6 +1,9 @@
 package luc.fourestier.rbook;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import luc.fourestier.rbook.AddDialogFragment.AddDialogListener;
@@ -44,25 +47,47 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 		setContentView(R.layout.activity_main);
 
 		try {
+			String sdcard = Environment.getExternalStorageDirectory().getPath();
+			if (theBookManager == null) {
+				Log.v("MAIN", "External storage dir: " + sdcard);
+				theBookManager = BookManager.Create(sdcard);
+			}
+
 			Intent intent = getIntent();
 			String action = intent.getAction();
 			
 			if (action.compareTo(Intent.ACTION_VIEW) == 0) {
 				String scheme = intent.getScheme();
+				ContentResolver resolver = getContentResolver();
+				
 				if (scheme.compareTo(ContentResolver.SCHEME_CONTENT) == 0) {
 					Uri uri = intent.getData();
-					ContentResolver resolver = getContentResolver();
 					String name = getContentName(resolver, uri);
 					
-//					InputStream input = resolver.openInputStream(uri);
 					Log.v("LFOR" , "Content intent detected: " + action + " : " + intent.getDataString() + " : " + intent.getType() + " : " + name);
+					InputStream input = resolver.openInputStream(uri);
+					String importfilepath = sdcard + "/RBook/Temp/" + name; // TODO No hardcoded path here!!!
+					InputStreamToFile(input, importfilepath);
+					try {
+						theBookManager.importRoadBook(importfilepath, name.split(".")[0], false); // TODO name.split might fail => check Error!!
+						Log.v("LFOR" , "after importRoadBook");
+					} catch (java.lang.IllegalArgumentException e) {
+						toastMessage("Roadbook already exist in the list!");
+					}
 				}
 				else if (scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
 					Uri uri = intent.getData();
-					String host = uri.getLastPathSegment();
+					String name = uri.getLastPathSegment();
 					
-//					InputStream input = resolver.openInputStream(uri);
-					Log.v("LFOR" , "File intent detected: " + action + " : " + intent.getDataString() + " : " + intent.getType() + " : " + host);
+					Log.v("LFOR" , "File intent detected: " + action + " : " + intent.getDataString() + " : " + intent.getType() + " : " + name);
+					InputStream input = resolver.openInputStream(uri);
+					String importfilepath = sdcard + "/RBook/Temp/" + name; // TODO No hardcoded path here!!!
+					InputStreamToFile(input, importfilepath);
+					try {
+						theBookManager.importRoadBook(importfilepath, name.split(".")[0], false); // TODO name.split might fail => check Error!!
+					} catch (java.lang.IllegalArgumentException e) {
+						toastMessage("Roadbook already exist in the list!");
+					}
 				}
 				else if (scheme.compareTo("http") == 0) {
 					// TODO Import from website!
@@ -70,12 +95,6 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 			}
 			
 			bookListView = (ListView) findViewById(R.id.road_book_list);
-
-			if (theBookManager == null) {
-				String sdcard = Environment.getExternalStorageDirectory().getPath();
-				Log.v("MAIN", "External storage dir: " + sdcard);
-				theBookManager = BookManager.Create(sdcard);
-			}
 
 			bookListArray = theBookManager.getRoadBookList();
 
@@ -184,8 +203,9 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 	    }
     }
     
+// Utils
     
-    public String getContentName(ContentResolver resolver, Uri uri){
+    private String getContentName(ContentResolver resolver, Uri uri){
         Cursor cursor = resolver.query(uri, null, null, null, null);
         cursor.moveToFirst();
         int nameIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
@@ -194,6 +214,24 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
         } else {
             return null;
         }
+    }
+    
+    private void InputStreamToFile(InputStream in, String file) {
+    	try {
+	    	OutputStream out = new FileOutputStream(new File(file));
+	
+			int size = 0;
+			byte[] buffer = new byte[1024];
+		
+			while ((size = in.read(buffer)) != -1) {
+				out.write(buffer, 0, size);
+			}
+			
+			out.close();
+    	}
+		catch (Exception e) {
+			Log.e("MainActivity", "InputStreamToFile exception: " + e.getMessage());
+		}
     }
 }
 

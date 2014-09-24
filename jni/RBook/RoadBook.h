@@ -17,8 +17,8 @@
 
 #define ROADBOOK_ERROR_BASE CONFIG_ROADBOOK_ERROR_BASE
 
-//! The road book file extension
-#define ROADBOOK_EXTENSION ".mrb"
+//! The road book file
+#define ROADBOOK_FILE "roadbook.mrb"
 
 //! The compressed road book file extension
 #define ROADBOOK_COMPRESSED_EXTENSION ".mrz"

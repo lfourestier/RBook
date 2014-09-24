@@ -32,6 +32,7 @@ public:
         ERROR_EMPTY_LIST, //!< List of file is empty
         ERROR_BOOKNAME_NOT_FOUND, //!< Did not find the book name in the list
         ERROR_ROADBOOK_INVALID, //!< The roadbook in use is somehow erroneous
+        ERROR_ROADBOOK_EXISTS, //!< The imported roadbook already exits.
     };
 
     /**
@@ -49,19 +50,6 @@ public:
      * @return @see ERROR
      */
     Error Initialize(std::string rootdir);
-
-    /**
-     * Fetch any books found in the specified list of directories.
-     * The books found will be moved in "<rootdir>/BOOK_DIR".
-     * The book list will then be adapted.
-     *
-     * @example Typical place where to fetch could be the "download" directory.
-     *
-     * @param fetchdirs: The list of directories where to fetch.
-     * @param filemap: the list of importable files found in the directories, in the form of a map <shortname, fullpath>.
-     * @return @see ERROR
-     */
-    Error ListImportRoadBooks(std::list<std::string> fetchdirs, std::map<std::string, std::string> &filemap);
 
     /**
      * Return the book list.
@@ -88,6 +76,19 @@ public:
      * @return @see ERROR
      */
     Error CreateRoadBook(std::string bookname, RoadBook *& roadbook);
+
+    /**
+     * Import an external roadbook into the book list.
+     * If roadbook already exist in the list and overwrite is false => return an error.
+     * If roadbook already exist in the list and overwrite is true => Delete existing roadbook and copy the new one.
+     *
+     * @param filepath: The path of the file to import.
+     * @param bookname: the bookname
+     * @param overwrite: If true and bookname exists in the list, overwrite the book in the list of books.
+     * @param roadbook: the returned roadbook
+     * @return @see ERROR
+     */
+    Error ImportRoadBook(std::string filepath, std::string bookname, bool overwrite, RoadBook *& roadbook);
 
     /**
      * Save the road book.

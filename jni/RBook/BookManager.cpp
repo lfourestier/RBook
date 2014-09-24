@@ -50,33 +50,6 @@ Error BookManager::Initialize(std::string rootdir) {
     return ret;
 }
 
-Error BookManager::ListImportRoadBooks(std::list<std::string> fetchdirs, std::map<std::string, std::string> &filemap) {
-    Error ret;
-
-    try {
-        if (!fetchdirs.empty()) {
-            for (std::list<std::string>::iterator i=fetchdirs.begin(); i != fetchdirs.end(); ++i) {
-                std::list<std::string> templist;
-                ret = FileUtils::ListFilesPathInDir(*i, ROADBOOK_COMPRESSED_EXTENSION, templist);
-                if (ret != ERROR_OK) {
-                    LOG_E(TAG, "Could not list files in directory: %s", ((std::string)*i).c_str());
-                    return ret;
-                }
-                templist.sort();
-                //filemap.merge(templist);
-            }
-        }
-        else {
-            ret = ERROR_NOT_INITIALIZED;
-        }
-    }
-    catch (std::exception& e) {
-        ret = ERROR_FAIL;
-    }
-
-    return ret;
-}
-
 Error BookManager::GetRoadBookList(std::list<std::string> &booklist)
 {
     Error ret;
@@ -143,6 +116,55 @@ Error BookManager::CreateRoadBook(std::string bookname, RoadBook *& roadbook) {
         ret = roadbook->Create();
     }
     else {
+        ret = ERROR_FAIL;
+    }
+
+    return ret;
+}
+
+Error BookManager::ImportRoadBook(std::string filepath, std::string bookname, bool overwrite, RoadBook *& roadbook) {
+    Error ret;
+
+    try {
+        // Check if book exists in the list
+        if (!ListOfBooks.empty()) {
+            for (std::list<std::string>::iterator i=ListOfBooks.begin(); i != ListOfBooks.end(); ++i) {
+                if (bookname.compare(*i) == 0) {
+                    ret = ERROR_ROADBOOK_EXISTS;
+                    break;
+                }
+            }
+        }
+
+        if (ret == ERROR_ROADBOOK_EXISTS) {
+            if (overwrite == true) {
+                ret = DeleteRoadBook(bookname);
+                if (ret != ERROR_OK) {
+                    return ret;
+                }
+            }
+            else {
+                return ret;
+            }
+        }
+
+        // Copy/overwrite file into RBook dir.
+        std::string newfilename = RBookDirectory + FILEUTILS_PATH_DELIMITER + bookname + ROADBOOK_COMPRESSED_EXTENSION;
+        ret = FileUtils::CopyFile(filepath, newfilename);
+        if (ret != ERROR_OK) {
+            return ret = ERROR_FAIL;
+        }
+
+        // Open roadbook
+        roadbook = new RoadBook(newfilename, bookname, RBookTempDirectory);
+        if (roadbook != NULL) {
+            ret = roadbook->Load();
+        }
+        else {
+            ret = ERROR_FAIL;
+        }
+    }
+    catch (std::exception& e) {
         ret = ERROR_FAIL;
     }
 
