@@ -58,49 +58,52 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 			try {
 				// Import file if activity was triggered by an external intent
 				Intent intent = getIntent();
-				String action = intent.getAction();
-				
-				if (action.compareTo(Intent.ACTION_VIEW) == 0) {
-					Log.v(MainActivity.class.getSimpleName() , "ACTION_VIEW intent detected: " + intent.getDataString() + " : " + intent.getType());
+				if (intent != null) {
+					String action = intent.getAction();
 					
-					String scheme = intent.getScheme();
-					Uri uri = intent.getData();
-					ContentResolver resolver = getContentResolver();
-					
-					// We will temporarily copy the file here below before definitive import.
-					String tempfile = sdcard + "/RBook/Temp/"; // TODO No hardcoded path here!!!
-					String filename = null;
-					
-					if (scheme.compareTo(ContentResolver.SCHEME_CONTENT) == 0) {
-						filename = getContentName(resolver, uri);
+					if ((action != null) && (action.compareTo(Intent.ACTION_VIEW) == 0)) {
+						Log.v(MainActivity.class.getSimpleName() , "ACTION_VIEW intent detected: " + intent.getDataString() + " : " + intent.getType());
 						
-						InputStream input = resolver.openInputStream(uri);
-						tempfile = tempfile + filename; 
-						InputStreamToFile(input, tempfile);
-					}
-					else if (scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
-						filename = uri.getLastPathSegment();
+						String scheme = intent.getScheme();
+						Uri uri = intent.getData();
+						ContentResolver resolver = getContentResolver();
 						
-						InputStream input = resolver.openInputStream(uri);
-						tempfile = tempfile + filename; 
-						InputStreamToFile(input, tempfile);
-					}
-					else if (scheme.compareTo("http") == 0) {
-						// TODO Import from website!
-					}
-					
-					// Import the file definitively then
-					if (filename != null) {
-						try {
-							theBookManager.importRoadBook(tempfile, filename.split("\\.")[0], false);
-						} catch (java.lang.IllegalArgumentException e) {
-							toastMessage("Roadbook already exist in the list!");
-							// TODO Add dialog to change name or overwrite.
+						// We will temporarily copy the file here below before definitive import.
+						String tempfile = sdcard + "/RBook/Temp/"; // TODO No hardcoded path here!!!
+						String filename = null;
+						
+						if (scheme.compareTo(ContentResolver.SCHEME_CONTENT) == 0) {
+							filename = getContentName(resolver, uri);
+							
+							InputStream input = resolver.openInputStream(uri);
+							tempfile = tempfile + filename; 
+							InputStreamToFile(input, tempfile);
+						}
+						else if (scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
+							filename = uri.getLastPathSegment();
+							
+							InputStream input = resolver.openInputStream(uri);
+							tempfile = tempfile + filename; 
+							InputStreamToFile(input, tempfile);
+						}
+						else if (scheme.compareTo("http") == 0) {
+							// TODO Import from website!
+						}
+						
+						// Import the file definitively then
+						if (filename != null) {
+							try {
+								theBookManager.importRoadBook(tempfile, filename.split("\\.")[0], false);
+							} catch (java.lang.IllegalArgumentException e) {
+								toastMessage("Roadbook already exist in the list!");
+								// TODO Add dialog to change name or overwrite.
+							}
 						}
 					}
 				}
 			}
 			catch (Exception e) {
+				Log.e(MainActivity.class.getSimpleName(), "Error while importing: " + e.getMessage());
 				toastMessage("Import failed!");
 			}
 			
@@ -119,7 +122,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 			}
 
 		} catch (Exception e) {
-			Log.e("MainActivity", "Error while starting: " + e.getMessage());
+			Log.e(MainActivity.class.getSimpleName(), "Error while starting: " + e.getMessage());
 			toastMessage("Error while starting!");
 			theBookManager = null;
 		}

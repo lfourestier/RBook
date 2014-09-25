@@ -180,8 +180,12 @@ Error RoadBook::AddNewPointAfter(RoadPoint*& point){
 
     try {
         point = new RoadPoint();
-        if (RoadPointList.empty() || (RoadPointIndex+1 >= RoadPointList.size())) {
+        if (RoadPointList.empty())  {
             RoadPointList.push_back(point);
+        }
+        else if (RoadPointIndex+1 >= RoadPointList.size()) {
+            RoadPointList.push_back(point);
+            Next(); // Go to the new point
         }
         else {
             std::vector<RoadPoint*>::iterator iterator = RoadPointList.begin();
