@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import luc.fourestier.rbook.AddDialogFragment.AddDialogListener;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,53 +48,63 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 		setContentView(R.layout.activity_main);
 
 		try {
+			// Initialize the book manager
 			String sdcard = Environment.getExternalStorageDirectory().getPath();
 			if (theBookManager == null) {
-				Log.v("MAIN", "External storage dir: " + sdcard);
+				Log.v(MainActivity.class.getSimpleName(), "External storage dir: " + sdcard);
 				theBookManager = BookManager.Create(sdcard);
 			}
 
-			Intent intent = getIntent();
-			String action = intent.getAction();
-			
-			if (action.compareTo(Intent.ACTION_VIEW) == 0) {
-				String scheme = intent.getScheme();
-				ContentResolver resolver = getContentResolver();
+			try {
+				// Import file if activity was triggered by an external intent
+				Intent intent = getIntent();
+				String action = intent.getAction();
 				
-				if (scheme.compareTo(ContentResolver.SCHEME_CONTENT) == 0) {
-					Uri uri = intent.getData();
-					String name = getContentName(resolver, uri);
+				if (action.compareTo(Intent.ACTION_VIEW) == 0) {
+					Log.v(MainActivity.class.getSimpleName() , "ACTION_VIEW intent detected: " + intent.getDataString() + " : " + intent.getType());
 					
-					Log.v("LFOR" , "Content intent detected: " + action + " : " + intent.getDataString() + " : " + intent.getType() + " : " + name);
-					InputStream input = resolver.openInputStream(uri);
-					String importfilepath = sdcard + "/RBook/Temp/" + name; // TODO No hardcoded path here!!!
-					InputStreamToFile(input, importfilepath);
-					try {
-						theBookManager.importRoadBook(importfilepath, name.split(".")[0], false); // TODO name.split might fail => check Error!!
-						Log.v("LFOR" , "after importRoadBook");
-					} catch (java.lang.IllegalArgumentException e) {
-						toastMessage("Roadbook already exist in the list!");
-					}
-				}
-				else if (scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
+					String scheme = intent.getScheme();
 					Uri uri = intent.getData();
-					String name = uri.getLastPathSegment();
+					ContentResolver resolver = getContentResolver();
 					
-					Log.v("LFOR" , "File intent detected: " + action + " : " + intent.getDataString() + " : " + intent.getType() + " : " + name);
-					InputStream input = resolver.openInputStream(uri);
-					String importfilepath = sdcard + "/RBook/Temp/" + name; // TODO No hardcoded path here!!!
-					InputStreamToFile(input, importfilepath);
-					try {
-						theBookManager.importRoadBook(importfilepath, name.split(".")[0], false); // TODO name.split might fail => check Error!!
-					} catch (java.lang.IllegalArgumentException e) {
-						toastMessage("Roadbook already exist in the list!");
+					// We will temporarily copy the file here below before definitive import.
+					String tempfile = sdcard + "/RBook/Temp/"; // TODO No hardcoded path here!!!
+					String filename = null;
+					
+					if (scheme.compareTo(ContentResolver.SCHEME_CONTENT) == 0) {
+						filename = getContentName(resolver, uri);
+						
+						InputStream input = resolver.openInputStream(uri);
+						tempfile = tempfile + filename; 
+						InputStreamToFile(input, tempfile);
 					}
-				}
-				else if (scheme.compareTo("http") == 0) {
-					// TODO Import from website!
+					else if (scheme.compareTo(ContentResolver.SCHEME_FILE) == 0) {
+						filename = uri.getLastPathSegment();
+						
+						InputStream input = resolver.openInputStream(uri);
+						tempfile = tempfile + filename; 
+						InputStreamToFile(input, tempfile);
+					}
+					else if (scheme.compareTo("http") == 0) {
+						// TODO Import from website!
+					}
+					
+					// Import the file definitively then
+					if (filename != null) {
+						try {
+							theBookManager.importRoadBook(tempfile, filename.split("\\.")[0], false);
+						} catch (java.lang.IllegalArgumentException e) {
+							toastMessage("Roadbook already exist in the list!");
+							// TODO Add dialog to change name or overwrite.
+						}
+					}
 				}
 			}
+			catch (Exception e) {
+				toastMessage("Import failed!");
+			}
 			
+			// Initialize the view elements
 			bookListView = (ListView) findViewById(R.id.road_book_list);
 
 			bookListArray = theBookManager.getRoadBookList();
@@ -110,6 +121,15 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 		} catch (Exception e) {
 			Log.e("MainActivity", "Error while starting: " + e.getMessage());
 			toastMessage("Error while starting!");
+			theBookManager = null;
+		}
+	}
+	
+	@Override
+	public void onConfigurationChanged (Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		if (newConfig != null) {
+			Log.v("LFOR", "Orientation: " + Integer.toString(newConfig.orientation));
 		}
 	}
 
