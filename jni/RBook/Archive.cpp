@@ -18,7 +18,7 @@
 
 #define TAG "Archive"
 
-#define BUFFER_SIZE 256
+#define ARCHIVE_BUFFER_SIZE 256
 
 namespace RBook {
 
@@ -88,7 +88,7 @@ Error Archive::Inflate(std::string directory) {
     bool endofarchive = false;
     do {
         unz_file_info fileinfo;
-        char buffer[BUFFER_SIZE];
+        char buffer[ARCHIVE_BUFFER_SIZE];
         std::string filepath = directory + FILEUTILS_PATH_DELIMITER;
 
         err = unzOpenCurrentFile(unzipfile);
@@ -98,7 +98,7 @@ Error Archive::Inflate(std::string directory) {
            break;
         }
 
-        err = unzGetCurrentFileInfo(unzipfile, &fileinfo, buffer, BUFFER_SIZE, NULL, 0, NULL, 0);
+        err = unzGetCurrentFileInfo(unzipfile, &fileinfo, buffer, ARCHIVE_BUFFER_SIZE, NULL, 0, NULL, 0);
         if (err != ZIP_OK) {
             LOG_E(TAG, "Cannot get current file name/info!");
             ret = ERROR_CANNOT_INFLATE;
@@ -115,7 +115,7 @@ Error Archive::Inflate(std::string directory) {
 
         int writesize = 0;
         do {
-            writesize = unzReadCurrentFile(unzipfile, buffer, BUFFER_SIZE);
+            writesize = unzReadCurrentFile(unzipfile, buffer, ARCHIVE_BUFFER_SIZE);
             if (writesize > 0) {
                 int size = fwrite(buffer, 1, writesize, filetounzip);
                 if (size <= 0) {
@@ -219,9 +219,9 @@ Error Archive::Add(std::vector<std::string> &files, zipFile &zfile){
         }
 
         int readsize = 0;
-        char buffer[BUFFER_SIZE];
+        char buffer[ARCHIVE_BUFFER_SIZE];
         do {
-            readsize = fread(buffer, 1, BUFFER_SIZE, filetozip);
+            readsize = fread(buffer, 1, ARCHIVE_BUFFER_SIZE, filetozip);
             if (readsize > 0) {
                 err = zipWriteInFileInZip (zfile, buffer, readsize);
                 if (err != ZIP_OK) {

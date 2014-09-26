@@ -21,7 +21,7 @@ namespace RBook {
 
 /**
  * Manage the list of books and their locations.
- * Users only see "aliases" (called bookname) then, ide, a simple string representing the book.
+ * Users only see "aliases" (called bookname) ide, a simple string representing the book.
  */
 class BookManager {
 public:
@@ -120,8 +120,7 @@ public:
      * Default constructor.
      */
     BookManager() {
-    }
-    ;
+    };
 
     /**
      * Destructor.

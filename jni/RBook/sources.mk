@@ -1,5 +1,6 @@
 MODULEDIR := $(ROOTDIR)/RBook
 SOURCES :=   	BookManager.cpp \
+                PictManager.cpp \
 				RoadBook.cpp \
                 RoadPoint.cpp \
                 Error.cpp \

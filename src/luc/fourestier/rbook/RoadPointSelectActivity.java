@@ -1,5 +1,7 @@
 package luc.fourestier.rbook;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -13,16 +15,18 @@ import android.widget.Toast;
 
 public class RoadPointSelectActivity extends Activity {
 	private GridView gridview;
-	private String[] pointSelectionArray = {
-        "question_mark", "ra4_exit2",
-        "start", "t_left",
-        "t_right", "x4_left",
-        "x4_right", "x4_straight",
-        "y_left", "y_right",
-        "finish"
-	};
+	private String[] pointSelectionArray;
+//	= {
+//        "question_mark", "ra4_exit2",
+//        "start", "t_left",
+//        "t_right", "x4_left",
+//        "x4_right", "x4_straight",
+//        "y_left", "y_right",
+//        "finish"
+//	};
 	
 	private RoadBook currentRoadBook = null;
+	private PictManager thePictManager = null;
 	
 // Activity
 	
@@ -32,13 +36,22 @@ public class RoadPointSelectActivity extends Activity {
 		setContentView(R.layout.activity_road_point_select);
 		setupActionBar();
 		
+		try {
 		currentRoadBook = MainActivity.currentRoadBook;
+		thePictManager = MainActivity.thePictManager;
 		
 		gridview = (GridView) findViewById(R.id.point_select_gridview);
 		RoadPointImageAdapter adapter = new RoadPointImageAdapter(this);
+		ArrayList<String> pictArray= thePictManager.getPictList();
+		pointSelectionArray = pictArray.toArray(new String[pictArray.size()]);
 		adapter.mPointNames = pointSelectionArray;
 		gridview.setAdapter(adapter);
 		gridview.setOnItemClickListener(mGridItemListener);
+		}
+		catch (Exception e) {
+			toastMessage("Cannot list picts!");
+			thePictManager = null;
+		}
 	}
 
 // Action bar

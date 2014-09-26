@@ -14,10 +14,10 @@
 #include "Error.h"
 #include "Config.h"
 
+#define FILEUTILS_ERROR_BASE CONFIG_FILEUTILS_ERROR_BASE
+
 #define FILEUTILS_PATH_DELIMITER CONFIG_PATH_DELIMITER
 #define FILEUTILS_EXTENSION_DELIMITER "."
-
-#define FILEUTILS_ERROR_BASE CONFIG_FILEUTILS_ERROR_BASE
 
 namespace RBook {
 
@@ -110,14 +110,14 @@ public:
     static Error RemoveDirectory(std::string directory);
 
     /**
-     * List files of a certain extension contained by a directory.
-     *
+     * List files with a certain suffix contained by a directory.
      * @param directory: Directory path (Full path). Directory MUST exist.
-     * @param extension: Extension. Must contain the "." separator, eg, ".txt" (And not just "txt"!!!).
+     * @param suffix: The suffix. (eg: if suffix is ".png" then {icon1_full.png, icons2_small.png} => {icon1_full, icon2_small} or
+     * if suffix is "_full.png" then {icon1_full.png, icons2_small.png} => {icon1}).
      * @param list: The returned list of file (Extension is stripped off from the filename. eg: "file.txt" becomes "file" in the list).
      * @return @see ERROR
      */
-    static Error ListFilesRootInDir(std::string directory, std::string extension, std::list<std::string> &list);
+    static Error ListFilesRootInDir(std::string directory, std::string suffix, std::list<std::string> &list);
 
     /**
      * List files of a certain extension contined by the directory

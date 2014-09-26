@@ -17,8 +17,12 @@
 
 #define ROADBOOK_ERROR_BASE CONFIG_ROADBOOK_ERROR_BASE
 
-//! The road book file
-#define ROADBOOK_FILE "roadbook.mrb"
+// The json fields
+#define ROADBOOK_TITLE_TAG "title"
+#define ROADBOOK_DESCRIPTION_TAG "description"
+#define ROADBOOK_LOCATION_TAG "location"
+#define ROADBOOK_IMAGE_TAG "image"
+#define ROADBOOK_ROADPOINTS_TAG "roadpoints"
 
 //! The compressed road book file extension
 #define ROADBOOK_COMPRESSED_EXTENSION ".mrz"

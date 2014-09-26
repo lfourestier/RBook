@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import luc.fourestier.rbook.AddDialogFragment.AddDialogListener;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -32,6 +33,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 	private BookListAdapter listAdapter;
 	
 	public static BookManager theBookManager = null;
+	public static PictManager thePictManager = null;
 	public static RoadBook currentRoadBook = null; // TODO Should not be static!
 
 // Native library
@@ -48,11 +50,21 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 		setContentView(R.layout.activity_main);
 
 		try {
+			AssetManager assetManager = getAssets();
+			
 			// Initialize the book manager
 			String sdcard = Environment.getExternalStorageDirectory().getPath();
 			if (theBookManager == null) {
 				Log.v(MainActivity.class.getSimpleName(), "External storage dir: " + sdcard);
 				theBookManager = BookManager.Create(sdcard);
+			}
+
+			// Initialize the picts
+			if (thePictManager == null) {
+				InputStream input = assetManager.open("pict.zip");
+				String tempfile = sdcard + "/RBook/Temp/pict.zip";
+				InputStreamToFile(input, tempfile);
+				thePictManager = PictManager.create(tempfile, sdcard + "/RBook/"); // TODO No hardcoded path here!!
 			}
 
 			try {
@@ -125,6 +137,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 			Log.e(MainActivity.class.getSimpleName(), "Error while starting: " + e.getMessage());
 			toastMessage("Error while starting!");
 			theBookManager = null;
+			thePictManager = null;
 		}
 	}
 	

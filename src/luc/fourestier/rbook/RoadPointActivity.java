@@ -1,6 +1,8 @@
 package luc.fourestier.rbook;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -28,6 +30,7 @@ public class RoadPointActivity extends Activity {
 	private Button albumButton;
 
 	private RoadBook currentRoadBook;
+	private PictManager thePictManager = null;
 
 	private String pointImageType;
 	private final String drawablePrefix = "drawable";
@@ -43,6 +46,7 @@ public class RoadPointActivity extends Activity {
 
 		try {
 			currentRoadBook = MainActivity.currentRoadBook;
+			thePictManager = MainActivity.thePictManager;
 	
 			directionTextView = (TextView) findViewById(R.id.point_direction_text);
 			distancetonextTextView = (TextView) findViewById(R.id.point_distancetonext_text);
@@ -166,13 +170,15 @@ public class RoadPointActivity extends Activity {
 		distancetonextTextView.setText(String.format("%.2f", distance));
 		
 		pointImageType = roadpoint.getType();
-		int id = getResources().getIdentifier(pointImageType, drawablePrefix,
-				getPackageName());
-		if (id != 0) {
-			pointImageView.setImageResource(id);
-		} else {
+		try {
+			String path = thePictManager.getPict(pointImageType, thePictManager.RESOLUTION_FULL);
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            pointImageView.setImageBitmap(bitmap);
+		}
+		catch (IndexOutOfBoundsException e) {
 			pointImageView.setImageResource(R.drawable.question_mark);
 		}
+		
 		descriptionTextView.setText(roadpoint.getDescription());
 		kilometerTextView.setText(String.format("%.2f", roadpoint.getKilometer()));
 

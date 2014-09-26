@@ -25,7 +25,7 @@ namespace RBook {
  */
 class Archive {
 public:
-    //! ArchiveFile Error list
+    //! Archive Error list
     enum ERROR {
         ERROR_FILE_NOT_FOUND = ARCHIVE_ERROR_BASE, //!< Did not find the file specified.
         ERROR_CANNOT_ARCHIVE, //!< File issue while archiving.

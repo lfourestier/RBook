@@ -11,6 +11,7 @@ LOCAL_MODULE    := RBook
 LOCAL_C_INCLUDES := $(LOCAL_PATH)
                     
 LOCAL_SRC_FILES := luc_fourestier_rbook_BookManager.cpp \
+					luc_fourestier_rbook_PictManager.cpp \
 					luc_fourestier_rbook_RoadBook.cpp \
 					luc_fourestier_rbook_RoadPoint.cpp
 

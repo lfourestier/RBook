@@ -1,6 +1,8 @@
 package luc.fourestier.rbook;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,9 +11,11 @@ import android.widget.ImageView;
 
 public class RoadPointImageAdapter extends BaseAdapter {
 	    private Context mContext;
-		private final String drawablePrefix = "drawable";
+		
+		private PictManager thePictManager = null;
 
 	    public RoadPointImageAdapter(Context c) {
+	    	thePictManager = MainActivity.thePictManager;
 	        mContext = c;
 	    }
 
@@ -43,16 +47,16 @@ public class RoadPointImageAdapter extends BaseAdapter {
 	            imageView = (ImageView) convertView;
 	        }
 	        
-	        int id = 0;
-	        if (mPointNames != null) {
-			id = mContext.getResources().getIdentifier(mPointNames[position], drawablePrefix, mContext.getPackageName());
+	        if ((mPointNames != null) && (mPointNames.length > 0)) {
+	        	String path = thePictManager.getPict(mPointNames[position], thePictManager.RESOLUTION_FULL); // TODO put it in _SMALL!!
+
+	            Bitmap bitmap = BitmapFactory.decodeFile(path);
+	            imageView.setImageBitmap(bitmap);
+	        }
+	        else {
+				imageView.setImageResource(R.drawable.question_mark);
 	        }
 	        
-			if (id != 0) {
-				imageView.setImageResource(id);
-			} else {
-				imageView.setImageResource(R.drawable.question_mark);
-			}
 	        return imageView;
 	    }
 

@@ -11,10 +11,10 @@
 #include "BookManager.h"
 
 //! The road book directory
-#define BOOK_DIR "/RBook"
+#define BOOKMANAGER_DIR "/RBook"
 
 //! The road book temporary directory
-#define BOOK_TEMP_DIR "/Temp"
+#define BOOKMANAGER_TEMP_DIR "/Temp"
 
 #define TAG "BookManager"
 
@@ -24,27 +24,26 @@ Error BookManager::Initialize(std::string rootdir) {
     Error ret;
 
     // Check RBook directory and cerate if needed.
-    RBookDirectory = rootdir + BOOK_DIR;
+    RBookDirectory = rootdir + BOOKMANAGER_DIR;
 
     ret = FileUtils::DirectoryExists(RBookDirectory);
     if (ret == FileUtils::ERROR_DIR_NOT_FOUND) {
-        LOG_D(TAG, "RBook directory does not exist.");
         ret = FileUtils::MakeDirectory(RBookDirectory);
     }
     if(ret != ERROR_OK) {
         RBookDirectory.clear();
-        return ret;
+        return ERROR_FAIL;
     }
 
     // Prepare temporary directory
-    RBookTempDirectory = RBookDirectory + BOOK_TEMP_DIR;
+    RBookTempDirectory = RBookDirectory + BOOKMANAGER_TEMP_DIR;
     if (FileUtils::DirectoryExists(RBookTempDirectory) == ERROR_OK) {
         FileUtils::RemoveDirectory(RBookTempDirectory);
     }
     ret = FileUtils::MakeDirectory(RBookTempDirectory);
     if(ret != ERROR_OK) {
         RBookTempDirectory.clear();
-        return ret;
+        return ERROR_FAIL;
     }
 
     return ret;
@@ -152,7 +151,7 @@ Error BookManager::ImportRoadBook(std::string filepath, std::string bookname, bo
         std::string newfilename = RBookDirectory + FILEUTILS_PATH_DELIMITER + bookname + ROADBOOK_COMPRESSED_EXTENSION;
         ret = FileUtils::CopyFile(filepath, newfilename);
         if (ret != ERROR_OK) {
-            return ret = ERROR_FAIL;
+            return ERROR_FAIL;
         }
 
         // Open roadbook

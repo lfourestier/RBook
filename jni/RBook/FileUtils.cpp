@@ -207,7 +207,7 @@ Error FileUtils::RemoveDirectory(std::string directory) {
     return ret;
 }
 
-Error FileUtils::ListFilesRootInDir(std::string directory, std::string extension, std::list<std::string> &list) {
+Error FileUtils::ListFilesRootInDir(std::string directory, std::string suffix, std::list<std::string> &list) {
     Error ret;
 
     try {
@@ -222,12 +222,12 @@ Error FileUtils::ListFilesRootInDir(std::string directory, std::string extension
             while ((file = readdir(dir)) != NULL) {
                 std::string filename(file->d_name);
 
-                std::size_t pos = filename.find(extension);
+                std::size_t pos = filename.find(suffix);
                 if (pos == std::string::npos) {
                     continue;
                 }
 
-                filename.replace(pos, extension.size(), "");
+                filename.replace(pos, suffix.size(), "");
                 list.push_back(filename);
             }
             closedir(dir);

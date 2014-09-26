@@ -25,16 +25,8 @@
 
 #define TAG "RoadBook"
 
-#define ROADBOOK_TITLE_TAG "title"
-#define ROADBOOK_DESCRIPTION_TAG "description"
-#define ROADBOOK_LOCATION_TAG "location"
-#define ROADBOOK_IMAGE_TAG "image"
-#define ROADBOOK_ROADPOINTS_TAG "roadpoints"
-
-#define ROADPOINT_DESCRIPTION_TAG "description"
-#define ROADPOINT_KILOMETER_TAG "kilometer"
-#define ROADPOINT_TYPE_TAG "type"
-#define ROADPOINT_DIRECTION_TAG "direction"
+//! The road book file
+#define ROADBOOK_FILE "roadbook.mrb"
 
 namespace RBook {
 
@@ -113,8 +105,7 @@ Error RoadBook::GetDistanceFromPrevious(float &distance) {
     ret = GetPreviousPoint(previouspoint);
     if (ret == ERROR_REACHED_START) {
         distance = 0.0;
-        ret = ERROR_OK;
-        return ret;
+        return ERROR_OK;
     }
     else if (ret != ERROR_OK) {
         return ret;
@@ -138,8 +129,7 @@ Error RoadBook::GetDistanceToNext(float &distance) {
     ret = GetNextPoint(nextpoint);
     if (ret == ERROR_REACHED_END) {
         distance = 0.0;
-        ret = ERROR_OK;
-        return ret;
+        return ERROR_OK;
     }
     else if (ret != ERROR_OK) {
         return ret;
@@ -314,7 +304,7 @@ Error RoadBook::Create() {
         ret = CreateTemporaryDirectory();
         if (ret != ERROR_OK) {
             LOG_E(TAG, "could create archive temporary directory!");
-            return ret = ERROR_CANNOT_CREATE;
+            return ERROR_CANNOT_CREATE;
         }
     }
     else {
@@ -337,13 +327,13 @@ Error RoadBook::Load() {
             ret = CreateTemporaryDirectory();
             if (ret != ERROR_OK) {
                 LOG_E(TAG, "could create archive temporary directory!");
-                return ret = ERROR_CANNOT_CREATE;
+                return ERROR_CANNOT_CREATE;
             }
 
             ret = archive.Inflate(TempArchiveDirectory);
             if (ret != ERROR_OK) {
                 LOG_E(TAG, "could not inflate archive!");
-                return ret = ERROR_CANNOT_CREATE;
+                return ERROR_CANNOT_CREATE;
             }
 
             // Find the file to parse for the roadbook
@@ -394,13 +384,13 @@ Error RoadBook::Save() {
         try {
             // Check if temporary directories have been created
             if (TempArchiveDirectory.empty()) {
-                return ret = ERROR_CANNOT_SAVE;
+                return ERROR_CANNOT_SAVE;
             }
 
             if (FileUtils::DirectoryExists(TempArchiveDirectory) == FileUtils::ERROR_DIR_NOT_FOUND) {
                 ret = FileUtils::MakeDirectory(TempArchiveDirectory);
                 if (ret != ERROR_OK) {
-                    return ret;
+                    return ERROR_CANNOT_SAVE;
                 }
             }
 
@@ -419,7 +409,7 @@ Error RoadBook::Save() {
             ret = archive.Deflate(TempArchiveDirectory);
             if (ret != ERROR_OK) {
                 LOG_E(TAG, "could not deflate archive!");
-                return ret = ERROR_CANNOT_SAVE;
+                return ERROR_CANNOT_SAVE;
             }
 
         }
@@ -457,13 +447,13 @@ Error RoadBook::CreateTemporaryDirectory() {
             ret = FileUtils::RemoveDirectory(TempArchiveDirectory);
             if (ret != ERROR_OK) {
                 LOG_W(TAG, "could not remove directory!");
-                return ret;
+                return ERROR_FAIL;
             }
         }
 
         ret = FileUtils::MakeDirectory(TempArchiveDirectory);
         if (ret != ERROR_OK) {
-            return ret;
+            return ERROR_FAIL;
         }
     }
     else {
@@ -480,6 +470,7 @@ Error RoadBook::RemoveTemporaryDirectory() {
         ret = FileUtils::RemoveDirectory(TempArchiveDirectory);
         if (ret != ERROR_OK) {
             LOG_W(TAG, "could not remove directory!");
+            ret = ERROR_FAIL;
         }
     }
 
@@ -519,7 +510,7 @@ Error RoadBook::ParseRoadBook(const std::string& content) {
         TotalDistance = RoadPointList.back()->Kilometer; // Last point kilometer.
     }
     catch (std::exception& e) {
-        ret = RoadBook::ERROR_MAL_FORMATTED_BOOK;
+        ret = ERROR_MAL_FORMATTED_BOOK;
     }
 
     return ret;
@@ -539,7 +530,7 @@ Error RoadBook::ParseRoadPointList(const JSONNode& roadpointlist) {
         }
     }
     catch (std::exception& e) {
-        ret = RoadBook::ERROR_MAL_FORMATTED_BOOK;
+        ret = ERROR_MAL_FORMATTED_BOOK;
     }
 
     return ret;
@@ -579,7 +570,7 @@ Error RoadBook::ParseRoadPoint(const JSONNode& roadpoint) {
         }
     }
     catch (std::exception& e) {
-        ret = RoadBook::ERROR_MAL_FORMATTED_BOOK;
+        ret = ERROR_MAL_FORMATTED_BOOK;
     }
 
     return ret;

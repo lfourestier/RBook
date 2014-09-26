@@ -14,6 +14,12 @@
 
 #define ROADPOINT_ERROR_BASE CONFIG_ROADBOOK_ERROR_BASE
 
+// The json fields
+#define ROADPOINT_DESCRIPTION_TAG "description"
+#define ROADPOINT_KILOMETER_TAG "kilometer"
+#define ROADPOINT_TYPE_TAG "type"
+#define ROADPOINT_DIRECTION_TAG "direction"
+
 namespace RBook {
 
 class RoadPoint {
