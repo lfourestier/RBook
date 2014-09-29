@@ -28,7 +28,7 @@ static void JNIThrowOnError(JNIEnv *env, RBook::Error error) {
         JNIThrowException(env, "java/io/IOException", NULL);
         break;
     case RBook::PictManager::ERROR_PICT_NOT_FOUND:
-        LOG_E(TAG, "java/lang/IndexOutOfBoundsException");
+        LOG_W(TAG, "java/lang/IndexOutOfBoundsException");
         JNIThrowException(env, "java/lang/IndexOutOfBoundsException", NULL);
         break;
     default:
@@ -103,17 +103,22 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_PictManager__1GetPictListSer
     }
 
     // Get book list.
+    jstring result;
     std::list<std::string> list;
     RBook::Error error = pm->GetPictList(list);
     JNIThrowOnError(env, error);
+    if (error != RBook::ERROR_OK) {
+        return result;
+    }
 
     // Serialize list and return it
     std::string serializedlist;
     for (std::list<std::string>::iterator it = list.begin(); it != list.end(); ++it) {
         serializedlist += *it + ";";
     }
+    result = env->NewStringUTF(serializedlist.c_str());
 
-    return env->NewStringUTF(serializedlist.c_str());
+    return result;
 }
 
 JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_PictManager__1GetPict(JNIEnv *env, jobject thiz, jstring jpict, jint resolution) {
@@ -127,10 +132,15 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_PictManager__1GetPict(JNIEnv
     std::string cpppict(charpict);
     env->ReleaseStringUTFChars(jpict, charpict);
 
+    jstring result;
     std::string path;
     RBook::Error error = pm->GetPict(cpppict, resolution, path);
     JNIThrowOnError(env, error);
+    if (error != RBook::ERROR_OK) {
+        return result;
+    }
+    result = env->NewStringUTF(path.c_str());
 
-    return env->NewStringUTF(path.c_str());
+    return result;
 }
 

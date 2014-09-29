@@ -2,6 +2,8 @@ package luc.fourestier.rbook;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class PictManager {
 	
 	/*
@@ -45,7 +47,7 @@ public class PictManager {
 	 * @return
 	 */
 	public String getPict(String pict, int resolution) {
-		String path = _GetPict(pict, resolution);
+		String	path = _GetPict(pict, resolution);
 		
 		return path;
 	}

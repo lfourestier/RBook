@@ -76,7 +76,7 @@ public class RoadPointEditActivity extends Activity {
 			}
 		
 		} catch (Exception e) {
-			Log.e("RoadPointEditActivity", "Error while loading!" + e.getMessage());
+			Log.e(TAG, "Error while loading!" + e.getMessage());
 			toastMessage("Oups! Cannot load!");
 		}
 	}
@@ -103,7 +103,7 @@ public class RoadPointEditActivity extends Activity {
 	        	setValueFromRoadPointView(currentRoadBook.getCurrentPoint());
 				NavUtils.navigateUpFromSameTask(this);
 			} catch (Exception e) {
-				Log.e("RoadPointEditActivity", "Error while goign back!" + e.getMessage());
+				Log.e(TAG, "Error while goign back!" + e.getMessage());
 				toastMessage("Oups! Cannot load!");
 			}
 			return true;
@@ -114,7 +114,7 @@ public class RoadPointEditActivity extends Activity {
 	    	    Intent intent = new Intent(this, MainActivity.class);
 				NavUtils.navigateUpTo(this, intent);
 			} catch (Exception e) {
-				Log.e("RoadPointEditActivity", "Error while saving!" + e.getMessage());
+				Log.e(TAG, "Error while saving!" + e.getMessage());
 				toastMessage("Oups! Cannot save!");
 			}
             return true;
@@ -152,7 +152,7 @@ public class RoadPointEditActivity extends Activity {
 			} catch (IndexOutOfBoundsException e) {
 				previousButton.setEnabled(false);
 			} catch (Exception e) {
-				Log.e("RoadPointEditActivity", "Error while going next!" + e.getMessage());
+				Log.e(TAG, "Error while going next!" + e.getMessage());
 				toastMessage("Oups! Cannot load!");
 			}
 		}
@@ -172,7 +172,7 @@ public class RoadPointEditActivity extends Activity {
 				refreshRoadPointView(currentRoadBook);
 				previousButton.setEnabled(true);
 			} catch (Exception e) {
-				Log.e("RoadPointEditActivity", "Error while going previous!" + e.getMessage());
+				Log.e(TAG, "Error while going previous!" + e.getMessage());
 				toastMessage("Oups! Cannot load!");
 			}
 		}
@@ -244,6 +244,7 @@ public class RoadPointEditActivity extends Activity {
 	}
 		
 // Toast
+    private static final String TAG = RoadPointEditActivity.class.getSimpleName();
     
     private void toastMessage(String message) {
 	    Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);

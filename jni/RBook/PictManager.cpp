@@ -48,6 +48,13 @@ Error PictManager::Populate(std::string archivepath, std::string rootdir){
         return ERROR_CANNOT_INFLATE;
     }
 
+    // Initialize the pict list
+    ret = FileUtils::ListFilesRootInDir(PictDirectory, ResolutionLabels[0] + PICTMANAGER_PICT_EXTENSION, ListOfPicts);
+    if ((ret != ERROR_OK ) || (ListOfPicts.empty())) {
+        LOG_E(TAG, "could not initialize the pict list!");
+        return ERROR_CANNOT_INFLATE;
+    }
+
     return ret;
 }
 
@@ -55,15 +62,12 @@ Error PictManager::GetPictList(std::list<std::string> &list){
     Error ret;
 
     try {
-        if (!PictDirectory.empty() && (FileUtils::DirectoryExists(PictDirectory) != FileUtils::ERROR_DIR_NOT_FOUND)) {
-            ret = FileUtils::ListFilesRootInDir(PictDirectory, ResolutionLabels[0] + PICTMANAGER_PICT_EXTENSION, ListOfPicts);
-            if ((ret == ERROR_OK ) && (!ListOfPicts.empty())) {
-                // Copy list
-                 for (std::list<std::string>::iterator i=ListOfPicts.begin(); i != ListOfPicts.end(); ++i) {
-                     list.push_front(*i);
-                 }
+        if (!ListOfPicts.empty()) {
+            // Copy list
+             for (std::list<std::string>::iterator i=ListOfPicts.begin(); i != ListOfPicts.end(); ++i) {
+                 list.push_front(*i);
              }
-        }
+         }
         else {
             ret = ERROR_NOT_INITIALIZED;
         }
@@ -76,8 +80,6 @@ Error PictManager::GetPictList(std::list<std::string> &list){
 
 Error PictManager::GetPict(std::string pict, int resolution, std::string &path){
     Error ret;
-
-    LOG_D("LFOR", pict.c_str());
 
     try {
         if (!ListOfPicts.empty()) {

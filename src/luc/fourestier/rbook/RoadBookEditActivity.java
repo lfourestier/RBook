@@ -44,7 +44,7 @@ public class RoadBookEditActivity extends Activity {
 	    	refreshRoadBookView(currentRoadBook);
 		}
 		catch (Exception e) {
-			Log.e("RoadBookEditActivity", "Cannot load: " + e.getMessage());
+			Log.e(TAG, "Cannot load: " + e.getMessage());
 			toastMessage("Oups! Cannot load!");
 		}
 	}
@@ -85,7 +85,7 @@ public class RoadBookEditActivity extends Activity {
         	    startActivity(intent);
 			} 
         	catch (Exception e) {
-				Log.e("RoadBookEditActivity", "Cannot load point list: " + e.getMessage());
+				Log.e(TAG, "Cannot load point list: " + e.getMessage());
 				toastMessage("Oups! Cannot load!");
 			}
         }
@@ -114,6 +114,7 @@ public class RoadBookEditActivity extends Activity {
 	}
 		
 // Toast
+    private static final String TAG = RoadBookEditActivity.class.getSimpleName();
     
     private void toastMessage(String message) {
 	    Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);

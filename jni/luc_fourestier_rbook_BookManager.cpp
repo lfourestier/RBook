@@ -110,9 +110,13 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_BookManager__1GetRoadBookLis
     }
 
     // Get book list.
+    jstring result;
     std::list<std::string> booklist;
     RBook::Error error = br->GetRoadBookList(booklist);
     JNIThrowOnError(env, error);
+    if (error != RBook::ERROR_OK) {
+        return result;
+    }
 
     // Serialize list and return it
     std::string serializedlist;

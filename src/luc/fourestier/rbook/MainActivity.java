@@ -55,7 +55,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 			// Initialize the book manager
 			String sdcard = Environment.getExternalStorageDirectory().getPath();
 			if (theBookManager == null) {
-				Log.v(MainActivity.class.getSimpleName(), "External storage dir: " + sdcard);
+				Log.v(TAG, "External storage dir: " + sdcard);
 				theBookManager = BookManager.Create(sdcard);
 			}
 
@@ -74,7 +74,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 					String action = intent.getAction();
 					
 					if ((action != null) && (action.compareTo(Intent.ACTION_VIEW) == 0)) {
-						Log.v(MainActivity.class.getSimpleName() , "ACTION_VIEW intent detected: " + intent.getDataString() + " : " + intent.getType());
+						Log.v(TAG, "ACTION_VIEW intent detected: " + intent.getDataString() + " : " + intent.getType());
 						
 						String scheme = intent.getScheme();
 						Uri uri = intent.getData();
@@ -115,7 +115,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 				}
 			}
 			catch (Exception e) {
-				Log.e(MainActivity.class.getSimpleName(), "Error while importing: " + e.getMessage());
+				Log.e(TAG, "Error while importing: " + e.getMessage());
 				toastMessage("Import failed!");
 			}
 			
@@ -134,7 +134,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 			}
 
 		} catch (Exception e) {
-			Log.e(MainActivity.class.getSimpleName(), "Error while starting: " + e.getMessage());
+			Log.e(TAG, "Error while starting: " + e.getMessage());
 			toastMessage("Error while starting!");
 			theBookManager = null;
 			thePictManager = null;
@@ -145,7 +145,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 	public void onConfigurationChanged (Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		if (newConfig != null) {
-			Log.v("LFOR", "Orientation: " + Integer.toString(newConfig.orientation));
+			Log.v(TAG, "Orientation: " + Integer.toString(newConfig.orientation));
 		}
 	}
 
@@ -198,7 +198,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 				startActivity(intent);
 
 			} catch (Exception e) {
-				Log.e("MainActivity", "Error while loading: " + e.getMessage());
+				Log.e(TAG, "Error while loading: " + e.getMessage());
 				toastMessage("Oups! Cannot load!");
 			}
 		}
@@ -241,6 +241,8 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
     
 // Utils
     
+    private static final String TAG = MainActivity.class.getSimpleName();
+    
     private String getContentName(ContentResolver resolver, Uri uri){
         Cursor cursor = resolver.query(uri, null, null, null, null);
         cursor.moveToFirst();
@@ -266,7 +268,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 			out.close();
     	}
 		catch (Exception e) {
-			Log.e("MainActivity", "InputStreamToFile exception: " + e.getMessage());
+			Log.e(TAG, "InputStreamToFile exception: " + e.getMessage());
 		}
     }
 }

@@ -53,7 +53,7 @@ public class RoadBookActivity extends Activity {
 	    	
 		}
     	catch (Exception e) {
-			Log.e("RoadBookActivity", "Error while loading book: " + e.getMessage());
+			Log.e(TAG, "Error while loading book: " + e.getMessage());
 			toastMessage("Error while loading book!");
 		}
 	}
@@ -96,7 +96,7 @@ public class RoadBookActivity extends Activity {
 				NavUtils.navigateUpFromSameTask(this);
         	}
         	catch (Exception e) {
-				Log.e("RoadBookActivity", "Cannot delete: " + e.getMessage());
+				Log.e(TAG, "Cannot delete: " + e.getMessage());
 				toastMessage("Oups! Cannot delete!");
 			}
 			return true;
@@ -106,7 +106,7 @@ public class RoadBookActivity extends Activity {
 				startActivity(intent);
         	}
         	catch (Exception e) {
-				Log.e("RoadBookActivity", "Cannot edit: " + e.getMessage());
+				Log.e(TAG, "Cannot edit: " + e.getMessage());
 				toastMessage("Oups! Cannot edit!");
 			}
 			return true;
@@ -123,7 +123,7 @@ public class RoadBookActivity extends Activity {
         	    startActivity(intent);
 			} 
         	catch (Exception e) {
-				Log.e("RoadBookActivity", "Cannot load point list: " + e.getMessage());
+				Log.e(TAG, "Cannot load point list: " + e.getMessage());
 				toastMessage("Cannot load point list!");
 			}
         }
@@ -146,8 +146,9 @@ public class RoadBookActivity extends Activity {
  	}
  	
  // Toast
-    
-  private void toastMessage(String message) {
+    private static final String TAG = RoadBookActivity.class.getSimpleName();
+   
+    private void toastMessage(String message) {
 	    Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
 	    if (toast != null) {
 	    	toast.show();		

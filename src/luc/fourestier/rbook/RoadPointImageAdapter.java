@@ -48,10 +48,15 @@ public class RoadPointImageAdapter extends BaseAdapter {
 	        }
 	        
 	        if ((mPointNames != null) && (mPointNames.length > 0)) {
-	        	String path = thePictManager.getPict(mPointNames[position], thePictManager.RESOLUTION_FULL); // TODO put it in _SMALL!!
-
-	            Bitmap bitmap = BitmapFactory.decodeFile(path);
-	            imageView.setImageBitmap(bitmap);
+	        	try {
+		        	String path = thePictManager.getPict(mPointNames[position], thePictManager.RESOLUTION_FULL); // TODO put it in _SMALL!!
+	
+		            Bitmap bitmap = BitmapFactory.decodeFile(path);
+		            imageView.setImageBitmap(bitmap);
+	        	}
+	        	catch (IndexOutOfBoundsException e) {
+	        		imageView.setImageResource(R.drawable.question_mark_icon);
+	        	}
 	        }
 	        else {
 				imageView.setImageResource(R.drawable.question_mark);

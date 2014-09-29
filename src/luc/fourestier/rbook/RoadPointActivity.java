@@ -71,7 +71,7 @@ public class RoadPointActivity extends Activity {
 			refreshRoadPoint(currentRoadBook);
 		} catch (Exception e) {
 			String message = "Error while loading! ";
-			Log.d("RoadPointActivity", message + e.getMessage() + " " + e.toString());
+			Log.d(TAG, message + e.getMessage() + " " + e.toString());
 			toastMessage(message);
 		}
 	}
@@ -111,7 +111,7 @@ public class RoadPointActivity extends Activity {
 			} catch (IndexOutOfBoundsException e) {
 				previousButton.setEnabled(false);
 			} catch (Exception e) {
-				Log.d("RoadPointActivity",
+				Log.d(TAG,
 						"Error while refreshing point! " + e.getMessage());
 				// TODO: handle exception
 			}
@@ -127,7 +127,7 @@ public class RoadPointActivity extends Activity {
 			} catch (IndexOutOfBoundsException e) {
 				nextButton.setEnabled(false);
 			} catch (Exception e) {
-				Log.d("RoadPointActivity",
+				Log.d(TAG,
 						"Error while refreshing point! " + e.getMessage());
 				// TODO: handle exception
 			}
@@ -192,6 +192,7 @@ public class RoadPointActivity extends Activity {
 	}
 	
 // Toast
+    private static final String TAG = RoadPointActivity.class.getSimpleName();
     
     private void toastMessage(String message) {
 	    Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
