@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "RoadPoint.h"
+#include "PictManager.h"
 #include "Error.h"
 #include "libjson.h"
 
@@ -115,6 +116,22 @@ public:
      * @return @see ERROR
      */
     Error GetDistanceToNext(float &distance);
+
+    /**
+     * Get the string that can be used into the text to speech for that point description.
+     * @param speech: The speech to tell in the TTS engine
+     * @param pictmgr: the Pictmanager needed to retrieve the proper pict speech.
+     * @return @see ERROR
+     */
+    Error GetCurrentPointSpeech(PictManager *pictmgr, std::string &speech);
+
+    /**
+     * Get the string that can be used into the text to speech for the next point.
+     * @param speech: The speech to tell in the TTS engine
+     * @param pictmgr: the Pictmanager needed to retrieve the proper pict speech.
+     * @return @see ERROR
+     */
+    Error GetNextPointSpeech(PictManager *pictmgr, std::string &speech);
 
     /**
      * Insert a new point into the list before the current position.

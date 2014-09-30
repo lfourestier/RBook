@@ -73,6 +73,15 @@ public:
     Error GetPict(std::string pict, int resolution, std::string &path);
 
     /**
+     * Get the speech string linked to the pict. (see ".speech" files in the pict archive).
+     * @param pict: The pict
+     * @param speech: the returned speech string
+     * @return @see ERROR
+     */
+    Error GetPictSpeech(std::string pict, std::string &speech);
+
+
+    /**
      * Destructor
      */
     ~PictManager();

@@ -7,6 +7,7 @@
 
 #include "luc_fourestier_rbook_RoadBook.h"
 #include "RBook/RoadBook.h"
+#include "RBook/PictManager.h"
 #include "RBook/Log.h"
 #include "RBook/FileUtils.h"
 
@@ -298,6 +299,48 @@ JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetDistanceFromPre
     JNIThrowOnError(env, error);
 
     return distance;
+}
+
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointSpeech  (JNIEnv *env, jobject thiz, jint instance) {
+    InitializeInstanceField(env, thiz);
+
+    jstring result;
+    RBook::RoadBook *rb = GetInstance(env, thiz);
+    if (rb == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return result;
+    }
+    RBook::PictManager *pictmgr = reinterpret_cast<RBook::PictManager*>(instance);
+    std::string speech;
+    RBook::Error error = rb->GetCurrentPointSpeech(pictmgr, speech);
+    JNIThrowOnError(env, error);
+    if (error != RBook::ERROR_OK) {
+        return result;
+    }
+
+    return env->NewStringUTF(speech.c_str());
+
+}
+
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetNextPointSpeech  (JNIEnv *env, jobject thiz, jint instance) {
+    InitializeInstanceField(env, thiz);
+
+    jstring result;
+    RBook::RoadBook *rb = GetInstance(env, thiz);
+    if (rb == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return result;
+    }
+    RBook::PictManager *pictmgr = reinterpret_cast<RBook::PictManager*>(instance);
+    std::string speech;
+    RBook::Error error = rb->GetNextPointSpeech(pictmgr, speech);
+    JNIThrowOnError(env, error);
+    if (error != RBook::ERROR_OK) {
+        return result;
+    }
+
+    return env->NewStringUTF(speech.c_str());
+
 }
 
 JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadBook__1AddNewPointBefore (JNIEnv *env, jobject thiz) {

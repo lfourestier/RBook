@@ -142,6 +142,24 @@ public class RoadBook {
 	public float getDistanceFromPrevious() {
 		return _GetDistanceFromPrevious();
 	}
+	
+	/**
+	 * Get the speech for the current point.
+	 * @param pictmgr: Need to get the speech related to the pict in use.
+	 * @return the speech.
+	 */
+	public String getCurrentPointSpeech(PictManager pictmgr) {
+		return _GetCurrentPointSpeech(pictmgr.getNativeInstance());
+	}
+
+	/**
+	 * Get the speech for the next point.
+	 * @param pictmgr: Need to get the speech related to the pict in use.
+	 * @return the speech.
+	 */
+	public String getNextPointSpeech(PictManager pictmgr) {
+		return _GetNextPointSpeech(pictmgr.getNativeInstance());
+	}
 
 	/**
 	 * Add a new road point before the current position.
@@ -230,6 +248,8 @@ public class RoadBook {
 	private native final int _GetNextPoint();
 	private native final float _GetDistanceToNext();
 	private native final float _GetDistanceFromPrevious();
+	private native final String _GetCurrentPointSpeech(int pictmgr);
+	private native final String _GetNextPointSpeech(int pictmgr);
 	private native final int _AddNewPointBefore();
 	private native final int _AddNewPointAfter();
 	private native final void _DeleteCurrentPoint();

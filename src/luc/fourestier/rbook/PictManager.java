@@ -52,6 +52,14 @@ public class PictManager {
 		return path;
 	}
 	
+	/**
+	 * Get the native instance.
+	 * @return Integer
+	 */
+	public int getNativeInstance() {
+		return nativeInstance;
+	}
+	
 // Private
     
     private int nativeInstance;

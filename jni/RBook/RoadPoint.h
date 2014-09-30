@@ -48,6 +48,7 @@ public:
      * Constructor.
      */
     RoadPoint();
+
 };
 
 } // namespace

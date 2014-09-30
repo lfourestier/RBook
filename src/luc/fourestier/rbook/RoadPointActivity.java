@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -29,7 +30,8 @@ public class RoadPointActivity extends Activity {
 	private Button mapButton;
 	private Button albumButton;
 
-	private RoadBook currentRoadBook;
+	private TextToSpeech textToSpeechEngine = null;
+	private RoadBook currentRoadBook = null;
 	private PictManager thePictManager = null;
 
 	private String pointImageType;
@@ -45,6 +47,7 @@ public class RoadPointActivity extends Activity {
 		setupActionBar();
 
 		try {
+			textToSpeechEngine = MainActivity.theTextToSpeechEngine;
 			currentRoadBook = MainActivity.currentRoadBook;
 			thePictManager = MainActivity.thePictManager;
 	
@@ -121,6 +124,9 @@ public class RoadPointActivity extends Activity {
 	private OnClickListener mNextListener = new OnClickListener() {
 		public void onClick(View v) {
 			try {
+				String speech = currentRoadBook.getNextPointSpeech(thePictManager);
+				textToSpeechEngine.speak(speech, TextToSpeech.QUEUE_FLUSH, null);
+
 				currentRoadBook.next();
 				refreshRoadPoint(currentRoadBook);
 				previousButton.setEnabled(true);

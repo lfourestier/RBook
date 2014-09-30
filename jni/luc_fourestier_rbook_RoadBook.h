@@ -129,6 +129,22 @@ JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetDistanceFromPre
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _GetCurrentPointSpeech
+ * Signature: (I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetCurrentPointSpeech
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _GetNextPointSpeech
+ * Signature: (I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetNextPointSpeech
+  (JNIEnv *, jobject, jint);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
  * Method:    _AddNewPointBefore
  * Signature: ()I
  */

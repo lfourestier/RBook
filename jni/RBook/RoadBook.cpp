@@ -28,6 +28,20 @@
 //! The road book file
 #define ROADBOOK_FILE "roadbook.mrb"
 
+#define ROADBOOK_SPEECH_UNIT "kilometers"
+#define ROADBOOK_SPEECH_MILEAGE "mileage"
+
+#define ROADBOOK_SPEECH_PARTIAL_DISTANCE "after %.2f " ROADBOOK_SPEECH_UNIT ", "
+#define ROADBOOK_SPEECH_KILOMETER "at " ROADBOOK_SPEECH_MILEAGE " %.2f, "
+#define ROADBOOK_SPEECH_DESCRIPTION " %s, "
+#define ROADBOOK_SPEECH_ACTION " %s, "
+#define ROADBOOK_SPEECH_DIRECTION "then %s."
+
+#define ROADBOOK_SPEECH_NEXT_SENTENCE ROADBOOK_SPEECH_PARTIAL_DISTANCE ROADBOOK_SPEECH_KILOMETER ROADBOOK_SPEECH_DESCRIPTION ROADBOOK_SPEECH_ACTION ROADBOOK_SPEECH_DIRECTION
+#define ROADBOOK_SPEECH_POINT_SENTENCE ROADBOOK_SPEECH_KILOMETER ROADBOOK_SPEECH_DESCRIPTION ROADBOOK_SPEECH_ACTION ROADBOOK_SPEECH_DIRECTION
+
+#define ROADBOOK_SPEECH_BUFFER_SIZE 1024
+
 namespace RBook {
 
 Error RoadBook::GetPointCount(unsigned int &count) {
@@ -141,6 +155,60 @@ Error RoadBook::GetDistanceToNext(float &distance) {
     }
 
     distance = nextpoint->Kilometer - currentpoint->Kilometer;
+
+    return ret;
+}
+
+Error RoadBook::GetCurrentPointSpeech(PictManager *pictmgr, std::string &speech) {
+    Error ret;
+
+    RoadPoint *roadpoint = NULL;
+    ret = GetCurrentPoint(roadpoint);
+    if ((ret != ERROR_OK) || (roadpoint == NULL)) {
+        return ERROR_FAIL;
+    }
+
+    std::string pictspeech(" ");
+    if (pictmgr != NULL) {
+        pictmgr->GetPictSpeech(roadpoint->Type, pictspeech);
+    }
+
+    char buffer[ROADBOOK_SPEECH_BUFFER_SIZE];
+    int count = snprintf(buffer, ROADBOOK_SPEECH_BUFFER_SIZE, ROADBOOK_SPEECH_POINT_SENTENCE, roadpoint->Kilometer, roadpoint->Description.c_str(), pictspeech.c_str(), roadpoint->Direction.c_str());
+    if (count <= 0) {
+        return ERROR_FAIL;
+    }
+    speech = buffer;
+
+    return ret;
+}
+
+Error RoadBook::GetNextPointSpeech(PictManager *pictmgr, std::string &speech) {
+    Error ret;
+
+    RoadPoint *roadpoint = NULL;
+    ret = GetNextPoint(roadpoint);
+    if ((ret != ERROR_OK) || (roadpoint == NULL)) {
+        return ERROR_FAIL;
+    }
+
+    std::string pictspeech(" ");
+    if (pictmgr != NULL) {
+        pictmgr->GetPictSpeech(roadpoint->Type, pictspeech);
+    }
+
+    float distance = 0.0;
+    ret = GetDistanceToNext(distance);
+    if (ret != ERROR_OK) {
+        distance = 0.0;
+    }
+
+    char buffer[ROADBOOK_SPEECH_BUFFER_SIZE];
+    int count = snprintf(buffer, ROADBOOK_SPEECH_BUFFER_SIZE, ROADBOOK_SPEECH_NEXT_SENTENCE, distance, roadpoint->Kilometer, roadpoint->Description.c_str(), pictspeech.c_str(), roadpoint->Direction.c_str());
+    if (count <= 0) {
+        return ERROR_FAIL;
+    }
+    speech = buffer;
 
     return ret;
 }

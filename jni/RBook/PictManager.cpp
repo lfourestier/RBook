@@ -5,6 +5,8 @@
  *      Author: befourel
  */
 
+#include <fstream>
+
 #include "FileUtils.h"
 #include "Log.h"
 #include "Archive.h"
@@ -13,6 +15,7 @@
 
 #define PICTMANAGER_DIR "/Pict"
 #define PICTMANAGER_PICT_EXTENSION ".png"
+#define PICTMANAGER_PICT_SPEECH_EXTENSION ".speech"
 
 #define TAG "PictManager"
 
@@ -91,6 +94,43 @@ Error PictManager::GetPict(std::string pict, int resolution, std::string &path){
                     LOG_V(TAG, "Found pict for %s: %s", pict.c_str(), temppath.c_str());
                     if (FileUtils::FileExists(temppath) == ERROR_OK) {
                         path = temppath;
+                    }
+                    else {
+                        LOG_E(TAG, "Cannot find pict %s", pict.c_str());
+                        ret = ERROR_PICT_NOT_FOUND;
+                    }
+                    ret = ERROR_OK;
+                    break;
+                }
+            }
+        }
+        else {
+            LOG_E(TAG, "Pict list is empty");
+            ret = ERROR_PICT_NOT_FOUND;
+        }
+    }
+    catch (std::exception& e) {
+        ret = ERROR_FAIL;
+    }
+
+    return ret;
+}
+
+Error PictManager::GetPictSpeech(std::string pict, std::string &speech) {
+    Error ret;
+    speech = " ";
+
+    try {
+        if (!ListOfPicts.empty()) {
+            ret = ERROR_PICT_NOT_FOUND;
+
+            for (std::list<std::string>::iterator i=ListOfPicts.begin(); i != ListOfPicts.end(); ++i) {
+                if (pict.compare(*i) == 0) {
+                    std::string temppath = PictDirectory + FILEUTILS_PATH_DELIMITER + pict + PICTMANAGER_PICT_SPEECH_EXTENSION;
+                    if (FileUtils::FileExists(temppath) == ERROR_OK) {
+                        std::ifstream speechfile(temppath.c_str());
+                        std::getline(speechfile, speech);
+                        speechfile.close();
                     }
                     else {
                         LOG_E(TAG, "Cannot find pict %s", pict.c_str());

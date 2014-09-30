@@ -16,6 +16,5 @@ RoadPoint::RoadPoint() {
     Direction = "";
     Number = 0;
 }
-
 } // namespace
 
