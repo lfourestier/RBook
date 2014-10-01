@@ -26,6 +26,7 @@ public class RoadBookActivity extends Activity {
 
 	private BookManager theBookManager = null;
     private RoadBook currentRoadBook = null;
+	private Speech theSpeechEngine = null;
 
     private ShareActionProvider mShareActionProvider = null;
     
@@ -38,6 +39,7 @@ public class RoadBookActivity extends Activity {
 		setupActionBar();
 		
 		try {
+			theSpeechEngine = MainActivity.theSpeechEngine;
 			theBookManager = MainActivity.theBookManager;
 			currentRoadBook = MainActivity.currentRoadBook;
 			
@@ -71,8 +73,12 @@ public class RoadBookActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.road_book, menu);
 		
-	    MenuItem shareItem = menu.findItem(R.id.action_share);
-	    mShareActionProvider = (ShareActionProvider) shareItem.getActionProvider();
+	    MenuItem item = menu.findItem(R.id.action_speech);
+	    if (!theSpeechEngine.speechOn) {
+		    item.setIcon(R.drawable.ic_action_volume_muted);
+		}
+	    item = menu.findItem(R.id.action_share);
+	    mShareActionProvider = (ShareActionProvider) item.getActionProvider();
 		Intent shareIntent = new Intent(Intent.ACTION_SEND);
 		shareIntent.setType("application/zip");
 		Uri uri = Uri.fromFile(new File(currentRoadBook.getFilePath()));
@@ -108,6 +114,16 @@ public class RoadBookActivity extends Activity {
         	catch (Exception e) {
 				Log.e(TAG, "Cannot edit: " + e.getMessage());
 				toastMessage("Oups! Cannot edit!");
+			}
+			return true;
+		case R.id.action_speech:
+		    if (theSpeechEngine.speechOn) {
+		    	theSpeechEngine.mute();
+			    item.setIcon(R.drawable.ic_action_volume_muted);
+			}
+		    else {
+		    	theSpeechEngine.unMute();
+	        	item.setIcon(R.drawable.ic_action_volume_on);
 			}
 			return true;
 		}

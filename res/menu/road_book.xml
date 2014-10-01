@@ -8,6 +8,12 @@
         android:actionProviderClass="android.widget.ShareActionProvider" />
 
     <item
+        android:id="@+id/action_speech"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_volume_on"
+        android:title="@string/action_speech" />
+
+    <item
         android:id="@+id/action_edit"
         android:showAsAction="never"
         android:icon="@drawable/ic_action_edit"

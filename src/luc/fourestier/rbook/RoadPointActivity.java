@@ -1,6 +1,7 @@
 package luc.fourestier.rbook;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -30,12 +31,11 @@ public class RoadPointActivity extends Activity {
 	private Button mapButton;
 	private Button albumButton;
 
-	private TextToSpeech textToSpeechEngine = null;
+	private Speech theSpeechEngine = null;
 	private RoadBook currentRoadBook = null;
 	private PictManager thePictManager = null;
 
 	private String pointImageType;
-	private final String drawablePrefix = "drawable";
 
 // Activity	
 	
@@ -47,7 +47,7 @@ public class RoadPointActivity extends Activity {
 		setupActionBar();
 
 		try {
-			textToSpeechEngine = MainActivity.theTextToSpeechEngine;
+			theSpeechEngine = MainActivity.theSpeechEngine;
 			currentRoadBook = MainActivity.currentRoadBook;
 			thePictManager = MainActivity.thePictManager;
 	
@@ -72,13 +72,15 @@ public class RoadPointActivity extends Activity {
 			setTitle(currentRoadBook.getBookName());
 
 			refreshRoadPoint(currentRoadBook);
+			String speech = currentRoadBook.getCurrentPointSpeech(thePictManager);
+			theSpeechEngine.speak(speech);
 		} catch (Exception e) {
 			String message = "Error while loading! ";
 			Log.d(TAG, message + e.getMessage() + " " + e.toString());
 			toastMessage(message);
 		}
 	}
-
+	
 // Action bar
 	
 	private void setupActionBar() {
@@ -90,6 +92,10 @@ public class RoadPointActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.road_point, menu);
+	    MenuItem item = menu.findItem(R.id.action_point_speech);
+	    if (!theSpeechEngine.speechOn) {
+		    item.setIcon(R.drawable.ic_action_volume_muted);
+		}
 		return true;
 	}
 
@@ -98,6 +104,16 @@ public class RoadPointActivity extends Activity {
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		case R.id.action_point_speech:
+		    if (theSpeechEngine.speechOn) {
+		    	theSpeechEngine.mute();
+			    item.setIcon(R.drawable.ic_action_volume_muted);
+			}
+		    else {
+		    	theSpeechEngine.unMute();
+	        	item.setIcon(R.drawable.ic_action_volume_on);
+			}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -110,6 +126,8 @@ public class RoadPointActivity extends Activity {
 			try {
 				currentRoadBook.previous();
 				refreshRoadPoint(currentRoadBook);
+				String speech = currentRoadBook.getCurrentPointSpeech(thePictManager);
+				theSpeechEngine.speak(speech);
 				nextButton.setEnabled(true);
 			} catch (IndexOutOfBoundsException e) {
 				previousButton.setEnabled(false);
@@ -125,10 +143,9 @@ public class RoadPointActivity extends Activity {
 		public void onClick(View v) {
 			try {
 				String speech = currentRoadBook.getNextPointSpeech(thePictManager);
-				textToSpeechEngine.speak(speech, TextToSpeech.QUEUE_FLUSH, null);
-
 				currentRoadBook.next();
 				refreshRoadPoint(currentRoadBook);
+				theSpeechEngine.speak(speech);
 				previousButton.setEnabled(true);
 			} catch (IndexOutOfBoundsException e) {
 				nextButton.setEnabled(false);

@@ -30,9 +30,10 @@
 							</builder>
 							<tool id="com.android.gcc.compiler.1776627825" name="Android GCC Compiler" superClass="com.android.gcc.compiler">
 								<option id="com.android.gcc.option.includePath.231750209" superClass="com.android.gcc.option.includePath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/MotoBook/jni/external/libjson/_internal/Source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RBook/jni/external/zlib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RBook/jni/external/minizip}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RBook/jni/external/libjson/_internal/Source}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/RBook/jni/RBook}&quot;"/>
 								</option>
 								<inputType id="com.android.gcc.inputType.1979484687" superClass="com.android.gcc.inputType"/>
 							</tool>
@@ -60,8 +61,10 @@
 			<path value=""/>
 		</doc-comment-owner>
 	</storageModule>
-	<storageModule moduleId="refreshScope" versionNumber="1">
-		<resource resourceType="PROJECT" workspacePath="/RBook"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Default">
+			<resource resourceType="PROJECT" workspacePath="/RBook"/>
+		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">

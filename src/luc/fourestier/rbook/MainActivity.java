@@ -36,8 +36,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 	private ArrayList<String> bookListArray;
 	private BookListAdapter listAdapter;
 	
-	public boolean TTSInitialized = false;
-	public static TextToSpeech theTextToSpeechEngine = null;
+	public static Speech theSpeechEngine = null;
 	public static BookManager theBookManager = null;
 	public static PictManager thePictManager = null;
 	public static RoadBook currentRoadBook = null;
@@ -125,9 +124,6 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 				toastMessage("Import failed!");
 			}
 			
-			// Initializes text to speech
-			initTTS(getApplicationContext()); // TODO Should be configurable in the settings
-			
 			// Initialize the view elements
 			bookListView = (ListView) findViewById(R.id.road_book_list);
 
@@ -142,6 +138,12 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 				currentRoadBook = null;
 			}
 
+			// Initializes text to speech
+			if (theSpeechEngine == null) {
+				theSpeechEngine = new Speech(); 
+				theSpeechEngine.initialize(getApplicationContext()); // TODO Should be configurable in the settings
+			}
+			
 		} catch (Exception e) {
 			Log.e(TAG, "Error while starting: " + e.getMessage());
 			toastMessage("Error while starting!");
@@ -160,26 +162,10 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 	
 	@Override
 	public void onDestroy() {
-		theTextToSpeechEngine.stop();
-		theTextToSpeechEngine.shutdown();
+		theSpeechEngine.destroy();
 		super.onDestroy();
 	}
 	
-// Text to speech
-	private void initTTS(Context context) {
-		theTextToSpeechEngine = new TextToSpeech(context, mTTSInitListener);
-	}
-	
-	private TextToSpeech.OnInitListener mTTSInitListener = new TextToSpeech.OnInitListener() {
-		@Override
-		public void onInit(int status) {
-	         if(status != TextToSpeech.ERROR){
-	             theTextToSpeechEngine.setLanguage(Locale.UK); // TODO set locale config in settings.
-	             TTSInitialized = true;
-	            }				
-		}
-	};
-
 // Action bar
 	
 	@Override

@@ -12,6 +12,7 @@
     <string name="action_edit">Edit</string>
     <string name="action_share">Share</string>
     <string name="action_settings">Settings</string>
+    <string name="action_speech">Speech</string>
     <string name="dialog_add_book_text">Roadbook name</string>
     <string name="button_ok">OK</string>
     <string name="button_cancel">Cancel</string>

@@ -148,7 +148,7 @@ public class RoadBook {
 	 * @param pictmgr: Need to get the speech related to the pict in use.
 	 * @return the speech.
 	 */
-	public String getCurrentPointSpeech(PictManager pictmgr) {
+	public String getCurrentPointSpeech(PictManager pictmgr) { // TODO Find a way not to specify the pict manager here!
 		return _GetCurrentPointSpeech(pictmgr.getNativeInstance());
 	}
 
