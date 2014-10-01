@@ -38,6 +38,7 @@ public class Speech {
 	 * Mute the speech.
 	 */
 	public void mute() {
+		textToSpeechEngine.stop();
 		speechOn = false;
 	}
 	

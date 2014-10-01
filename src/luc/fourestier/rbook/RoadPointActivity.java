@@ -54,6 +54,7 @@ public class RoadPointActivity extends Activity {
 			directionTextView = (TextView) findViewById(R.id.point_direction_text);
 			distancetonextTextView = (TextView) findViewById(R.id.point_distancetonext_text);
 			pointImageView = (ImageView) findViewById(R.id.point_road_image);
+			pointImageView.setOnClickListener(mPictListener);
 			descriptionTextView = (TextView) findViewById(R.id.point_description_text);
 			kilometerTextView = (TextView) findViewById(R.id.point_kilometer_text);
 			partialTextView = (TextView) findViewById(R.id.point_partialkilometer_text);
@@ -72,8 +73,6 @@ public class RoadPointActivity extends Activity {
 			setTitle(currentRoadBook.getBookName());
 
 			refreshRoadPoint(currentRoadBook);
-			String speech = currentRoadBook.getCurrentPointSpeech(thePictManager);
-			theSpeechEngine.speak(speech);
 		} catch (Exception e) {
 			String message = "Error while loading! ";
 			Log.d(TAG, message + e.getMessage() + " " + e.toString());
@@ -121,13 +120,22 @@ public class RoadPointActivity extends Activity {
 
 // Buttons	
 	
+	private OnClickListener mPictListener = new OnClickListener() {
+		public void onClick(View v) {
+			try {
+				String speech = currentRoadBook.getCurrentPointSpeech(thePictManager);
+				theSpeechEngine.speak(speech);
+			} catch (Exception e) {
+				Log.d(TAG, "Error while speech! " + e.getMessage());
+			}
+		}
+	};
+
 	private OnClickListener mPrevListener = new OnClickListener() {
 		public void onClick(View v) {
 			try {
 				currentRoadBook.previous();
 				refreshRoadPoint(currentRoadBook);
-				String speech = currentRoadBook.getCurrentPointSpeech(thePictManager);
-				theSpeechEngine.speak(speech);
 				nextButton.setEnabled(true);
 			} catch (IndexOutOfBoundsException e) {
 				previousButton.setEnabled(false);

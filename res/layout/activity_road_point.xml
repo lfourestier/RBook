@@ -26,31 +26,13 @@
         android:textSize="24sp" />
 
     <ImageView
-        android:id="@+id/point_distancetonext_icon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/point_distancetonext_text"
-        android:src="@drawable/distance_to_next" />
-
-    <TextView
-        android:id="@+id/point_distancetonext_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/point_direction_text"
-        android:layout_below="@+id/point_direction_text"
-        android:layout_marginTop="10dp"
-        android:text="@string/default_text"
-        android:textSize="16sp" />
-    
-    <ImageView
         android:id="@+id/point_road_image"
         android:layout_width="match_parent"
-    	android:layout_height="match_parent"
-  		android:layout_below="@+id/point_distancetonext_text"
-  		android:layout_above="@+id/point_description_text"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/point_description_text"
+        android:layout_below="@+id/point_direction_text"
         android:contentDescription="@string/default_text"
-        android:src="@drawable/ra4_exit2" />
+        android:src="@drawable/question_mark" />
 
     <TextView
         android:id="@+id/point_description_text"
@@ -85,10 +67,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/point_previous_button"
-        android:layout_alignRight="@+id/point_kilometer_text"
+        android:layout_alignParentLeft="true"
         android:text="@string/default_text"
         android:textSize="16sp" />
 
+    <ImageView
+        android:id="@+id/point_partialkilometer_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_toRightOf="@+id/point_partialkilometer_text"
+        android:layout_alignTop="@+id/point_partialkilometer_text"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/distance_from_previous" />
+
+    <ImageView
+        android:id="@+id/point_distancetonext_icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_toLeftOf="@+id/point_distancetonext_text"
+        android:layout_alignTop="@+id/point_distancetonext_text"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/distance_to_next" />
+
+    <TextView
+        android:id="@+id/point_distancetonext_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/point_kilometer_text"
+        android:layout_above="@+id/point_previous_button"
+        android:text="@string/default_text"
+        android:textSize="16sp" />
+    
     <TextView
         android:id="@+id/point_numbers_text"
         android:layout_width="wrap_content"
