@@ -1,11 +1,10 @@
 package luc.fourestier.rbook;
 
 import android.app.Activity;
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -177,11 +176,14 @@ public class RoadPointActivity extends Activity {
 
 	private OnClickListener malbumListener = new OnClickListener() {
 		public void onClick(View v) {
-//			LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		    View view = inflater.inflate(R.layout.,
-//		                                   (ViewGroup) findViewById(R.id.image_toast));
-
-			toastMessage("Photos are coming soon!");
+        	try {
+        	    Intent intent = new Intent(RoadPointActivity.this, PointImageActivity.class);
+        	    startActivity(intent);
+			} 
+        	catch (Exception e) {
+				Log.e(TAG, "Cannot load point image: " + e.getMessage());
+				toastMessage("Cannot load point image!");
+			}
 	    }
 	};
 	

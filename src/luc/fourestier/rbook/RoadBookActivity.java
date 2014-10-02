@@ -4,6 +4,8 @@ import java.io.File;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +25,7 @@ public class RoadBookActivity extends Activity {
     private TextView descriptionTextView;
     private TextView locationTextView;
     private TextView distanceTextView;
+    private ImageView bookImageView;
     private Button startButton;
 
 	private BookManager theBookManager = null;
@@ -47,6 +51,7 @@ public class RoadBookActivity extends Activity {
 	    	descriptionTextView = (TextView) findViewById(R.id.book_description_text);
 	    	locationTextView = (TextView) findViewById(R.id.book_location_text);
 	    	distanceTextView = (TextView) findViewById(R.id.book_distance_text);
+	    	bookImageView = (ImageView) findViewById(R.id.book_image);
 	    	startButton = (Button) findViewById(R.id.book_start_button);
 	    	startButton.setOnClickListener(mStartListener);
 	    	
@@ -159,6 +164,13 @@ public class RoadBookActivity extends Activity {
  			distance = 0.0f;
  		}
  	    distanceTextView.setText(String.format("%.2f", distance));
+ 	    
+ 	    String path = roadbook.getImage();
+ 	    if (!path.isEmpty()) {
+ 	        Bitmap bitmap = BitmapFactory.decodeFile(path);
+ 	        bookImageView.setImageBitmap(bitmap);
+ 	    }
+
  	}
  	
  // Toast

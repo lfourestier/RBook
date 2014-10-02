@@ -194,6 +194,35 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetLocation (JNIEnv 
     roadbook->Location = cpplocation;
 }
 
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetImage(JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    jstring result;
+    RBook::RoadBook *rb = GetInstance(env, thiz);
+    if (rb == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return result;
+    }
+
+    return env->NewStringUTF(rb->Image.c_str());
+}
+
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetImage (JNIEnv *env, jobject thiz, jstring imagepath) {
+    InitializeInstanceField(env, thiz);
+
+    const char* charimagepath = env->GetStringUTFChars(imagepath, NULL);
+    std::string cppimagepath(charimagepath);
+    env->ReleaseStringUTFChars(imagepath, charimagepath);
+
+    RBook::RoadBook *roadbook = GetInstance(env, thiz);
+    if (roadbook == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+
+    roadbook->Image = cppimagepath; // TODO Copy image into archive location
+}
+
 JNIEXPORT jfloat JNICALL Java_luc_fourestier_rbook_RoadBook__1GetTotalDistance(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 

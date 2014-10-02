@@ -75,6 +75,25 @@ public class RoadBook {
 	}
 
 	/**
+	 * Get the image of the road book.
+	 * 
+	 * @return The image path string.
+	 */
+	public String getImage() {
+		return _GetImage();
+	}
+
+	/**
+	 * Set the image of the roadbook.
+	 * Image will be copied into archive directory of the roadbook.
+	 * 
+	 * @param imagepath: the image path.
+	 */
+	public void setImage(String imagepath) {
+		_SetImage(imagepath);
+	}
+
+	/**
 	 * Get The total distance
 	 * 
 	 * @return The distance
@@ -241,6 +260,8 @@ public class RoadBook {
 	private native final void _SetDescription(String description);
 	private native final String _GetLocation();
 	private native final void _SetLocation(String location);
+	private native final String _GetImage();
+	private native final void _SetImage(String location);
 	private native final float _GetTotalDistance();
 	private native final int _GetPointCount();
 	private native final int _GetCurrentPoint();

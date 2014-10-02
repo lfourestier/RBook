@@ -341,7 +341,6 @@ RoadBook::RoadBook(std::string filepath, std::string bookname, std::string tempd
     Location = "";
     TotalDistance = 0.0;
     Image = "";
-    ImagePath = "";
 
     FilePath = filepath;
     Bookname = bookname;
@@ -435,9 +434,6 @@ Error RoadBook::Load() {
     if (ret == ERROR_OK) {
          // Parse road book file
         ret = ParseRoadBook(roadbookcontent);
-        if (!Image.empty()) {
-            ImagePath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + Image;
-        }
     }
 
     return ret;
@@ -568,7 +564,7 @@ Error RoadBook::ParseRoadBook(const std::string& content) {
             }
             else if ((i->type() == JSON_STRING) && (nodename == ROADBOOK_IMAGE_TAG)) {
                 LOG_V(TAG, "%s: %s", nodename.c_str(), i->as_string().c_str());
-                Image = i->as_string();
+                Image = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + i->as_string();
             }
             else if ((i->type() == JSON_ARRAY) && (nodename == ROADBOOK_ROADPOINTS_TAG)) {
                 ret = ParseRoadPointList(*i); // TODO Crash if array is empty. Why?
@@ -628,6 +624,10 @@ Error RoadBook::ParseRoadPoint(const JSONNode& roadpoint) {
             else if ((i->type() == JSON_STRING) && (nodename == ROADPOINT_DIRECTION_TAG)) {
                 LOG_V(TAG, "%s: %s", nodename.c_str(), i->as_string().c_str());
                 rp->Direction = i->as_string();
+            }
+            else if ((i->type() == JSON_STRING) && (nodename == ROADPOINT_IMAGE_TAG)) {
+                LOG_V(TAG, "%s: %s", nodename.c_str(), i->as_string().c_str());
+                rp->Image = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + i->as_string();
             }
         }
 

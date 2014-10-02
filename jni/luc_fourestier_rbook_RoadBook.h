@@ -73,6 +73,22 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetLocation
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _GetImage
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetImage
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _SetImage
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetImage
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
  * Method:    _GetTotalDistance
  * Signature: ()F
  */

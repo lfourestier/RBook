@@ -175,6 +175,35 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadPoint__1SetDirection (JNIEn
     roadpoint->Direction = cppdirection;
 }
 
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadPoint__1GetImage(JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    jstring result;
+    RBook::RoadPoint *roadpoint = GetInstance(env, thiz);
+    if (roadpoint == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return result;
+    }
+
+    return env->NewStringUTF(roadpoint->Image.c_str());
+}
+
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadPoint__1SetImage (JNIEnv *env, jobject thiz, jstring imagepath) {
+    InitializeInstanceField(env, thiz);
+
+    const char* charimagepath = env->GetStringUTFChars(imagepath, NULL);
+    std::string cppimagepath(charimagepath);
+    env->ReleaseStringUTFChars(imagepath, charimagepath);
+
+    RBook::RoadPoint *roadpoint = GetInstance(env, thiz);
+    if (roadpoint == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+
+    roadpoint->Image = cppimagepath; // TODO Copy image.
+}
+
 JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadPoint__1GetNumber(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
 

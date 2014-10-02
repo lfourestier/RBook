@@ -19,6 +19,7 @@
 #define ROADPOINT_KILOMETER_TAG "kilometer"
 #define ROADPOINT_TYPE_TAG "type"
 #define ROADPOINT_DIRECTION_TAG "direction"
+#define ROADPOINT_IMAGE_TAG "image"
 
 namespace RBook {
 
@@ -40,6 +41,9 @@ public:
 
     //! Description of the direction towards the next point (City, well known places, road numbers...).
     std::string Direction;
+
+    //! the image name linked to the point.
+    std::string Image;
 
     //! The number of the point in the list.
     unsigned int Number;

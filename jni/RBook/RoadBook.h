@@ -63,11 +63,9 @@ public:
     //! File location where to save and load.
     std::string FilePath;
 
-    //! The image name illustrating the roadbook.
+    //! The image name illustrating the roadbook (Full path).
     std::string Image;
 
-    //! Full path to the image.
-    std::string ImagePath;
 
     /**
      * Get the total number of points in the book.

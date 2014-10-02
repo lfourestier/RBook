@@ -84,8 +84,7 @@
 	        android:layout_below="@+id/book_distance_text"
 	        android:layout_centerHorizontal="true"
 	        android:layout_marginTop="20dp"
-	        android:contentDescription="@string/default_text"
-	        android:src="@drawable/rb_ardennes" />
+	        android:contentDescription="@string/default_text" />
 	
 	    <Button
 	        android:id="@+id/book_start_button"

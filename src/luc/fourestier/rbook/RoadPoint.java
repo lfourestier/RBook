@@ -75,6 +75,25 @@ public class RoadPoint {
 	}
 	
 	/**
+	 * Get the image of the road point.
+	 * 
+	 * @return The image path string.
+	 */
+	public String getImage() {
+		return _GetImage();
+	}
+
+	/**
+	 * Set the image of the road point.
+	 * Image will be copied into archive directory of the road point.
+	 * 
+	 * @param imagepath: the image path.
+	 */
+	public void setImage(String imagepath) {
+		_SetImage(imagepath);
+	}
+
+	/**
 	 * Get the point number in the list.
 	 * 
 	 * @return The number.
@@ -97,20 +116,14 @@ public class RoadPoint {
 	// native
 	
 	private native final String _GetDescription();
-
 	private native final void _SetDescription(String description);
-	
 	private native final float _GetKilometer();
-
 	private native final void _SetKilometer(float kilometer);
-	
 	private native final String _GetType();
-
 	private native final void _SetType(String type);
-	
 	private native final String _GetDirection();
-	
 	private native final void _SetDirection(String direction);
-	
+	private native final String _GetImage();
+	private native final void _SetImage(String location);
 	private native final int _GetNumber();
 }

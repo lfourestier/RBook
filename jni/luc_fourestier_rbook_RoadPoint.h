@@ -73,6 +73,22 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadPoint__1SetDirection
 
 /*
  * Class:     luc_fourestier_rbook_RoadPoint
+ * Method:    _GetImage
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadPoint__1GetImage
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadPoint
+ * Method:    _SetImage
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadPoint__1SetImage
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadPoint
  * Method:    _GetNumber
  * Signature: ()I
  */
