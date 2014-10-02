@@ -178,13 +178,40 @@ Error FileUtils::RemoveDirectory(std::string directory) {
             struct dirent* file;
 
             while ((file = readdir(dir)) != NULL) {
+                if (((strlen(file->d_name) == 1) && (file->d_name[0] = '.')) || ((strlen(file->d_name) == 2) && (file->d_name[0] = '.') && (file->d_name[1] = '.'))) {
+                    // Avoid standard directories
+                    continue;
+                }
+
                 std::string filepath(directory + FILEUTILS_PATH_DELIMITER);
                 filepath.append(file->d_name);
+                struct stat status;
 
-                int err = remove(filepath.c_str());
-                if (err != 0) {
-                    LOG_W(TAG, "Error %i while removing file %s", errno, filepath.c_str());
+                if (stat(filepath.c_str(), &status) == 0) {
+                    if (S_ISDIR(status.st_mode)) {
+                        ret = RemoveDirectory(filepath);
+                        if (ret != ERROR_OK) {
+                            LOG_W(TAG, "Error while removing directory %s", filepath.c_str());
+                        }
+                    }
+                    else if (S_ISREG(status.st_mode)) {
+                        int err = remove(filepath.c_str());
+                        if (err != 0) {
+                            LOG_W(TAG, "Error %i while removing file %s", errno, filepath.c_str());
+                        }
+                    }
+                    else {
+                        LOG_W(TAG, "Cannot remove %s: Not a file or dir!", filepath.c_str());
+                    }
                 }
+                else {
+                    // try anyway!
+                    int err = remove(filepath.c_str());
+                    if (err != 0) {
+                        LOG_W(TAG, "Error %i while removing file %s", errno, filepath.c_str());
+                    }
+                }
+
             }
             closedir(dir);
         }
