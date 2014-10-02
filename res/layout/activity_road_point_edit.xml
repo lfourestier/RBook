@@ -18,7 +18,7 @@
 	        android:id="@+id/point_edit_direction_icon"
 	        android:layout_width="24dp"
 	        android:layout_height="24dp"
-	        android:layout_alignParentLeft="true"
+	        android:layout_toLeftOf="@+id/point_edit_direction_text"
 	        android:layout_alignTop="@+id/point_edit_direction_text"
 		    android:contentDescription="@string/default_text"
 	        android:src="@drawable/direction" />
@@ -28,35 +28,16 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentTop="true"
-	        android:layout_toRightOf="@+id/point_edit_direction_icon"
+	        android:layout_centerHorizontal="true"
 	        android:hint="@string/point_edit_direction_hint"
 		    android:inputType="text"
-	        android:textSize="24sp" />
+	        android:textSize="20sp" />
 	
-	    <ImageView
-	        android:id="@+id/point_edit_distancetonext_icon"
-	        android:layout_width="16dp"
-	        android:layout_height="16dp"
-	        android:layout_alignParentLeft="true"
-	        android:layout_alignTop="@+id/point_edit_distancetonext_text"
-	        android:contentDescription="@string/default_text"
-	        android:src="@drawable/distance_to_next" />
-	
-	    <TextView
-	        android:id="@+id/point_edit_distancetonext_text"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/point_edit_direction_text"
-	        android:layout_below="@+id/point_edit_direction_text"
-	        android:layout_marginTop="10dp"
-	        android:text="@string/default_text"
-	        android:textSize="16sp" />
-	    
 	    <ImageButton
 	        android:id="@+id/point_edit_road_image"
 	        android:layout_width="100dp"
 	    	android:layout_height="100dp"
-	  		android:layout_below="@+id/point_edit_distancetonext_text"
+	  		android:layout_below="@+id/point_edit_direction_text"
 	        android:layout_centerHorizontal="true"
 	        android:scaleType="fitCenter"
 	        android:contentDescription="@string/default_text"
@@ -71,7 +52,7 @@
 	        android:textStyle="italic"
 	        android:hint="@string/point_edit_description_hint"
 		    android:inputType="text"
-	        android:textSize="20sp" />
+	        android:textSize="24sp" />
 	    
 	    <ImageView
 	        android:id="@+id/point_edit_kilometer_icon"
@@ -98,10 +79,37 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/point_edit_kilometer_text"
-	        android:layout_alignRight="@+id/point_edit_kilometer_text"
+	        android:layout_alignParentLeft="true"
 	        android:text="@string/default_text"
 	        android:textSize="16sp" />
 	
+	    <ImageView
+	        android:id="@+id/point_edit_partialkilometer_icon"
+	        android:layout_width="16dp"
+	        android:layout_height="16dp"
+	        android:layout_toRightOf="@+id/point_edit_partialkilometer_text"
+	        android:layout_alignTop="@+id/point_edit_partialkilometer_text"
+	        android:layout_marginLeft="5dp"
+	        android:src="@drawable/distance_from_previous" />
+	
+	    <ImageView
+	        android:id="@+id/point_edit_distancetonext_icon"
+	        android:layout_width="16dp"
+	        android:layout_height="16dp"
+	        android:layout_toLeftOf="@+id/point_edit_distancetonext_text"
+	        android:layout_alignTop="@+id/point_edit_distancetonext_text"
+	        android:layout_marginRight="5dp"
+	        android:src="@drawable/distance_to_next" />
+	
+	    <TextView
+	        android:id="@+id/point_edit_distancetonext_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignRight="@+id/point_edit_kilometer_text"
+	        android:layout_below="@+id/point_edit_kilometer_text"
+	        android:text="@string/default_text"
+	        android:textSize="16sp" />
+	    
 	    <TextView
 	        android:id="@+id/point_edit_numbers_text"
 	        android:layout_width="wrap_content"
@@ -111,7 +119,7 @@
 	        android:text="@string/default_text"
 	        android:textSize="16sp" />
 
-	    	    <Button
+	    <Button
 	        android:id="@+id/point_edit_previous_button"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"

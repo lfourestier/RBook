@@ -12,7 +12,7 @@
         android:id="@+id/point_direction_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/point_direction_text"
         android:layout_alignTop="@+id/point_direction_text"
         android:src="@drawable/direction" />
 
@@ -21,9 +21,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/point_direction_icon"
+        android:layout_centerHorizontal="true"
         android:text="@string/default_text"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/point_road_image"
@@ -42,7 +42,7 @@
         android:layout_centerHorizontal="true"
         android:textStyle="italic"
         android:text="@string/default_text"
-        android:textSize="20sp" />
+        android:textSize="24sp" />
     
     <ImageView
         android:id="@+id/point_kilometer_icon"
