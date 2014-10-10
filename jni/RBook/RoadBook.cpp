@@ -42,6 +42,9 @@
 
 #define ROADBOOK_SPEECH_BUFFER_SIZE 1024
 
+#define ROADBOOK_NO_IMAGE ROADPOINT_NO_IMAGE
+#define ROADBOOK_NO_TEXT ROADPOINT_NO_TEXT
+
 namespace RBook {
 
 Error RoadBook::GetPointCount(unsigned int &count) {
@@ -213,11 +216,60 @@ Error RoadBook::GetNextPointSpeech(PictManager *pictmgr, std::string &speech) {
     return ret;
 }
 
+Error RoadBook::GetImage(std::string &imagepath) {
+    Error ret;
+
+    if (Image.compare(ROADBOOK_NO_IMAGE) != 0) {
+        imagepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + Image;
+    }
+    else {
+        imagepath.clear();
+    }
+
+    return ret;
+}
+
+Error RoadBook::SetImage(std::string imagepath){
+    Error ret;
+
+    if (imagepath.empty()) {
+        Image = ROADBOOK_NO_IMAGE;
+    }
+    else {
+        std::string path(imagepath);
+        std::string name(imagepath);
+
+        ret = FileUtils::GetFileName(name);
+        if (ret != ERROR_OK) {
+            return ERROR_FAIL;
+        }
+
+        // Check if the picture is already in the temp archive directory, if not copy the image
+        ret = FileUtils::GetFilePath(path);
+        if (ret != ERROR_OK) {
+            return ERROR_FAIL;
+        }
+
+        if (path.compare(TempArchiveDirectory) != 0) {
+            LOG_V(TAG, "Copy image %s into %s", imagepath.c_str(), (TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + name).c_str());
+            ret = FileUtils::CopyFile(imagepath, TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + name);
+            if (ret != ERROR_OK) {
+                return ERROR_FAIL;
+            }
+        }
+
+        // Set the image field
+        Image = name;
+    }
+
+    return ret;
+}
+
 Error RoadBook::AddNewPointBefore(RoadPoint*& point) {
     Error ret;
 
     try {
-        point = new RoadPoint();
+        point = new RoadPoint(TempArchiveDirectory);
         if (RoadPointList.empty()) {
             RoadPointList.push_back(point);
         }
@@ -237,7 +289,7 @@ Error RoadBook::AddNewPointAfter(RoadPoint*& point){
     Error ret;
 
     try {
-        point = new RoadPoint();
+        point = new RoadPoint(TempArchiveDirectory);
         if (RoadPointList.empty())  {
             RoadPointList.push_back(point);
         }
@@ -564,7 +616,7 @@ Error RoadBook::ParseRoadBook(const std::string& content) {
             }
             else if ((i->type() == JSON_STRING) && (nodename == ROADBOOK_IMAGE_TAG)) {
                 LOG_V(TAG, "%s: %s", nodename.c_str(), i->as_string().c_str());
-                Image = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + i->as_string();
+                Image = i->as_string();
             }
             else if ((i->type() == JSON_ARRAY) && (nodename == ROADBOOK_ROADPOINTS_TAG)) {
                 ret = ParseRoadPointList(*i); // TODO Crash if array is empty. Why?
@@ -602,7 +654,7 @@ Error RoadBook::ParseRoadPointList(const JSONNode& roadpointlist) {
 
 Error RoadBook::ParseRoadPoint(const JSONNode& roadpoint) {
     Error ret;
-    RoadPoint *rp = new RoadPoint();
+    RoadPoint *rp = new RoadPoint(TempArchiveDirectory);
 
     try {
         // Parse JSON
@@ -627,7 +679,7 @@ Error RoadBook::ParseRoadPoint(const JSONNode& roadpoint) {
             }
             else if ((i->type() == JSON_STRING) && (nodename == ROADPOINT_IMAGE_TAG)) {
                 LOG_V(TAG, "%s: %s", nodename.c_str(), i->as_string().c_str());
-                rp->Image = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + i->as_string();
+                rp->Image = i->as_string();
             }
         }
 
@@ -650,9 +702,25 @@ Error RoadBook::GenerateRoadBook(std::string& content) {
     try {
         JSONNode mainnode(JSON_NODE);
 
+        if (Title.empty()) {
+            Title = ROADBOOK_NO_TEXT;
+        }
         mainnode.push_back(JSONNode(ROADBOOK_TITLE_TAG, Title));
+
+        if (Description.empty()) {
+            Description = ROADBOOK_NO_TEXT;
+        }
         mainnode.push_back(JSONNode(ROADBOOK_DESCRIPTION_TAG, Description));
+
+        if (Location.empty()) {
+            Location = ROADBOOK_NO_TEXT;
+        }
         mainnode.push_back(JSONNode(ROADBOOK_LOCATION_TAG, Location));
+
+        if (Image.empty()) {
+            Image = ROADBOOK_NO_IMAGE;
+        }
+        mainnode.push_back(JSONNode(ROADBOOK_IMAGE_TAG, Image));
 
         JSONNode roadpointarray(JSON_ARRAY);
         roadpointarray.set_name(ROADBOOK_ROADPOINTS_TAG);
@@ -680,10 +748,26 @@ Error RoadBook::GenerateRoadPoints(JSONNode& roadpoints) {
         for (int index = 0; index < RoadPointList.size(); ++index) {
             JSONNode roadpointnode(JSON_NODE);
 
+            if (RoadPointList[index]->Description.empty()) {
+                RoadPointList[index]->Description = ROADBOOK_NO_TEXT;
+            }
             roadpointnode.push_back(JSONNode(ROADPOINT_DESCRIPTION_TAG, RoadPointList[index]->Description));
             roadpointnode.push_back(JSONNode(ROADPOINT_KILOMETER_TAG, RoadPointList[index]->Kilometer));
+
+            if (RoadPointList[index]->Type.empty()) {
+                RoadPointList[index]->Type = ROADBOOK_NO_TEXT;
+            }
             roadpointnode.push_back(JSONNode(ROADPOINT_TYPE_TAG, RoadPointList[index]->Type));
+
+            if (RoadPointList[index]->Direction.empty()) {
+                RoadPointList[index]->Direction = ROADBOOK_NO_TEXT;
+            }
             roadpointnode.push_back(JSONNode(ROADPOINT_DIRECTION_TAG, RoadPointList[index]->Direction));
+
+            if (RoadPointList[index]->Image.empty()) {
+                RoadPointList[index]->Image = ROADBOOK_NO_IMAGE;
+            }
+            roadpointnode.push_back(JSONNode(ROADPOINT_IMAGE_TAG, RoadPointList[index]->Image));
 
             roadpoints.push_back(roadpointnode);
         }

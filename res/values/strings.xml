@@ -40,5 +40,6 @@
     <string name="rbook_copyright">Written by Luc Fourestier - lfourestier@yahoo.fr \nAll rights are reserved. Copyright 2014</string>
     <string name="title_activity_point_image">PointImageActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_point_edit_image">PointEditImageActivity</string>
 
 </resources>

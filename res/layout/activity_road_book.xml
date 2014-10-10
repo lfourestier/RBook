@@ -20,7 +20,7 @@
 	        android:layout_height="24dp"
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignBottom="@+id/book_name_text"
-	        android:src="@drawable/rbook" />
+	        android:src="@drawable/ic_activity_logo" />
 	
 	    <TextView
 	        android:id="@+id/book_name_text"
@@ -47,7 +47,7 @@
 	        android:layout_height="20dp"
 	        android:layout_toLeftOf="@+id/book_location_text"
 	        android:layout_alignBottom="@+id/book_location_text"
-	        android:src="@drawable/location" />
+	        android:src="@drawable/ic_activity_location" />
 	
 	    <TextView
 	        android:id="@+id/book_location_text"
@@ -65,7 +65,7 @@
 	        android:layout_height="20dp"
 	        android:layout_toLeftOf="@+id/book_distance_text"
 	        android:layout_alignBottom="@+id/book_distance_text"
-	        android:src="@drawable/milestone" />
+	        android:src="@drawable/ic_activity_milestone" />
 	
 	    <TextView
 	        android:id="@+id/book_distance_text"
@@ -92,7 +92,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/book_image"
 	        android:layout_alignParentRight="true"
-	        android:background="@drawable/go" />
+	        android:background="@drawable/ic_activity_go" />
 	
 	</RelativeLayout>
 </ScrollView>

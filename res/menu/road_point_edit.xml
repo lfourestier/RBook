@@ -9,7 +9,7 @@
     <item
         android:id="@+id/action_point_delete"
         android:showAsAction="always"
-        android:icon="@drawable/ic_action_discard"
+        android:icon="@drawable/ic_action_substract"
         android:title="@string/action_delete"/>
 
     <item

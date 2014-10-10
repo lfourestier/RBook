@@ -2,6 +2,8 @@ package luc.fourestier.rbook;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -30,6 +32,7 @@ public class RoadPointEditActivity extends Activity {
 	
 	private BookManager theBookManager = null;
 	private RoadBook currentRoadBook = null;
+	private PictManager thePictManager = null;
 
 	private String pointImageType;
 	private final String drawablePrefix = "drawable";
@@ -45,6 +48,7 @@ public class RoadPointEditActivity extends Activity {
 		try {
 			theBookManager = MainActivity.theBookManager;
 			currentRoadBook = MainActivity.currentRoadBook;
+			thePictManager = MainActivity.thePictManager;
 	
 			directionEditText = (EditText) findViewById(R.id.point_edit_direction_text);
 			distancetonextTextView = (TextView) findViewById(R.id.point_edit_distancetonext_text);
@@ -189,11 +193,14 @@ public class RoadPointEditActivity extends Activity {
 
 	private OnClickListener malbumListener = new OnClickListener() {
 		public void onClick(View v) {
-//			LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		    View view = inflater.inflate(R.layout.,
-//		                                   (ViewGroup) findViewById(R.id.image_toast));
-
-			toastMessage("Photos are coming soon!");
+        	try {
+        	    Intent intent = new Intent(RoadPointEditActivity.this, PointEditImageActivity.class);
+        	    startActivity(intent);
+			} 
+        	catch (Exception e) {
+				Log.e(TAG, "Cannot load point image: " + e.getMessage());
+				toastMessage("Cannot load point image!");
+			}
 	    }
 	};
 	
@@ -212,13 +219,15 @@ public class RoadPointEditActivity extends Activity {
 		distancetonextTextView.setText(String.format("%.2f", distance));
 		
 		pointImageType = roadpoint.getType();
-		int id = getResources().getIdentifier(pointImageType, drawablePrefix,
-				getPackageName());
-		if (id != 0) {
-			pointImageButton.setImageResource(id);
-		} else {
-			pointImageButton.setImageResource(R.drawable.question_mark);
+		try {
+			String path = thePictManager.getPict(pointImageType, thePictManager.RESOLUTION_FULL);
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            pointImageButton.setImageBitmap(bitmap);
 		}
+		catch (IndexOutOfBoundsException e) {
+			pointImageButton.setImageResource(R.drawable.question_mark_full);
+		}
+		
 		descriptionEditText.setText(roadpoint.getDescription());
 		kilometerEditText.setText(String.format("%.2f", roadpoint.getKilometer()));
 

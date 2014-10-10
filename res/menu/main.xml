@@ -10,6 +10,7 @@
         android:id="@+id/action_help"
         android:orderInCategory="100"
         android:showAsAction="never"
+        android:icon="@drawable/ic_action_help"
         android:title="@string/action_help"/>
 
 </menu>

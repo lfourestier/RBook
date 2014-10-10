@@ -5,14 +5,17 @@
     android:versionName="1.0" >
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="18" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/rbook"
+        android:icon="@drawable/ic_activity_logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -106,6 +109,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="luc.fourestier.rbook.MainActivity" />
+        </activity>
+        <activity
+            android:name="luc.fourestier.rbook.PointEditImageActivity"
+            android:label="@string/title_activity_point_edit_image"
+            android:parentActivityName="luc.fourestier.rbook.RoadPointEditActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="luc.fourestier.rbook.RoadPointEditActivity" />
         </activity>
     </application>
 

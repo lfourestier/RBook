@@ -132,6 +132,21 @@ public:
     Error GetNextPointSpeech(PictManager *pictmgr, std::string &speech);
 
     /**
+     * Get the image for the book.
+     * @param imagepath: Full image path
+     * @return @see ERROR
+     */
+    Error GetImage(std::string &imagepath);
+
+    /**
+     * Copy and set the image of the roadbook.
+     * If the image is already in TempArchiveDirectory, then the copy is skipped.
+     * @param imagepath: Image to copy (Full path)
+     * @return @see ERROR
+     */
+    Error SetImage(std::string imagepath);
+
+    /**
      * Insert a new point into the list before the current position.
      * Create the point.
      * Current position point and next ones will be pushed.

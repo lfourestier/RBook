@@ -10,19 +10,35 @@ public class Speech {
 	private TextToSpeech textToSpeechEngine = null;
 	private boolean textToSpeechInitialized = false;
     private static final String TAG = Speech.class.getSimpleName();
-    
+    private Context context;
 	
 	/**
 	 * Speech is on!
 	 */
-	public boolean speechOn = true;
-
+	public boolean speechOn = false;
 	
+	/**
+	 * Constructor
+	 * @param ctx: App context.
+	 */
+	public Speech(Context ctx) {
+		if (ctx == null) {
+			throw new IllegalArgumentException();
+		}
+		context = ctx;
+	}
+
+	/**
+	 * Private default constructor
+	 */
+	private Speech() {
+	}
+
 	/**
 	 * Start the TTS engine.
 	 * @param context: Application context.
 	 */
-	public void initialize(Context context) {
+	public void initialize() {
 		if ((!textToSpeechInitialized) || (textToSpeechEngine == null)) {
 			if (textToSpeechEngine != null) {
 				textToSpeechEngine.stop();
@@ -38,7 +54,9 @@ public class Speech {
 	 * Mute the speech.
 	 */
 	public void mute() {
-		textToSpeechEngine.stop();
+		if (textToSpeechEngine != null) {
+			textToSpeechEngine.stop();
+		}
 		speechOn = false;
 	}
 	
@@ -46,6 +64,7 @@ public class Speech {
 	 * Unmute the speech.
 	 */
 	public void unMute() {
+		initialize();
 		speechOn = true;
 	}
 	
@@ -84,6 +103,7 @@ public class Speech {
 			textToSpeechEngine = null;
 			textToSpeechInitialized = false;
 		}
+		speechOn = false;
 	}
 	
 	private TextToSpeech.OnInitListener mTTSInitListener = new TextToSpeech.OnInitListener() {

@@ -209,7 +209,7 @@ public class RoadPointActivity extends Activity {
             pointImageView.setImageBitmap(bitmap);
 		}
 		catch (IndexOutOfBoundsException e) {
-			pointImageView.setImageResource(R.drawable.question_mark);
+			pointImageView.setImageResource(R.drawable.question_mark_full);
 		}
 		
 		descriptionTextView.setText(roadpoint.getDescription());

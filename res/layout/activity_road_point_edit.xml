@@ -21,7 +21,7 @@
 	        android:layout_toLeftOf="@+id/point_edit_direction_text"
 	        android:layout_alignTop="@+id/point_edit_direction_text"
 		    android:contentDescription="@string/default_text"
-	        android:src="@drawable/direction" />
+	        android:src="@drawable/ic_activity_direction" />
 	
 	    <EditText
 	        android:id="@+id/point_edit_direction_text"
@@ -41,7 +41,7 @@
 	        android:layout_centerHorizontal="true"
 	        android:scaleType="fitCenter"
 	        android:contentDescription="@string/default_text"
-	        android:src="@drawable/question_mark_icon" />
+	        android:src="@drawable/question_mark_small" />
 	
 	    <EditText
 	        android:id="@+id/point_edit_description_text"
@@ -62,7 +62,7 @@
 	        android:layout_alignBottom="@+id/point_edit_kilometer_text"
 	        android:layout_marginBottom="15dp"
 	        android:contentDescription="@string/default_text"
-	        android:src="@drawable/milestone" />
+	        android:src="@drawable/ic_activity_milestone" />
 	
 	    <EditText
 	        android:id="@+id/point_edit_kilometer_text"
@@ -90,7 +90,7 @@
 	        android:layout_toRightOf="@+id/point_edit_partialkilometer_text"
 	        android:layout_alignTop="@+id/point_edit_partialkilometer_text"
 	        android:layout_marginLeft="5dp"
-	        android:src="@drawable/distance_from_previous" />
+	        android:src="@drawable/ic_activity_distance_from" />
 	
 	    <ImageView
 	        android:id="@+id/point_edit_distancetonext_icon"
@@ -99,7 +99,7 @@
 	        android:layout_toLeftOf="@+id/point_edit_distancetonext_text"
 	        android:layout_alignTop="@+id/point_edit_distancetonext_text"
 	        android:layout_marginRight="5dp"
-	        android:src="@drawable/distance_to_next" />
+	        android:src="@drawable/ic_activity_distance_to" />
 	
 	    <TextView
 	        android:id="@+id/point_edit_distancetonext_text"
@@ -125,7 +125,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_below="@+id/point_edit_partialkilometer_text"
 	        android:layout_alignParentLeft="true"
-	        android:background="@drawable/previous" />
+	        android:background="@drawable/ic_activity_previous" />
 	
 	    <Button
 	        android:id="@+id/point_edit_next_button"
@@ -133,7 +133,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_alignTop="@+id/point_edit_previous_button"
 	        android:layout_alignParentRight="true"
-	        android:background="@drawable/next" />
+	        android:background="@drawable/ic_activity_next" />
 	
 	    <Button
 	        android:id="@+id/point_edit_album_button"
@@ -141,7 +141,7 @@
 	        android:layout_height="40dp"
 	        android:layout_alignBottom="@+id/point_edit_next_button"
 	        android:layout_toLeftOf="@+id/point_edit_next_button"
-	        android:background="@drawable/album" />
+	        android:background="@drawable/ic_activity_album" />
 	
 	    <Button
 	        android:id="@+id/point_edit_map_button"
@@ -149,7 +149,7 @@
 	        android:layout_height="40dp"
 	        android:layout_alignBottom="@+id/point_edit_previous_button"
 	        android:layout_toRightOf="@+id/point_edit_previous_button"
-	        android:background="@drawable/compass" />
+	        android:background="@drawable/ic_activity_compass" />
 	
 	
 	</RelativeLayout>

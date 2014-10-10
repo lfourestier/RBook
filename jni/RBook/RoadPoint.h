@@ -21,6 +21,9 @@
 #define ROADPOINT_DIRECTION_TAG "direction"
 #define ROADPOINT_IMAGE_TAG "image"
 
+#define ROADPOINT_NO_IMAGE "none"
+#define ROADPOINT_NO_TEXT " "
+
 namespace RBook {
 
 class RoadPoint {
@@ -50,8 +53,34 @@ public:
 
     /**
      * Constructor.
+     * @param archivedirectory: Temporary road book directory
      */
-    RoadPoint();
+    RoadPoint(std::string archivedirectory);
+
+    /**
+     * Get the image for the point.
+     * @param imagepath: Full image path
+     * @return @see ERROR
+     */
+    Error GetImage(std::string &imagepath);
+
+    /**
+     * Copy and set the image of the road point.
+     * If the image is already in TempArchiveDirectory, then the copy is skipped.
+     * @param imagepath: Image to copy (Full path)
+     * @return @see ERROR
+     */
+    Error SetImage(std::string imagepath);
+
+private:
+
+    //! Temporary directory where archive is inflated.
+   std::string TempArchiveDirectory;
+
+    /**
+     * Constructor.
+     */
+    RoadPoint(){};
 
 };
 

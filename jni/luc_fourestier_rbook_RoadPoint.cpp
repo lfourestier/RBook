@@ -185,7 +185,11 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadPoint__1GetImage(JNIEnv 
         return result;
     }
 
-    return env->NewStringUTF(roadpoint->Image.c_str());
+    std::string image;
+    RBook::Error error = roadpoint->GetImage(image);
+    JNIThrowOnError(env, error);
+
+    return env->NewStringUTF(image.c_str());
 }
 
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadPoint__1SetImage (JNIEnv *env, jobject thiz, jstring imagepath) {
@@ -201,7 +205,8 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadPoint__1SetImage (JNIEnv *e
         return;
     }
 
-    roadpoint->Image = cppimagepath; // TODO Copy image.
+    RBook::Error error = roadpoint->SetImage(cppimagepath);
+    JNIThrowOnError(env, error);
 }
 
 JNIEXPORT jint JNICALL Java_luc_fourestier_rbook_RoadPoint__1GetNumber(JNIEnv *env, jobject thiz) {

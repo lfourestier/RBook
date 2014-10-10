@@ -136,8 +136,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 
 			// Initializes text to speech
 			if (theSpeechEngine == null) {
-				theSpeechEngine = new Speech(); 
-				theSpeechEngine.initialize(getApplicationContext()); // TODO Should be configurable in the settings
+				theSpeechEngine = new Speech(getApplicationContext()); 
 			}
 			
 		} catch (Exception e) {
@@ -158,7 +157,9 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 	
 	@Override
 	public void onDestroy() {
-		theSpeechEngine.destroy();
+		if (theSpeechEngine != null) {
+			theSpeechEngine.destroy();
+		}
 		super.onDestroy();
 	}
 	

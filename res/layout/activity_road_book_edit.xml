@@ -21,7 +21,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignBottom="@+id/book_edit_name_text"
 	        android:contentDescription="@string/default_text"
-	        android:src="@drawable/rbook" />
+	        android:src="@drawable/ic_activity_logo" />
 	
 	    <EditText
 	        android:id="@+id/book_edit_name_text"
@@ -51,7 +51,7 @@
 	        android:layout_toLeftOf="@+id/book_edit_location_text"
 	        android:layout_alignBottom="@+id/book_edit_location_text"
 	        android:contentDescription="@string/default_text"
-	        android:src="@drawable/location" />
+	        android:src="@drawable/ic_activity_location" />
 	
 	    <EditText
 	        android:id="@+id/book_edit_location_text"
@@ -65,13 +65,13 @@
 	        android:textSize="20sp" />
 	
 	    <ImageView
-	        android:id="@+id/book_distance_icon"
+	        android:id="@+id/book_edit_distance_icon"
 	        android:layout_width="20dp"
 	        android:layout_height="20dp"
 	        android:layout_toLeftOf="@+id/book_edit_distance_text"
 	        android:layout_alignBottom="@+id/book_edit_distance_text"
 	        android:contentDescription="@string/default_text"
-	        android:src="@drawable/milestone" />
+	        android:src="@drawable/ic_activity_milestone" />
 	
 	    <TextView
 	        android:id="@+id/book_edit_distance_text"
@@ -83,13 +83,22 @@
 	        android:text="@string/default_text"
 	        android:textSize="20sp" />
 	
-		<Button
+	    <ImageView
+	        android:id="@+id/book_edit_image"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/book_edit_distance_text"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="20dp"
+	        android:contentDescription="@string/default_text" />
+	
+	    <Button
 	        android:id="@+id/book_edit_start_button"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_below="@+id/book_edit_distance_text"
+	        android:layout_below="@+id/book_edit_image"
 	        android:layout_alignParentRight="true"
-	        android:background="@drawable/go" />
+	        android:background="@drawable/ic_activity_go" />
 	
 	</RelativeLayout>
 </ScrollView>
