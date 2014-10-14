@@ -52,6 +52,13 @@ public:
     Error Initialize(std::string rootdir);
 
     /**
+     * Get teh book directory or ERROR is not created yet
+     * @param dir: The returned full directory path
+     * @return @see ERROR
+     */
+    Error GetBookDir(std::string &dir);
+
+    /**
      * Return the book list.
      *
      * @param booklist: The list of bookname

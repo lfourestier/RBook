@@ -84,6 +84,14 @@ public class RoadBook {
 	}
 
 	/**
+	 * Create an image path for storing the photo while editing
+	 * @return The full path for the image
+	 */
+	public String createImagePath() {
+		return _CreateImagePath();
+	}
+
+	/**
 	 * Set the image of the roadbook.
 	 * Image will be copied into archive directory of the roadbook.
 	 * 
@@ -261,6 +269,7 @@ public class RoadBook {
 	private native final String _GetLocation();
 	private native final void _SetLocation(String location);
 	private native final String _GetImage();
+	private native final String _CreateImagePath();
 	private native final void _SetImage(String location);
 	private native final float _GetTotalDistance();
 	private native final int _GetPointCount();

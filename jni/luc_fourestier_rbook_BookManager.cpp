@@ -81,13 +81,8 @@ static void SetInstance(JNIEnv* env, jobject thiz, const RBook::BookManager* ins
 
 // JNI API
 
-JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1Create(JNIEnv *env, jobject thiz, jstring jrootdir) {
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1Create(JNIEnv *env, jobject thiz) {
     InitializeInstanceField(env, thiz);
-
-    // Create and initialize BookManager
-    const char* charrootdir = env->GetStringUTFChars(jrootdir, NULL);
-    std::string cpprootdir(charrootdir);
-    env->ReleaseStringUTFChars(jrootdir, charrootdir);
 
     RBook::BookManager *bm = new RBook::BookManager();
     if (bm == NULL) {
@@ -95,22 +90,55 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1Create(JNIEnv *en
         return;
     }
 
-    RBook::Error error = bm->Initialize(cpprootdir);
-    JNIThrowOnError(env, error);
-
     // Register instance at Java level
     SetInstance(env, thiz, bm);
 }
 
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1Initialize(JNIEnv *env, jobject thiz, jstring jrootdir) {
+    RBook::BookManager *bm = GetInstance(env, thiz);
+    if (bm == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return;
+    }
+
+    // Initialize BookManager
+    const char* charrootdir = env->GetStringUTFChars(jrootdir, NULL);
+    std::string cpprootdir(charrootdir);
+    env->ReleaseStringUTFChars(jrootdir, charrootdir);
+
+    RBook::Error error = bm->Initialize(cpprootdir);
+    JNIThrowOnError(env, error);
+
+}
+
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_BookManager__1GetBookDir(JNIEnv *env, jobject thiz) {
+    jstring result;
+    RBook::BookManager *bm = GetInstance(env, thiz);
+    if (bm == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return result;
+    }
+
+    // Get book directory.
+    std::string bookdir;
+    RBook::Error error = bm->GetBookDir(bookdir);
+    JNIThrowOnError(env, error);
+    if (error != RBook::ERROR_OK) {
+        return result;
+    }
+
+    return env->NewStringUTF(bookdir.c_str());
+}
+
 JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_BookManager__1GetRoadBookListSerialized(JNIEnv *env, jobject thiz) {
+    jstring result;
     RBook::BookManager *br = GetInstance(env, thiz);
     if (br == NULL) {
         JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
-        return 0;
+        return result;
     }
 
     // Get book list.
-    jstring result;
     std::list<std::string> booklist;
     RBook::Error error = br->GetRoadBookList(booklist);
     JNIThrowOnError(env, error);

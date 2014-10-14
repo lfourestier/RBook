@@ -139,6 +139,13 @@ public:
     Error GetImage(std::string &imagepath);
 
     /**
+     * Create an image path that application can use to store the image while editing.
+     * @param imagepath: The imagepath or empty if it was not possible.
+     * @return @see ERROR
+     */
+    Error CreateImagePath(std::string &imagepath);
+
+    /**
      * Copy and set the image of the roadbook.
      * If the image is already in TempArchiveDirectory, then the copy is skipped.
      * @param imagepath: Image to copy (Full path)

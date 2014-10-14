@@ -136,11 +136,21 @@
 	        android:background="@drawable/ic_activity_next" />
 	
 	    <Button
+	        android:id="@+id/point_edit_photo_button"
+	        android:layout_width="40dp"
+	        android:layout_height="40dp"
+	        android:layout_alignBottom="@+id/point_edit_album_button"
+	        android:layout_toLeftOf="@+id/point_edit_album_button"
+	        android:layout_marginRight="5dp"
+	        android:background="@drawable/ic_activity_camera" />
+	
+	    <Button
 	        android:id="@+id/point_edit_album_button"
 	        android:layout_width="40dp"
 	        android:layout_height="40dp"
 	        android:layout_alignBottom="@+id/point_edit_next_button"
 	        android:layout_toLeftOf="@+id/point_edit_next_button"
+	        android:layout_marginRight="5dp"
 	        android:background="@drawable/ic_activity_album" />
 	
 	    <Button
@@ -149,6 +159,7 @@
 	        android:layout_height="40dp"
 	        android:layout_alignBottom="@+id/point_edit_previous_button"
 	        android:layout_toRightOf="@+id/point_edit_previous_button"
+	        android:layout_marginLeft="5dp"
 	        android:background="@drawable/ic_activity_compass" />
 	
 	

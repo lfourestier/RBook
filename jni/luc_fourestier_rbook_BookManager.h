@@ -10,9 +10,17 @@ extern "C" {
 /*
  * Class:     luc_fourestier_rbook_BookManager
  * Method:    _Create
- * Signature: (Ljava/lang/String;)V
+ * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1Create
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_BookManager
+ * Method:    _Initialize
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1Initialize
   (JNIEnv *, jobject, jstring);
 
 /*
@@ -21,6 +29,14 @@ JNIEXPORT void JNICALL Java_luc_fourestier_rbook_BookManager__1Create
  * Signature: ()Ljava/lang/String;
  */
 JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_BookManager__1GetRoadBookListSerialized
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_BookManager
+ * Method:    _GetBookDir
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_BookManager__1GetBookDir
   (JNIEnv *, jobject);
 
 /*

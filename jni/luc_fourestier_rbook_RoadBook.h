@@ -81,6 +81,14 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetImage
 
 /*
  * Class:     luc_fourestier_rbook_RoadBook
+ * Method:    _CreateImagePath
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1CreateImagePath
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     luc_fourestier_rbook_RoadBook
  * Method:    _SetImage
  * Signature: (Ljava/lang/String;)V
  */

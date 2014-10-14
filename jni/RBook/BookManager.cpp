@@ -49,6 +49,19 @@ Error BookManager::Initialize(std::string rootdir) {
     return ret;
 }
 
+Error BookManager::GetBookDir(std::string &dir) {
+    Error ret;
+
+    if (!RBookDirectory.empty() && (FileUtils::DirectoryExists(RBookDirectory) != FileUtils::ERROR_DIR_NOT_FOUND)) {
+        dir = RBookDirectory;
+    }
+    else {
+        ret = ERROR_NOT_INITIALIZED;
+    }
+
+    return ret;
+}
+
 Error BookManager::GetRoadBookList(std::list<std::string> &booklist)
 {
     Error ret;

@@ -5,10 +5,14 @@
  *      Author: Luc Fourestier
  */
 
+#include <sstream>
 #include "FileUtils.h"
 #include "Log.h"
 
 #include "RoadPoint.h"
+
+#define ROADPOINT_IMAGE_FILE_ROOT "point"
+#define ROADPOINT_IMAGE_FILE_EXT ".png"
 
 #define TAG "RoadPoint"
 
@@ -26,7 +30,7 @@ RoadPoint::RoadPoint(std::string archivedirectory) {
 Error RoadPoint::GetImage(std::string &imagepath) {
     Error ret;
 
-    if (Image.compare(ROADPOINT_NO_IMAGE) != 0) {
+    if ((Image.compare(ROADPOINT_NO_IMAGE) != 0) && !TempArchiveDirectory.empty()) {
         imagepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + Image;
     }
     else {
@@ -36,10 +40,26 @@ Error RoadPoint::GetImage(std::string &imagepath) {
     return ret;
 }
 
+Error RoadPoint::CreateImagePath(std::string &imagepath) {
+    Error ret;
+
+    if (!TempArchiveDirectory.empty()) {
+        std::stringstream strstream;
+        strstream << Number;
+        imagepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + ROADPOINT_IMAGE_FILE_ROOT + strstream.str() + ROADPOINT_IMAGE_FILE_EXT;
+    }
+    else {
+        imagepath.clear();
+        ret = ERROR_FAIL;
+    }
+
+    return ret;
+}
+
 Error RoadPoint::SetImage(std::string imagepath){
     Error ret;
 
-    if (imagepath.empty()) {
+    if (imagepath.empty() || TempArchiveDirectory.empty()) {
         Image = ROADPOINT_NO_IMAGE;
     }
     else {

@@ -1,10 +1,14 @@
 package luc.fourestier.rbook;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -24,9 +28,12 @@ public class RoadBookEditActivity extends Activity {
     private TextView distanceTextView;
     private ImageView bookImageView;
     private Button startButton;
+    private Button photoButton;
 
     private RoadBook currentRoadBook = null;
 	private BookManager theBookManager = null;
+	
+	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 
 // Activity
     
@@ -46,6 +53,8 @@ public class RoadBookEditActivity extends Activity {
 	    	bookImageView = (ImageView) findViewById(R.id.book_edit_image);
 	    	startButton = (Button) findViewById(R.id.book_edit_start_button);
 	    	startButton.setOnClickListener(mStartListener);
+	    	photoButton = (Button) findViewById(R.id.book_edit_photo_button);
+	    	photoButton.setOnClickListener(mPhotoListener);
 	    	
 	    	setTitle(currentRoadBook.getBookName());
 	    	refreshRoadBookView(currentRoadBook);
@@ -109,6 +118,42 @@ public class RoadBookEditActivity extends Activity {
         }
     };
     
+ // Photo button
+	
+ 	private OnClickListener mPhotoListener = new OnClickListener() {
+         public void onClick(View v) {
+         	try {
+         		setValueFromRoadBookView(currentRoadBook);
+         		
+         	    // create Intent to take a picture and return control to the calling application
+         	    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+         	    Uri fileUri = Uri.fromFile(new File(currentRoadBook.createImagePath()));
+         	    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); 
+
+         	    // start the image capture Intent
+         	    startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+ 			} 
+         	catch (Exception e) {
+ 				Log.e(TAG, "Cannot take road book pciture: " + e.getMessage());
+ 				toastMessage("Oups! Cannot take picture!");
+ 			}
+         }
+     };
+     
+     @Override
+     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+             if (resultCode == RESULT_OK) {
+            	 if (data != null) {
+            		 toastMessage("Image saved to: " + data.getData());
+                 }
+                 currentRoadBook.setImage(currentRoadBook.createImagePath());
+                 refreshRoadBookView(currentRoadBook);
+             } 
+         }
+     }
+     
 // Road book    
     
 	private void refreshRoadBookView(RoadBook roadbook) {

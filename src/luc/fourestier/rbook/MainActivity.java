@@ -53,19 +53,34 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 		try {
 			AssetManager assetManager = getAssets();
 			
-			// Initialize the book manager
-			String sdcard = Environment.getExternalStorageDirectory().getPath();
+			// Create the book manager
 			if (theBookManager == null) {
-				Log.v(TAG, "External storage dir: " + sdcard);
-				theBookManager = BookManager.Create(sdcard);
+				theBookManager = BookManager.Create();
 			}
+			
+			String RBookDirectory;
+			try {
+				RBookDirectory = theBookManager.getBookDir();
+			} catch (RuntimeException e) {
+				String sdcard = Environment.getExternalStorageDirectory().getPath();
+				theBookManager.Initialize(sdcard);
+				RBookDirectory = theBookManager.getBookDir();
+				
+				// Copy the demo file
+				InputStream input = assetManager.open("demo.mrz");
+				String tempfile = RBookDirectory + "/demo.mrz";
+				InputStreamToFile(input, tempfile);
+				Log.v(TAG, "Copied demo file");
+
+			}
+			Log.v(TAG, "RBook dir: " + RBookDirectory);
 
 			// Initialize the picts
 			if (thePictManager == null) {
 				InputStream input = assetManager.open("pict.zip");
-				String tempfile = sdcard + "/RBook/Temp/pict.zip";
+				String tempfile = RBookDirectory + "/Temp/pict.zip";
 				InputStreamToFile(input, tempfile);
-				thePictManager = PictManager.create(tempfile, sdcard + "/RBook/"); // TODO No hardcoded path here!!
+				thePictManager = PictManager.create(tempfile, RBookDirectory + "/"); 
 			}
 
 			try {
@@ -82,7 +97,7 @@ public class MainActivity extends FragmentActivity implements AddDialogListener 
 						ContentResolver resolver = getContentResolver();
 						
 						// We will temporarily copy the file here below before definitive import.
-						String tempfile = sdcard + "/RBook/Temp/"; // TODO No hardcoded path here!!!
+						String tempfile = RBookDirectory + "/Temp/"; 
 						String filename = null;
 						
 						if (scheme.compareTo(ContentResolver.SCHEME_CONTENT) == 0) {

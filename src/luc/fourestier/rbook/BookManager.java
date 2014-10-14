@@ -5,17 +5,35 @@ import java.util.ArrayList;
 public class BookManager {
 
 	/**
-	 * Create a book manager and initialize it with rootdir.
+	 * Create a book manager.
+	 * 
+	 * @return The instance of the book manager.
+	 * @exception java/lang/RuntimeException: any internal native resource errors; 
+	 */
+	public static BookManager Create() {
+		BookManager bm = new BookManager();
+		bm._Create();
+		return bm;
+	}
+	
+	/**
+	 * Initialize the bookmanager with rootdir.
 	 * 
 	 * @param rootdir: Where to store roadbooks.
-	 * @return The instance of the book manager.
 	 * @exception java/lang/RuntimeException: any internal native resource errors; 
 	 * @exception java/io/IOException: any file/dir errors; 
 	 */
-	public static BookManager Create(String rootdir) {
-		BookManager bm = new BookManager();
-		bm._Create(rootdir);
-		return bm;
+	public void Initialize(String rootdir) {
+		_Initialize(rootdir);
+	}
+	
+	/**
+	 * Get the book directory.
+	 * @return The full path
+	 * @exception java/lang/RuntimeException: if book directory is not initialized; 
+	 */
+	public String getBookDir() {
+		return _GetBookDir();
 	}
 	
 	/**
@@ -136,8 +154,10 @@ public class BookManager {
     
 // Native 
 
-	private native final void _Create(String rootdir);
+	private native final void _Create();
+	private native final void _Initialize(String rootdir);
 	private native final String _GetRoadBookListSerialized();
+	private native final String _GetBookDir();
 	private native final int _GetRoadBook(String bookname);
 	private native final int _CreateRoadBook(String bookname);
 	private native final int _ImportRoadBook(String filepath, String bookname, boolean overwrite);

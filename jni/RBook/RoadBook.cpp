@@ -27,6 +27,7 @@
 
 //! The road book file
 #define ROADBOOK_FILE "roadbook.mrb"
+#define ROADBOOK_IMAGE_FILE "book.png"
 
 #define ROADBOOK_SPEECH_UNIT "kilometers"
 #define ROADBOOK_SPEECH_MILEAGE "mileage"
@@ -81,6 +82,7 @@ Error RoadBook::GetNextPoint(RoadPoint*& point) {
         }
         else if (RoadPointIndex + 1 < RoadPointList.size()) {
             point = RoadPointList[RoadPointIndex + 1];
+            point->Number = RoadPointIndex+2;
         }
         else {
             ret = ERROR_REACHED_END;
@@ -102,6 +104,7 @@ Error RoadBook::GetPreviousPoint(RoadPoint*& point) {
         }
         else if (RoadPointIndex > 0) {
             point = RoadPointList[RoadPointIndex - 1];
+            point->Number = RoadPointIndex;
         }
         else {
             ret = ERROR_REACHED_START;
@@ -219,7 +222,7 @@ Error RoadBook::GetNextPointSpeech(PictManager *pictmgr, std::string &speech) {
 Error RoadBook::GetImage(std::string &imagepath) {
     Error ret;
 
-    if (Image.compare(ROADBOOK_NO_IMAGE) != 0) {
+    if ((Image.compare(ROADBOOK_NO_IMAGE) != 0) && !TempArchiveDirectory.empty()) {
         imagepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + Image;
     }
     else {
@@ -229,10 +232,25 @@ Error RoadBook::GetImage(std::string &imagepath) {
     return ret;
 }
 
+Error RoadBook::CreateImagePath(std::string &imagepath) {
+    Error ret;
+
+    if (!TempArchiveDirectory.empty()) {
+        imagepath = TempArchiveDirectory + FILEUTILS_PATH_DELIMITER + ROADBOOK_IMAGE_FILE;
+        //Image = ROADBOOK_IMAGE_FILE;
+    }
+    else {
+        imagepath.clear();
+        ret = ERROR_FAIL;
+    }
+
+    return ret;
+}
+
 Error RoadBook::SetImage(std::string imagepath){
     Error ret;
 
-    if (imagepath.empty()) {
+    if (imagepath.empty() || TempArchiveDirectory.empty()) {
         Image = ROADBOOK_NO_IMAGE;
     }
     else {
@@ -271,11 +289,13 @@ Error RoadBook::AddNewPointBefore(RoadPoint*& point) {
     try {
         point = new RoadPoint(TempArchiveDirectory);
         if (RoadPointList.empty()) {
+            point->Number = 1;
             RoadPointList.push_back(point);
         }
         else {
             std::vector<RoadPoint*>::iterator iterator = RoadPointList.begin();
             std::advance(iterator, RoadPointIndex);
+            point->Number = RoadPointIndex + 1;
             RoadPointList.insert(iterator, point);
         }
     } catch (std::exception& e) {
@@ -291,15 +311,18 @@ Error RoadBook::AddNewPointAfter(RoadPoint*& point){
     try {
         point = new RoadPoint(TempArchiveDirectory);
         if (RoadPointList.empty())  {
+            point->Number = 1;
             RoadPointList.push_back(point);
         }
         else if (RoadPointIndex+1 >= RoadPointList.size()) {
             RoadPointList.push_back(point);
+            point->Number = RoadPointIndex + 2;
             Next(); // Go to the new point
         }
         else {
             std::vector<RoadPoint*>::iterator iterator = RoadPointList.begin();
             std::advance(iterator, RoadPointIndex + 1);
+            point->Number = RoadPointIndex + 2;
             RoadPointList.insert(iterator, point);
             Next(); // Go to the new point
         }

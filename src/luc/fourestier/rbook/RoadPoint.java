@@ -84,6 +84,14 @@ public class RoadPoint {
 	}
 
 	/**
+	 * Create an image path for storing the photo while editing
+	 * @return The full path for the image
+	 */
+	public String createImagePath() {
+		return _CreateImagePath();
+	}
+
+	/**
 	 * Set the image of the road point.
 	 * Image will be copied into archive directory of the road point.
 	 * 
@@ -124,6 +132,7 @@ public class RoadPoint {
 	private native final String _GetDirection();
 	private native final void _SetDirection(String direction);
 	private native final String _GetImage();
+	private native final String _CreateImagePath();
 	private native final void _SetImage(String location);
 	private native final int _GetNumber();
 }

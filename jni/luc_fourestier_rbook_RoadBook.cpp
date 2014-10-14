@@ -211,6 +211,23 @@ JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1GetImage(JNIEnv *
     return env->NewStringUTF(image.c_str());
 }
 
+JNIEXPORT jstring JNICALL Java_luc_fourestier_rbook_RoadBook__1CreateImagePath(JNIEnv *env, jobject thiz) {
+    InitializeInstanceField(env, thiz);
+
+    jstring result;
+    RBook::RoadBook *rb = GetInstance(env, thiz);
+    if (rb == NULL) {
+        JNIThrowException(env, "java/lang/RuntimeException", "Instance is null");
+        return result;
+    }
+
+    std::string imagepath;
+    RBook::Error error = rb->CreateImagePath(imagepath);
+    JNIThrowOnError(env, error);
+
+    return env->NewStringUTF(imagepath.c_str());
+}
+
 JNIEXPORT void JNICALL Java_luc_fourestier_rbook_RoadBook__1SetImage (JNIEnv *env, jobject thiz, jstring imagepath) {
     InitializeInstanceField(env, thiz);
 

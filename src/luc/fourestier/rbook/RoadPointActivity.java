@@ -166,10 +166,6 @@ public class RoadPointActivity extends Activity {
 
 	private OnClickListener mmapListener = new OnClickListener() {
 		public void onClick(View v) {
-//			LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		    View view = inflater.inflate(R.layout.,
-//		                                   (ViewGroup) findViewById(R.id.image_toast));
-
 			toastMessage("Maps are coming soon!");
 	    }
 	};
@@ -177,8 +173,13 @@ public class RoadPointActivity extends Activity {
 	private OnClickListener malbumListener = new OnClickListener() {
 		public void onClick(View v) {
         	try {
-        	    Intent intent = new Intent(RoadPointActivity.this, PointImageActivity.class);
-        	    startActivity(intent);
+        		if (!currentRoadBook.getCurrentPoint().getImage().isEmpty()) {
+	        	    Intent intent = new Intent(RoadPointActivity.this, PointImageActivity.class);
+	        	    startActivity(intent);
+        		}
+        		else {
+        			toastMessage("No Photo for that point!"); // TODO Change to @string for language compatibility
+        		}
 			} 
         	catch (Exception e) {
 				Log.e(TAG, "Cannot load point image: " + e.getMessage());

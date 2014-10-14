@@ -1,10 +1,14 @@
 package luc.fourestier.rbook;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -29,6 +33,7 @@ public class RoadPointEditActivity extends Activity {
 	private Button nextButton;
 	private Button mapButton;
 	private Button albumButton;
+    private Button photoButton;
 	
 	private BookManager theBookManager = null;
 	private RoadBook currentRoadBook = null;
@@ -36,6 +41,8 @@ public class RoadPointEditActivity extends Activity {
 
 	private String pointImageType;
 	private final String drawablePrefix = "drawable";
+
+	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 
 // Activity
 	
@@ -68,6 +75,8 @@ public class RoadPointEditActivity extends Activity {
 			albumButton.setOnClickListener(malbumListener);
 			mapButton = (Button) findViewById(R.id.point_edit_map_button);
 			mapButton.setOnClickListener(mmapListener);
+	    	photoButton = (Button) findViewById(R.id.point_edit_photo_button);
+	    	photoButton.setOnClickListener(mPhotoListener);
 	
 			setTitle(currentRoadBook.getBookName());
 	
@@ -183,10 +192,6 @@ public class RoadPointEditActivity extends Activity {
 
 	private OnClickListener mmapListener = new OnClickListener() {
 		public void onClick(View v) {
-//			LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//		    View view = inflater.inflate(R.layout.,
-//		                                   (ViewGroup) findViewById(R.id.image_toast));
-
 			toastMessage("Maps are coming soon!");
 	    }
 	};
@@ -194,8 +199,13 @@ public class RoadPointEditActivity extends Activity {
 	private OnClickListener malbumListener = new OnClickListener() {
 		public void onClick(View v) {
         	try {
-        	    Intent intent = new Intent(RoadPointEditActivity.this, PointEditImageActivity.class);
-        	    startActivity(intent);
+        		if (!currentRoadBook.getCurrentPoint().getImage().isEmpty()) {
+	        	    Intent intent = new Intent(RoadPointEditActivity.this, PointEditImageActivity.class);
+	        	    startActivity(intent);
+        		}
+        		else {
+        			toastMessage("No Photo for that point!"); // TODO Change to @string for language compatibility
+        		}
 			} 
         	catch (Exception e) {
 				Log.e(TAG, "Cannot load point image: " + e.getMessage());
@@ -204,6 +214,42 @@ public class RoadPointEditActivity extends Activity {
 	    }
 	};
 	
+ // Photo button
+	
+ 	private OnClickListener mPhotoListener = new OnClickListener() {
+         public void onClick(View v) {
+         	try {
+         		setValueFromRoadPointView(currentRoadBook.getCurrentPoint());
+         		
+         	    // create Intent to take a picture and return control to the calling application
+         	    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+         	    Uri fileUri = Uri.fromFile(new File(currentRoadBook.getCurrentPoint().createImagePath()));
+         	    intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); 
+
+         	    // start the image capture Intent
+         	    startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+ 			} 
+         	catch (Exception e) {
+ 				Log.e(TAG, "Cannot take road point picture: " + e.getMessage());
+ 				toastMessage("Oups! Cannot take picture!");
+ 			}
+         }
+     };
+     
+     @Override
+     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+             if (resultCode == RESULT_OK) {
+            	 if (data != null) {
+            		 toastMessage("Image saved to: " + data.getData());
+                 }
+                 currentRoadBook.getCurrentPoint().setImage(currentRoadBook.getCurrentPoint().createImagePath());
+                 refreshRoadPointView(currentRoadBook);
+             } 
+         }
+     }
+     
 // Road point	
 
 	private void refreshRoadPointView(RoadBook roadbook) {
